@@ -1,7 +1,7 @@
-# tripleperformance_docker
+# tripleperformance
 
 Cette brique permet de versionner :
-* l'environnement docker, y compris les fichiers de conf apache, sql, les certificats, ....
+* l'environnement docker, y compris les fichiers de conf apache, sql, les procédures de création de certificats, les backups, etc....
 * le script de création de l'environnement de dev, preprod et prod
 * les confs des différentes briques
 
