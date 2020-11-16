@@ -1,0 +1,39 @@
+debug = false
+logLevel = "INFO"
+
+defaultEntryPoints = ["http", "https", "dashboard"]
+
+[api]
+entryPoint = "dashboard"
+dashboard = true
+debug = true
+
+[entryPoints]
+  [entryPoints.dashboard]
+  address = ":9000"
+    [entryPoints.dashboard.auth.basic]
+    users = ["neayi:$apr1$/5428SE9$jrZoFU12rfR.8j1.S1uzo1"]
+  [entryPoints.http]
+  address = ":80"
+    [entryPoints.http.redirect]
+    entryPoint = "https"
+  [entryPoints.https]
+  address = ":443"
+    [entryPoints.https.tls]
+
+[retry]
+
+[docker]
+domain = "tripleperformance.fr"
+watch = true
+exposedbydefault = false
+
+# Deal with Let's Encrypt: https://doc.traefik.io/traefik/https/acme/
+# NB: you need to create adme.json - see README.md about it.
+[acme]
+email = "bertrand.gorge@neayi.com"
+storage = "/etc/traefik/acme.json"
+entryPoint = "https"
+onHostRule = true
+[acme.httpChallenge]
+entryPoint = "http"

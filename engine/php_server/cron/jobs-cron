@@ -1,0 +1,5 @@
+# Add the preprod wiki runJobs cron:
+0 0 * * * /usr/local/bin/php /var/www/html/maintenance/runJobs.php > /proc/1/fd/1 2>/proc/1/fd/2
+# Setup the renewal of the certificates:
+0 2 * * * /usr/local/sbin/certbot-auto -q renew > /proc/1/fd/1 2>/proc/1/fd/2
+

@@ -1,0 +1,108 @@
+# Dockerfile inspired from:
+# https://connect.ed-diamond.com/Linux-Pratique/LP-111/Creer-son-environnement-de-developpement-LAMP-grace-a-Docker-Compose
+FROM php:7.3.14-apache AS base
+
+ARG DEBUG_TOOLS
+
+RUN apt-get update  \
+  && apt-get remove -y exim \
+	&& apt-get install -y \
+		libpng-dev \
+		aptitude \
+		git \
+		dnsutils \
+		graphicsmagick-imagemagick-compat \
+		libfreetype6-dev \
+		libjpeg62-turbo-dev \
+		libmcrypt-dev \
+		libbz2-dev \
+		libgmp-dev \
+		libzip-dev \
+		libc-client-dev \
+		libkrb5-dev \
+		libpspell-dev \
+		libmagickwand-dev \
+		libxslt-dev --no-install-recommends \
+    cron \
+    supervisor \
+    vim \
+    msmtp \
+	&& rm -r /var/lib/apt/lists/*
+
+# Use GD
+RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ \
+	--with-jpeg-dir=/usr/include/
+
+RUN docker-php-ext-install -j$(nproc) \
+	mysqli exif mbstring zip dba bz2 calendar bcmath gettext gmp intl pdo pdo_mysql pspell gd \
+	iconv soap sockets sysvmsg sysvsem sysvshm wddx xmlrpc xsl
+
+# Image magick
+RUN pecl install imagick \
+	&& docker-php-ext-enable imagick
+
+RUN pecl install mcrypt-1.0.3 \
+	&& docker-php-ext-enable mcrypt
+
+RUN pecl install -o -f redis \
+	&& rm -rf /tmp/pear \
+	&& docker-php-ext-enable redis
+
+RUN pecl install apcu \
+  && docker-php-ext-enable apcu
+
+RUN a2enmod rewrite headers
+
+RUN test -z "$DEBUG_TOOLS" || ( \
+        pecl install xdebug \
+        	&& docker-php-ext-enable xdebug \
+        	&& echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini \
+        	&& echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/xdebug.ini \
+        	&& echo "xdebug.remote_host=host.docker.internal" >> /usr/local/etc/php/conf.d/xdebug.ini \
+        	&& echo "xdebug.idekey=VSCODE" >> /usr/local/etc/php/conf.d/xdebug.ini \
+        	&& echo "log_errors = On" >> /usr/local/etc/php/conf.d/error_log.ini \
+        	&& echo "error_log = /dev/stderr" >> /usr/local/etc/php/conf.d/error_log.ini \
+    )
+
+RUN curl -sS https://getcomposer.org/installer | php -- --1 --install-dir=/usr/local/bin --filename=composer
+
+COPY engine/php_server/apache/000-default.conf /etc/apache2/sites-enabled/000-default.conf
+COPY engine/php_server/apache/apache.prod.conf /etc/apache2/conf-available/z-app.conf
+RUN a2enconf z-app
+
+WORKDIR /var/www
+
+# ================================================
+
+FROM base AS prod
+
+# Setup msmtp with sendgrid
+COPY engine/php_server/php/sendmail.ini /usr/local/etc/php/conf.d/sendmail.ini
+COPY engine/php_server/php/errorlog.ini /usr/local/etc/php/conf.d/errorlog.ini
+COPY engine/php_server/msmtp/msmtprc /etc/msmtprc
+RUN chmod 600 /etc/msmtprc && chown www-data /etc/msmtprc
+
+# Add the cron jobs:
+COPY engine/php_server/cron/jobs-cron /etc/cron.d/jobs-cron
+RUN chmod 0644 /etc/cron.d/jobs-cron
+RUN crontab /etc/cron.d/jobs-cron
+
+# supervisord config file
+RUN mkdir -p /etc/supervisor/conf.d/
+COPY engine/php_server/supervisord/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# Entrypoint & cmd script
+COPY engine/php_server/bin/start.sh /bin/start.sh
+
+CMD /bin/start.sh
+
+# ================================================
+
+FROM prod AS prod_sources
+
+RUN rm -r /var/www/html
+
+COPY --chown=www-data:www-data bin bin/
+COPY --chown=www-data:www-data config config/
+
+RUN php bin/build_project.php --create-env

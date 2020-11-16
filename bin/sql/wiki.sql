@@ -1,0 +1,8 @@
+-- phpMyAdmin SQL Dump
+-- version 5.0.2
+-- https://www.phpmyadmin.net/
+--
+-- Hôte : db
+-- Généré le : lun. 09 nov. 2020 à 09:05
+-- Version du serveur :  5.6.48
+-- Version de PHP : 7.4.6

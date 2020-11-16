@@ -1,0 +1,132 @@
+version: '3.7'
+
+services:
+  traefik:
+    image: traefik:1.7-alpine
+    restart: always
+    ports:
+      - '80:80'
+      - '443:443'
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.port=9000'
+      - 'traefik.frontend.rule=Host:traefik.tripleperformance.fr'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./engine/traefik/traefik-prod.toml:/etc/traefik/traefik.toml
+      - ./.data/acme.json:/etc/traefik/acme.json
+
+  web:
+    # TODO Use release tags instead of :master
+    image: docker.pkg.github.com/neayi/tripleperformance/wiki:main
+    ## Uncomment in order to build the image on the current host
+    #build:
+    #  context: .
+    #  dockerfile: engine/php_server/Dockerfile
+    #  target: prod_sources
+    #  args:
+    #    - MSMTP_SECRET=$MSMTP_SECRET
+    restart: always
+    env_file: .env
+    volumes:
+      - ./.data/images:/var/www/html/images
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.port=80'
+      - 'traefik.frontend.rule=Host:wiki.tripleperformance.fr'
+
+  web_preprod:
+    image: docker.pkg.github.com/neayi/tripleperformance/wiki:main
+    restart: always
+    env_file: .env.preprod
+    volumes:
+      - ./.data/images:/var/www/html/images
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.port=80'
+      - 'traefik.frontend.rule=Host:wiki.preprod.tripleperformance.fr'
+
+  insights:
+    image: docker.pkg.github.com/neayi/insights/insights:master
+    env_file: insights/.env
+    ## Uncomment in order to build the image on the current host
+    #build:
+    #  context: insights
+    #  dockerfile: dockerfiles/php/Dockerfile
+    #  target: prod_sources
+    restart: always
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.port=80'
+      - 'traefik.frontend.rule=Host:insights.tripleperformance.fr'
+
+  insights_preprod:
+    image: docker.pkg.github.com/neayi/insights/insights:master
+    restart: always
+    env_file: insights/.env.preprod
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.port=80'
+      - 'traefik.frontend.rule=Host:insights.preprod.tripleperformance.fr'
+
+  db:
+    image: mysql:5.6
+    restart: always
+    env_file: .env
+    volumes:
+      - ./.data/mysql:/var/lib/mysql
+      - ./engine/mysql_ovh/mysqld_charset.cnf:/etc/mysql/conf.d/mysqld_charset.cnf:ro
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.port=80'
+      - 'traefik.frontend.rule=Host:phpmyadmin.tripleperformance.fr'
+
+  redis:
+    image: redis
+    restart: always
+
+  elasticsearch:
+    image: elasticsearch:6.8.6
+    restart: always
+    environment:
+      discovery.type: single-node
+      xpack.security.enabled: "true"
+      http.cors.enabled: "true"
+      http.cors.allow-origin: "https://elasticvue.tripleperformance.fr"
+      http.cors.allow-headers: X-Requested-With,Content-Type,Content-Length,Authorization
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ./.data/elasticsearch:/usr/share/elasticsearch/data
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.port=9200'
+      - 'traefik.frontend.rule=Host:elasticsearch.tripleperformance.fr'
+
+  elasticvue:
+    image: cars10/elasticvue
+    restart: always
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.port=8080'
+      - 'traefik.frontend.rule=Host:elasticvue.tripleperformance.fr'
+
+  parsoid:
+    image: thenets/parsoid:0.11
+    restart: always
+    environment:
+      PARSOID_DOMAIN_prod: https://wiki.tripleperformance.fr/api.php
+      PARSOID_DOMAIN_preprod: https://wiki.preprod.tripleperformance.fr/api.php
+    links:
+      - web:wiki.tripleperformance.fr
+      - web_preprod:wiki.preprod.tripleperformance.fr
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.port=8000'
+      - 'traefik.frontend.rule=Host:parsoid.tripleperformance.fr'

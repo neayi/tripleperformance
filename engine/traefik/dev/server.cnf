@@ -1,0 +1,20 @@
+[ req ]
+prompt             = no
+string_mask        = default
+default_bits       = 2048
+distinguished_name = req_distinguished_name
+x509_extensions    = x509_ext
+
+[ req_distinguished_name ]
+countryName = fr
+organizationName = TriplePerformance
+commonName = Certificat Applications TriplePerformance
+
+[ x509_ext ]
+keyUsage=critical,digitalSignature,keyAgreement,keyCertSign,cRLSign
+subjectAltName = @alt_names
+
+[ alt_names ]
+DNS.1 = traefik.vcap.me
+DNS.2 = wiki.vcap.me
+DNS.3 = insights.vcap.me

@@ -1,0 +1,44 @@
+name: build
+
+on:
+    push:
+        branches: [main]
+    release:
+        types: [published]
+
+env:
+    IMAGE_NAME: wiki
+    DOCKERFILE: engine/php_server/Dockerfile
+    CI: true
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v1
+
+            -   name: Define variables
+                id: vars
+                run: |
+                    echo ::set-output name=CI_COMMIT_REF_SLUG::${GITHUB_REF#refs/*/}
+                    echo ::set-output name=CI_REGISTRY_IMAGE::docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME
+
+            -   name: Log into registry
+                run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+
+            -   name: Pull existing Docker image
+                run: |
+                    docker pull ${CI_REGISTRY_IMAGE}:master || true
+
+            -   name: Build image
+                run: docker build --pull -t ${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_SLUG} --cache-from ${CI_REGISTRY_IMAGE}:master -f ${DOCKERFILE} .
+                env:
+                    CI_COMMIT_REF_SLUG: ${{ steps.vars.outputs.CI_COMMIT_REF_SLUG }}
+                    CI_REGISTRY_IMAGE: ${{ steps.vars.outputs.CI_REGISTRY_IMAGE }}
+
+            -   name: Push the latest Docker image
+                run: |
+                    docker push ${CI_REGISTRY_IMAGE}:${CI_COMMIT_REF_SLUG}
+                env:
+                    CI_COMMIT_REF_SLUG: ${{ steps.vars.outputs.CI_COMMIT_REF_SLUG }}
+                    CI_REGISTRY_IMAGE: ${{ steps.vars.outputs.CI_REGISTRY_IMAGE }}

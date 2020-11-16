@@ -1,0 +1,17 @@
+*.key
+*.crt
+*.bak
+*.log
+*.gz
+parsoid_down.bat
+tools/out.txt
+backup/.mysql.cnf
+/.env
+/.env.preprod
+/.env.*.local
+/docker-compose.override.yml
+/html
+/insights
+/.cache
+/.data
+/bin/sql/wiki_prod.sql

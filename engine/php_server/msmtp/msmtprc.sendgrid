@@ -1,0 +1,15 @@
+# Set default values for all following accounts.
+defaults
+tls on
+tls_trust_file /etc/ssl/certs/ca-certificates.crt
+logfile /var/log/msmtp.log
+
+# sendgrid (the password will be set during build using an environment variable)
+account default
+host smtp.sendgrid.net
+port 587
+auth on
+user apikey
+from hello@tripleperformance.fr
+logfile /var/log/msmtp.log
+#password keysecret

@@ -1,0 +1,15 @@
+[ req ]
+prompt             = no
+string_mask        = default
+default_bits       = 2048
+distinguished_name = req_distinguished_name
+x509_extensions    = x509_ext
+
+[ req_distinguished_name ]
+countryName = fr
+organizationName = TriplePerformance
+commonName = TriplePerformance Root CA
+
+[ x509_ext ]
+basicConstraints=critical,CA:true,pathlen:0
+keyUsage=critical,keyCertSign,cRLSign
