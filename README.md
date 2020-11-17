@@ -8,8 +8,8 @@ Cette brique permet de versionner :
 ## Utilisation
 ### Installation :
 
-    git clone git@github.com:neayi/tripleperformance_docker.git
-    cd tripleperformance_docker
+    git clone git@github.com:neayi/tripleperformance.git
+    cd tripleperformance
     git clone git@github.com:neayi/insights.git insights
 
 ### Mise à jour :
@@ -111,7 +111,7 @@ NB : ce script est créé au moment de l'installation par `build_project.php`
 On peut vérifier la bonne indexation en allant sur http://elasticvue.vcap.me/
 
 ### Mise à jour du code
-Quand on met à jour tripleperformance_docker, il faut ensuite mettre à jour le code de chaque instance :
+Quand on met à jour tripleperformance, il faut ensuite mettre à jour le code de chaque instance :
 
     docker-compose exec web php bin/build_project.php --update
 
@@ -133,8 +133,8 @@ On ira ensuite mettre à jour spécifiquement le wiki :
 
 ## Installer un serveur de production
 
-    git clone git@github.com:neayi/tripleperformance_docker.git
-    cd tripleperformance_docker
+    git clone git@github.com:neayi/tripleperformance.git
+    cd tripleperformance
     git clone git@github.com:neayi/insights.git insights
     
     cp .env.prod.dist .env
@@ -143,7 +143,8 @@ On ira ensuite mettre à jour spécifiquement le wiki :
     cp insights/.env.example insights/.env.preprod
     mkdir -p .data
     touch .data/acme.json && chmod 600 .data/acme.json
-
+    chmod a+w .data/elasticsearch
+    
 Configurer les fichiers .env, puis :
 
     docker login -u bertrand.gorge@neayi.com -p $PAT docker.pkg.github.com
