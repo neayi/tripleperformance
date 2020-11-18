@@ -17,8 +17,7 @@ services:
       - ./.data/acme.json:/etc/traefik/acme.json
 
   web:
-    # TODO Use release tags instead of :master
-    image: docker.pkg.github.com/neayi/tripleperformance/wiki:main
+    image: docker.pkg.github.com/neayi/tripleperformance/wiki:$WIKI_VERSION_PROD
     ## Uncomment in order to build the image on the current host
     #build:
     #  context: .
@@ -36,7 +35,7 @@ services:
       - 'traefik.frontend.rule=Host:wiki.tripleperformance.fr'
 
   web_preprod:
-    image: docker.pkg.github.com/neayi/tripleperformance/wiki:main
+    image: docker.pkg.github.com/neayi/tripleperformance/wiki:$WIKI_VERSION_PREPROD
     restart: always
     env_file: .env.preprod
     volumes:
@@ -47,7 +46,7 @@ services:
       - 'traefik.frontend.rule=Host:wiki.preprod.tripleperformance.fr'
 
   insights:
-    image: docker.pkg.github.com/neayi/insights/insights:master
+    image: docker.pkg.github.com/neayi/insights/insights:$INSIGHTS_VERSION_PROD
     env_file: insights/.env
     ## Uncomment in order to build the image on the current host
     #build:
@@ -63,7 +62,7 @@ services:
       - 'traefik.frontend.rule=Host:insights.tripleperformance.fr'
 
   insights_preprod:
-    image: docker.pkg.github.com/neayi/insights/insights:master
+    image: docker.pkg.github.com/neayi/insights/insights:$INSIGHTS_VERSION_PREPROD
     restart: always
     env_file: insights/.env.preprod
     volumes:

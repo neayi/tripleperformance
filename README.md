@@ -141,16 +141,26 @@ On ira ensuite mettre à jour spécifiquement le wiki :
     cp .env.preprod.dist .env.preprod
     cp insights/.env.example insights/.env
     cp insights/.env.example insights/.env.preprod
-    mkdir -p .data
+
+Modifier les fichiers .env, et en particulier vérifier la version des images à utiliser (INSIGHTS_VERSION_*, WIKI_VERSION_*)
+
+    mkdir -p .data/elasticsearch && chmod o+w .data/elasticsearch
+    mkdir -p .data/insights_prod_storage && chmod o+w .data/insights_prod_storage
+    mkdir -p .data/insights_preprod_storage && chmod o+w .data/insights_preprod_storage    
     touch .data/acme.json && chmod 600 .data/acme.json
-    chmod a+w .data/elasticsearch
-    
+
 Configurer les fichiers .env, puis :
 
     docker login -u bertrand.gorge@neayi.com -p $PAT docker.pkg.github.com
     docker-compose -f docker-compose.prod.yml up -d
 
 Avec `$PAT` un [Personal Access Token](https://github.com/settings/tokens) ayant les droits de lecture sur les packages github.
+
+
+Lancer la migration d'Insights :
+
+    docker-compose -f docker-compose.prod.yml exec --user="www-data:www-data" insights php artisan migrate
+
 
 
 Pour importer une DB, utiliser la commande : 
