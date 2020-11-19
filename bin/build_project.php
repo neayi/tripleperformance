@@ -388,7 +388,8 @@ function getWikiComponents()
 
 	// https://www.mediawiki.org/wiki/Extension:DynamicPageList3
 	$components[] = array(	'dest' => $wiki_thirdparties_dir . '/DynamicPageList',
-							'html' => '--branch 3.3.3 https://gitlab.com/hydrawiki/extensions/DynamicPageList.git',
+							'html' => '--branch master https://gitlab.com/hydrawiki/extensions/DynamicPageList.git',
+							'tag' => "3.3.3",
 							'link' => $wiki_install_dir . '/extensions/DynamicPageList');
 
 	// https://github.com/neayi/skin-neayi
@@ -537,6 +538,14 @@ function checkout_project($aComponent, $bForceRemoveFolder = false)
 	$cmd = 'git clone -q ' . $aComponent['html'] . ' ' . root_web . $aComponent['dest'];
 	runCommand($cmd);
 
+	if (!empty($aComponent['tag']))
+	{
+		changeDir(root_web . $aComponent['dest']);
+
+		$cmd = 'git checkout -q tags/' . $aComponent['tag'];
+		runCommand($cmd);
+	}
+
 	if (!empty($aComponent['submodules']))
 	{
 		changeDir(root_web . $aComponent['dest']);
@@ -555,6 +564,14 @@ function pull_project($aComponent)
 	}
 
 	changeDir(root_web . $aComponent['dest']);
+
+	if (!empty($aComponent['tag']))
+	{
+		// If we are using a tag, then we need to checkout to master first in order to avoid an error
+		$cmd = 'git checkout -q master'; // todo : change master with the right branch name
+		runCommand($cmd);
+	}	
+
 	$cmd = 'git pull -q';
 	runCommand($cmd);
 
@@ -564,6 +581,13 @@ function pull_project($aComponent)
 		$cmd = 'git checkout -q ' . $aComponent['branch'];
 		runCommand($cmd);		
 	}
+
+	// Make sure we are on the right tag:
+	if (!empty($aComponent['tag']))
+	{
+		$cmd = 'git checkout -q tags/' . $aComponent['tag'];
+		runCommand($cmd);
+	}	
 }
 
 function git_status_project($aComponent)
@@ -611,23 +635,21 @@ function run_composer_for_project($aComponent)
 	run_composer($aComponent['composer'], root_web . $aComponent['link']);
 }
 
-function runCommand($cmd, $bExec = false)
+function runCommand($cmd)
 {
 	echo $cmd . "\n";
 
 	if ($GLOBALS['dry_run'])
 		return '';
+	
+	$return_var = 0;
+	passthru($cmd, $return_var);
 
-	if ($bExec)
+	if ($return_var !== 0)
 	{
-		$output = '';
-		exec($cmd, $output);
-		return $output;
+		$cwd = getcwd();
+		throw new \RuntimeException("Error while executing: $cmd in $cwd");
 	}
-	else
-		passthru($cmd);
-
-    return '';
 }
 
 function changeDir($newWorkingDir)
