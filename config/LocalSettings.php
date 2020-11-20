@@ -402,6 +402,10 @@ wfLoadExtension( 'InputBox' );
 wfLoadExtension( 'MassEditRegex' );
 $wgGroupPermissions['sysop']['masseditregex'] = true;
 
+// Semantic Mediawiki
+enableSemantics( 'tripleperformance.fr' );
+
+
 // Debug and error reporting :
 
 // MaintenanceShell
