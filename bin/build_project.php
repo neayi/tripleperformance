@@ -351,7 +351,7 @@ function getWiki()
 {
 	// Mediawiki
 	$wiki_install_dir = '/html';
-	$wiki_version = 'REL1_34';
+	$wiki_version = 'REL1_35';
 
 	return array(	'html' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki.git',
 					'dest' => $wiki_install_dir,
@@ -364,7 +364,7 @@ function getWikiComponents()
 	$wiki_install_dir = '/html';
 	$wiki_thirdparties_dir = '/html/extensions';
 	$wiki_skins_dir = '/html/skins';
-	$wiki_version = 'REL1_34';
+	$wiki_version = 'REL1_35';
 	$neayi_wiki_version = 'REL1_34'; // Since we have cloned a few repos, we have our changes in an old branch
 	$latest_wiki_version = 'REL1_35'; // For some extensions we are happy to just take the latest stable
 
@@ -459,9 +459,9 @@ function getWikiComponents()
 							'composer' => 'install');
 
 	$components[] = array(	'dest' => $wiki_thirdparties_dir . '/CommentStreams',
-							'html' => '--branch '.$neayi_wiki_version.' https://github.com/neayi/mediawiki-extensions-CommentStreams.git',
+							'html' => '--branch Neayi https://github.com/neayi/mediawiki-extensions-CommentStreams.git',
 							'link' => $wiki_install_dir . '/extensions/CommentStreams',
-							'branch' => $neayi_wiki_version);
+							'branch' => 'Neayi');
 
 	$components[] = array(	'dest' => $wiki_thirdparties_dir . '/Echo',
 							'html' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-Echo.git',

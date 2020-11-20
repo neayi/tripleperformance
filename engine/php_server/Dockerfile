@@ -1,28 +1,27 @@
-# Dockerfile inspired from:
-# https://connect.ed-diamond.com/Linux-Pratique/LP-111/Creer-son-environnement-de-developpement-LAMP-grace-a-Docker-Compose
-FROM php:7.3.14-apache AS base
+FROM php:7.3-apache AS base
 
 ARG DEBUG_TOOLS
 
 RUN apt-get update  \
   && apt-get remove -y exim \
-	&& apt-get install -y \
-		libpng-dev \
-		aptitude \
-		git \
-		dnsutils \
-		graphicsmagick-imagemagick-compat \
-		libfreetype6-dev \
-		libjpeg62-turbo-dev \
-		libmcrypt-dev \
-		libbz2-dev \
-		libgmp-dev \
-		libzip-dev \
-		libc-client-dev \
-		libkrb5-dev \
-		libpspell-dev \
-		libmagickwand-dev \
-		libxslt-dev --no-install-recommends \
+  && apt-get install -y \
+	libpng-dev \
+	aptitude \
+	git \
+	dnsutils \
+	unzip \
+	graphicsmagick-imagemagick-compat \
+	libfreetype6-dev \
+	libjpeg62-turbo-dev \
+	libmcrypt-dev \
+	libbz2-dev \
+	libgmp-dev \
+	libzip-dev \
+	libc-client-dev \
+	libkrb5-dev \
+	libpspell-dev \
+	libmagickwand-dev \
+	libxslt-dev --no-install-recommends \
     cron \
     supervisor \
     vim \
