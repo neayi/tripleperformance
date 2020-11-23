@@ -12,15 +12,15 @@ try {
 	switch ($argv[1]) 
 	{
 		case '--update':
-			update();
+			update_wiki_env();
 			break;
 
 		case '--create-env':
-			create_env();
+			create_wiki_env();
 			break;
 
 		case '--status':
-			status();
+			status_wiki_env();
 			break;
 
 		case '--initElasticSearch':
@@ -40,48 +40,6 @@ try {
 exit(0); // Success.
 
 // ================================================================= //
-
-function create_env($component = 'wiki')
-{
-	switch ($component) {
-		case 'pratiques':
-		case 'wiki':
-			create_wiki_env();
-			break;
-
-		default:
-			# code...
-			break;
-	}
-}
-
-function update($component = 'wiki')
-{
-	switch ($component) {
-		case 'pratiques':
-		case 'wiki':
-			update_wiki_env();
-			break;
-
-		default:
-			# code...
-			break;
-	}
-}
-
-function status($component = 'wiki')
-{
-	switch ($component) {
-		case 'pratiques':
-		case 'wiki':
-			status_wiki_env();
-			break;
-
-		default:
-			# code...
-			break;
-	}
-}
 
 function create_wiki_env()
 {

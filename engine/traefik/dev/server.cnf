@@ -15,6 +15,6 @@ keyUsage=critical,digitalSignature,keyAgreement,keyCertSign,cRLSign
 subjectAltName = @alt_names
 
 [ alt_names ]
-DNS.1 = traefik.vcap.me
-DNS.2 = wiki.vcap.me
-DNS.3 = insights.vcap.me
+DNS.1 = traefik.dev.tripleperformance.fr
+DNS.2 = wiki.dev.tripleperformance.fr
+DNS.3 = insights.dev.tripleperformance.fr

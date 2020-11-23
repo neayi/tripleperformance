@@ -69,11 +69,11 @@ reboot
 * Insights : `docker-compose run --rm --user="$UID:$GID" insights_php bash` (ou `docker-compose exec insights_php bash` en tant que root et si le service est up)
 
 ### Accès à phpMyAdmin
-* Dev : http://phpmyadmin.vcap.me
+* Dev : http://phpmyadmin.dev.tripleperformance.fr
 * Prod et preprod : http://vps793962.ovh.net:8181/
 
 ### Accès à elasticVue
-* Dev : http://elastic:xxxxxxxx@elasticvue.vcap.me/ (mot de passe dans le fichier `.env` --> `ELASTICSEARCH_SERVER`)
+* Dev : http://elastic:xxxxxxxx@elasticvue.dev.tripleperformance.fr/ (mot de passe dans le fichier `.env` --> `ELASTICSEARCH_SERVER`)
 * Prod et preprod : http://vps793962.ovh.net:8080/
 
 ### Extraction du code
@@ -107,7 +107,7 @@ Dans cette opération, on indexe les pages du wiki dans elasticSearch à partir 
 
     docker-compose exec web php bin/build_project.php --initElasticSearch
 
-On peut vérifier la bonne indexation en allant sur http://elasticvue.vcap.me/ ou en pratiquant une recherche dans le wiki.
+On peut vérifier la bonne indexation en allant sur http://elasticvue.dev.tripleperformance.fr/ ou en pratiquant une recherche dans le wiki.
 
 ### Mise à jour du code
 Quand on met à jour tripleperformance, il faut ensuite mettre à jour le code de chaque instance :
