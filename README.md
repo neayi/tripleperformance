@@ -103,14 +103,11 @@ Par défaut, la base créée sera `wiki`, mais il est possible d'importer aussi 
 Il faut aussi ajouter des images pour compléter la configuration. Ces images ne sont pas versionnées, voir avec un membre de l'équipe pour les récupérer d'une autre install.
 
 ### Indexation du wiki dans elasticSearch
-A ce stade le wiki et le q2a doivent être fonctionnels. Il faut encore indexer les pages du wiki dans elasticSearch :
+Dans cette opération, on indexe les pages du wiki dans elasticSearch à partir de la DB :
 
-    docker-compose exec web bash
-    cd /var/www/html/maintenance
-    ./setupElasticSearch.sh
+    docker-compose exec web php bin/build_project.php --initElasticSearch
 
-NB : ce script est créé au moment de l'installation par `build_project.php`
-On peut vérifier la bonne indexation en allant sur http://elasticvue.vcap.me/
+On peut vérifier la bonne indexation en allant sur http://elasticvue.vcap.me/ ou en pratiquant une recherche dans le wiki.
 
 ### Mise à jour du code
 Quand on met à jour tripleperformance, il faut ensuite mettre à jour le code de chaque instance :

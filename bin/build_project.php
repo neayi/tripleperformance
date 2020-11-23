@@ -203,9 +203,9 @@ function createElasticSearchScript()
 
 	$lines = array();
 	$lines[] = "export MW_INSTALL_PATH=" . root_web . "/html/\n";
-	$lines[] = "php \$MW_INSTALL_PATH/extensions/CirrusSearch/maintenance/updateSearchIndexConfig.php\n";
-	$lines[] = "php \$MW_INSTALL_PATH/extensions/CirrusSearch/maintenance/forceSearchIndex.php --skipLinks --indexOnSkip\n";
-	$lines[] = "php \$MW_INSTALL_PATH/extensions/CirrusSearch/maintenance/forceSearchIndex.php --skipParse\n";
+	$lines[] = "php " . root_web . "/html/extensions/CirrusSearch/maintenance/UpdateSearchIndexConfig.php\n";
+	$lines[] = "php " . root_web . "/html/extensions/CirrusSearch/maintenance/ForceSearchIndex.php --skipLinks --indexOnSkip\n";
+	$lines[] = "php " . root_web . "/html/extensions/CirrusSearch/maintenance/ForceSearchIndex.php --skipParse\n";
 	$lines[] = "\n";
 
 	file_put_contents($scriptPath, $lines);
