@@ -9,7 +9,7 @@ services:
     labels:
       - 'traefik.enable=true'
       - 'traefik.port=9000'
-      - 'traefik.frontend.rule=Host:traefik.vcap.me'
+      - 'traefik.frontend.rule=Host:traefik.dev.tripleperformance.fr'
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./engine/traefik/dev/traefik.toml:/etc/traefik/traefik.toml
@@ -28,7 +28,7 @@ services:
     labels:
       - 'traefik.enable=true'
       - 'traefik.port=80'
-      - 'traefik.frontend.rule=Host:pratiques.dev.tripleperformance.fr,wiki.vcap.me'
+      - 'traefik.frontend.rule=Host:wiki.dev.tripleperformance.fr'
 
   insights_php:
     build:
@@ -47,7 +47,7 @@ services:
     labels:
       - 'traefik.enable=true'
       - 'traefik.port=80'
-      - 'traefik.frontend.rule=Host:insights.vcap.me'
+      - 'traefik.frontend.rule=Host:insights.dev.tripleperformance.fr'
 
   db:
     image: mysql:5.7
@@ -67,7 +67,7 @@ services:
     labels:
       - 'traefik.enable=true'
       - 'traefik.port=80'
-      - 'traefik.frontend.rule=Host:phpmyadmin.vcap.me'
+      - 'traefik.frontend.rule=Host:phpmyadmin.dev.tripleperformance.fr'
 
   redis:
     image: redis
@@ -92,18 +92,18 @@ services:
     labels:
       - 'traefik.enable=true'
       - 'traefik.port=8080'
-      - 'traefik.frontend.rule=Host:elasticvue.vcap.me'
+      - 'traefik.frontend.rule=Host:elasticvue.dev.tripleperformance.fr'
 
   parsoid:
     image: thenets/parsoid:0.11
     environment:
-      PARSOID_DOMAIN_dev: http://pratiques.dev.tripleperformance.fr/api.php
+      PARSOID_DOMAIN_dev: http://wiki.dev.tripleperformance.fr/api.php
     links:
-      - web:pratiques.dev.tripleperformance.fr
+      - web:wiki.dev.tripleperformance.fr
     labels:
       - 'traefik.enable=true'
       - 'traefik.port=8000'
-      - 'traefik.frontend.rule=Host:parsoid.vcap.me'
+      - 'traefik.frontend.rule=Host:parsoid.dev.tripleperformance.fr'
 
 volumes:
   data-mysql:

@@ -21,6 +21,6 @@ debug = true
         keyFile = "/etc/ssl/server.key"
 
 [docker]
-domain = "vcap.me"
+domain = "tripleperformance.fr"
 watch = true
 exposedbydefault = false

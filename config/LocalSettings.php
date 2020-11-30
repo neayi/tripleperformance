@@ -208,7 +208,32 @@ if('prod' === $env) {
     $wgGroupPermissions['bot']['noanalytics'] = true;
     // To exclude all logged in users give 'noanalytics' permission to 'user' group, i.e.
     $wgGroupPermissions['user']['noanalytics'] = true;
+
+    // SEO and Sitemap
+    // https://www.mediawiki.org/wiki/Extension:AutoSitemap
+    wfLoadExtension( 'AutoSitemap' ); 
+    $wgAutoSitemap["notify"] = [];
+
+    $wgAutoSitemap["notify"][] = "https://www.google.com/webmasters/sitemaps/ping?sitemap=$domainUrl/sitemap.xml";
+    $wgAutoSitemap["notify"][] = "https://www.bing.com/webmaster/ping.aspx?sitemap=$domainUrl/sitemap.xml";
+
+    $wgAutoSitemap["freq"] = "weekly"; //default
+    $wgAutoSitemap["priority"][NS_MAIN] = 1;
+    $wgAutoSitemap["priority"][NS_CATEGORY] = 0.8;
 }
+else
+{
+    // Avoid being indexed on non production environments
+    $wgDefaultRobotPolicy = 'noindex,nofollow';
+}
+
+// Cookies
+$wgCookieExpiration = 180 * 86400; // 180 days
+$wgExtendedLoginCookieExpiration = null;
+
+
+// https://www.mediawiki.org/wiki/Manual:$wgFixDoubleRedirects
+$wgFixDoubleRedirects = true;
 
 // Chameleon
 wfLoadExtension( 'Bootstrap' );
@@ -217,8 +242,14 @@ $wgDefaultSkin='chameleon';
 
 $egChameleonLayoutFile = dirname(MW_CONFIG_FILE) . '/skins/skin-neayi/layoutNeayi.xml';
 $egChameleonExternalStyleModules = array(
-   dirname(MW_CONFIG_FILE) . '/skins/skin-neayi/chameleon-neayi.scss'
+    dirname(MW_CONFIG_FILE) . '/skins/skin-neayi/chameleon-tripleperformance-variables.scss' => 'afterVariables',
+    dirname(MW_CONFIG_FILE) . '/skins/skin-neayi/chameleon-neayi.scss' => 'afterMain'
 );
+
+if($debug) {
+    \Bootstrap\BootstrapManager::getInstance()->addCacheTriggerFile(dirname(MW_CONFIG_FILE) . '/skins/skin-neayi/chameleon-tripleperformance-variables.scss');
+    \Bootstrap\BootstrapManager::getInstance()->addCacheTriggerFile(dirname(MW_CONFIG_FILE) . '/skins/skin-neayi/chameleon-neayi.scss');
+}
 
 // Database and cross referencing
 wfLoadExtension( 'DynamicPageList' );
@@ -287,17 +318,6 @@ wfLoadExtension( 'ChangeAuthor' );
 $wgGroupPermissions['sysop']['changeauthor'] = true; // Only sysops can use ChangeAuthor. This is the recommended setup
 $wgGroupPermissions['bureaucrat']['changeauthor'] = true; // Only bureaucrats can use ChangeAuthor
 
-// SEO and Sitemap
-wfLoadExtension( 'AutoSitemap' ); // https://www.mediawiki.org/wiki/Extension:AutoSitemap
-$wgAutoSitemap["notify"] = [];
-
-if('prod' === $env) {
-    $wgAutoSitemap["notify"][] = "https://www.google.com/webmasters/sitemaps/ping?sitemap=$domainUrl/sitemap.xml";
-    $wgAutoSitemap["notify"][] = "https://www.bing.com/webmaster/ping.aspx?sitemap=$domainUrl/sitemap.xml";
-}
-$wgAutoSitemap["freq"] = "weekly"; //default
-$wgAutoSitemap["priority"][NS_MAIN] = 1;
-$wgAutoSitemap["priority"][NS_CATEGORY] = 0.8;
 
 // References and citations
 wfLoadExtension( 'Cite' );
@@ -315,6 +335,10 @@ $wgDefaultUserOptions["echo-subscriptions-web-commentstreams-notification-catego
 wfLoadExtension( 'Echo' );
 $wgEchoUseJobQueue = true;
 
+$wgEnotifMinorEdits = false;
+$wgEnotifUseRealName = true;
+$wgUsersNotifiedOnAllChanges = [ 'Bertrand' ];
+
 // VisualEditor
 //wfLoadExtension( 'VisualEditor' );
 $wgVisualEditorTabMessages['editsource'] = null;
@@ -331,7 +355,7 @@ $wgPluggableAuth_EnableLocalLogin = false;
 $wgOAuthUri = getenv('INSIGHT_URL') . '/login?&';
 $wgOAuthUserApiByToken = 'http://insights/api/user?&';
 $wgGroupPermissions['*']['autocreateaccount'] = true;
-
+$wgUseCombinedLoginLink = true;
 
 // Delete several pages in one shot
 wfLoadExtension( 'DeleteBatch' );
