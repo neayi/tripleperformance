@@ -356,6 +356,11 @@ $wgOAuthUri = getenv('INSIGHT_URL') . '/login?&';
 $wgOAuthUserApiByToken = 'http://insights/api/user?&';
 $wgGroupPermissions['*']['autocreateaccount'] = true;
 $wgUseCombinedLoginLink = true;
+$wgAvatarsBaseUri = getenv('INSIGHT_URL') . '/storage/users/';
+
+// Realnames
+wfLoadExtension( 'Realnames' );
+$wgRealnamesLinkStyle = 'replace';
 
 // Delete several pages in one shot
 wfLoadExtension( 'DeleteBatch' );

@@ -499,6 +499,10 @@ function getWikiComponents()
 							'html' => '--branch '.$latest_wiki_version .' https://github.com/wikimedia/mediawiki-extensions-MassEditRegex.git',
 							'link' => $wiki_install_dir . '/extensions/MassEditRegex',
 							'branch' => $latest_wiki_version);							
+							
+	$components[] = array(	'dest' => $wiki_thirdparties_dir . '/Realnames',
+							'html' => 'https://github.com/ofbeaton/mediawiki-realnames.git',
+							'link' => $wiki_install_dir . '/extensions/Realnames');							
 														
 	return $components;
 }
