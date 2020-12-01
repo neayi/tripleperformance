@@ -124,8 +124,8 @@ services:
     image: thenets/parsoid:0.11
     restart: always
     environment:
-      PARSOID_DOMAIN_prod: https://wiki.tripleperformance.fr/api.php
-      PARSOID_DOMAIN_preprod: https://wiki.preprod.tripleperformance.fr/api.php
+      PARSOID_DOMAIN_prod: http://wiki.tripleperformance.fr/api.php
+      PARSOID_DOMAIN_preprod: http://wiki.preprod.tripleperformance.fr/api.php
     links:
       - web:wiki.tripleperformance.fr
       - web_preprod:wiki.preprod.tripleperformance.fr
