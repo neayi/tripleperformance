@@ -211,7 +211,7 @@ function getWikiComponents()
 {
 	// Mediawiki
 	$wiki_install_dir = '/html';
-	$wiki_thirdparties_dir = '/html/extensions';
+	$wiki_extensions_dir = '/html/extensions';
 	$wiki_skins_dir = '/html/skins';
 	$wiki_version = 'REL1_35';
 	$neayi_wiki_version = 'REL1_34'; // Since we have cloned a few repos, we have our changes in an old branch
@@ -226,136 +226,108 @@ function getWikiComponents()
 	// Regular Mediawiki extensions
 
 	// https://www.mediawiki.org/wiki/Extension:Google_Analytics_Integration
-	$components[] = array(	'dest' => $wiki_thirdparties_dir . '/googleAnalytics',
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/googleAnalytics',
 							'html' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-googleAnalytics.git',
-							'link' => $wiki_install_dir . '/extensions/googleAnalytics',
 							'branch' => $wiki_version);
 
 	// https://www.mediawiki.org/wiki/Extension:DynamicPageList3
-	$components[] = array(	'dest' => $wiki_thirdparties_dir . '/DynamicPageList',
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/DynamicPageList',
 							'html' => '--branch master https://gitlab.com/hydrawiki/extensions/DynamicPageList.git',
-							'tag' => "3.3.3",
-							'link' => $wiki_install_dir . '/extensions/DynamicPageList');
+							'tag' => "3.3.3");
 
-	// https://github.com/neayi/skin-neayi
-	$components[] = array(	'dest' => $wiki_skins_dir . '/skin-neayi',
-							'html' => 'https://github.com/neayi/skin-neayi.git',
-							'link' => $wiki_install_dir . '/skins/skin-neayi');
-
-	$components[] = array(	'dest' => $wiki_thirdparties_dir . '/Elastica',
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/Elastica',
 							'html' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-Elastica.git',
-							'link' => $wiki_install_dir . '/extensions/Elastica',
 							'postinstall' => 'composer',
 							'branch' => $wiki_version);
 
-	$components[] = array(	'dest' => $wiki_thirdparties_dir . '/CirrusSearch',
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/CirrusSearch',
 							'html' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-CirrusSearch.git',
-							'link' => $wiki_install_dir . '/extensions/CirrusSearch',
 							'postinstall' => 'composer',
 							'branch' => $wiki_version);
 
-	$components[] = array(	'dest' => $wiki_thirdparties_dir . '/EmbedVideo',
-							'html' => 'https://gitlab.com/hydrawiki/extensions/EmbedVideo.git',
-							'link' => $wiki_install_dir . '/extensions/EmbedVideo');
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/EmbedVideo',
+							'html' => 'https://gitlab.com/hydrawiki/extensions/EmbedVideo.git');
 
-	$components[] = array(	'dest' => $wiki_thirdparties_dir . '/RelatedArticles',
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/RelatedArticles',
 							'html' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-RelatedArticles.git',
-							'link' => $wiki_install_dir . '/extensions/RelatedArticles',
 							'branch' => $wiki_version);
 
-	$components[] = array(	'dest' => $wiki_thirdparties_dir . '/Popups',
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/Popups',
 							'html' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-Popups.git',
-							'link' => $wiki_install_dir . '/extensions/Popups',
 							'branch' => $wiki_version);
 
-	$components[] = array(	'dest' => $wiki_thirdparties_dir . '/Description2',
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/Description2',
 							'html' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-Description2.git',
-							'link' => $wiki_install_dir . '/extensions/Description2',
 							'branch' => $wiki_version);
 
-	$components[] = array(	'dest' => $wiki_thirdparties_dir . '/AutoSitemap',
-							'html' => 'https://github.com/dolfinus/AutoSitemap.git',
-							'link' => $wiki_install_dir . '/extensions/AutoSitemap');
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/AutoSitemap',
+							'html' => 'https://github.com/dolfinus/AutoSitemap.git');
 
-	$components[] = array(	'dest' => $wiki_thirdparties_dir . '/Loops',
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/Loops',
 							'html' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-Loops.git',
-							'link' => $wiki_install_dir . '/extensions/Loops',
 							'branch' => $wiki_version);
 
-	$components[] = array(	'dest' => $wiki_thirdparties_dir . '/Variables',
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/Variables',
 							'html' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-Variables.git',
-							'link' => $wiki_install_dir . '/extensions/Variables',
 							'branch' => $wiki_version);
 
-	$components[] = array(	'dest' => $wiki_thirdparties_dir . '/PluggableAuth',
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/PluggableAuth',
 							'html' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-PluggableAuth.git',
-							'link' => $wiki_install_dir . '/extensions/PluggableAuth',
 							'branch' => $wiki_version);
 
-	$components[] = array(	'dest' => $wiki_thirdparties_dir . '/Echo',
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/Echo',
 							'html' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-Echo.git',
-							'link' => $wiki_install_dir . '/extensions/Echo',
 							'branch' => $wiki_version);
 
-	$components[] = array(	'dest' => $wiki_thirdparties_dir . '/DeleteBatch',
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/DeleteBatch',
 							'html' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-DeleteBatch.git',
-							'link' => $wiki_install_dir . '/extensions/DeleteBatch',
 							'postinstall' => 'composer',
 							'branch' => $wiki_version);
 
-	$components[] = array(	'dest' => $wiki_thirdparties_dir . '/VisualEditor',
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/VisualEditor',
 							'html' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-VisualEditor.git',
-							'link' => $wiki_install_dir . '/extensions/VisualEditor',
 							'postinstall' => 'submodules',
 							'branch' => $wiki_version);
 
-	$components[] = array(	'dest' => $wiki_thirdparties_dir . '/Disambiguator',
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/Disambiguator',
 							'html' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-Disambiguator.git',
-							'link' => $wiki_install_dir . '/extensions/Disambiguator',
 							'branch' => $wiki_version);
 
-	$components[] = array(	'dest' => $wiki_thirdparties_dir . '/HitCounters',
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/HitCounters',
 							'html' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-HitCounters.git',
-							'link' => $wiki_install_dir . '/extensions/HitCounters',
 							'branch' => $wiki_version);
 
-	$components[] = array(	'dest' => $wiki_thirdparties_dir . '/MassEditRegex',
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/MassEditRegex',
 							'html' => '--branch '.$latest_wiki_version .' https://github.com/wikimedia/mediawiki-extensions-MassEditRegex.git',
-							'link' => $wiki_install_dir . '/extensions/MassEditRegex',
 							'branch' => $latest_wiki_version);				
 
-	$components[] = array(	'dest' => $wiki_thirdparties_dir . '/Realnames',
-							'html' => 'https://github.com/ofbeaton/mediawiki-realnames.git',
-							'link' => $wiki_install_dir . '/extensions/Realnames');	
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/Realnames',
+							'html' => 'https://github.com/ofbeaton/mediawiki-realnames.git');	
 
 	// Neayi extensions and forks
+	$components[] = array(	'dest' => $wiki_skins_dir . '/skin-neayi',
+							'html' => 'https://github.com/neayi/skin-neayi.git');
 
-	$components[] = array(	'dest' => $wiki_thirdparties_dir . '/PDFDownloadCard',
-							'html' => 'https://github.com/neayi/PDFDownloadCard.git',
-							'link' => $wiki_install_dir . '/extensions/PDFDownloadCard');
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/PDFDownloadCard',
+							'html' => 'https://github.com/neayi/PDFDownloadCard.git');
 
-	$components[] = array(	'dest' => $wiki_thirdparties_dir . '/Carousel',
-							'html' => 'https://github.com/neayi/ext-carousel.git',
-							'link' => $wiki_install_dir . '/extensions/Carousel');
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/Carousel',
+							'html' => 'https://github.com/neayi/ext-carousel.git');
 
-	$components[] = array(	'dest' => $wiki_thirdparties_dir . '/ChangeAuthor',
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/ChangeAuthor',
 							'html' => '--branch '.$neayi_wiki_version.' https://github.com/neayi/mediawiki-extensions-ChangeAuthor.git',
-							'link' => $wiki_install_dir . '/extensions/ChangeAuthor',
 							'branch' => $neayi_wiki_version);
 
-	$components[] = array(	'dest' => $wiki_thirdparties_dir . '/NeayiAuth',
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/NeayiAuth',
 							'html' => 'https://github.com/neayi/NeayiAuth.git',
-							'link' => $wiki_install_dir . '/extensions/NeayiAuth',
 							'postinstall' => 'composer');
 
-	$components[] = array(	'dest' => $wiki_thirdparties_dir . '/CommentStreams',
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/CommentStreams',
 							'html' => '--branch Neayi https://github.com/neayi/mediawiki-extensions-CommentStreams.git',
-							'link' => $wiki_install_dir . '/extensions/CommentStreams',
 							'branch' => 'Neayi');
 
-	$components[] = array(	'dest' => $wiki_thirdparties_dir . '/InputBox',
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/InputBox',
 							'html' => '--branch '.$neayi_wiki_version.' https://github.com/neayi/mediawiki-extensions-InputBox.git',
-							'link' => $wiki_install_dir . '/extensions/InputBox',
 							'branch' => $neayi_wiki_version);
 
 	return $components;
@@ -363,15 +335,40 @@ function getWikiComponents()
 
 function linkWikiSettings()
 {
-	// Mediawiki
-	$wiki_settings_dir = '/config/';
-	$wiki_install_dir = '/html/';
+	$src = root_web . '/config/LocalSettings.php';
+	$dst = root_web . '/html/LocalSettings.php';
 
-	// config
-	$LocalSettings = array(	'dest' => $wiki_settings_dir . 'LocalSettings.php',
-							'link' => $wiki_install_dir . 'LocalSettings.php');
+	if (!file_exists($src))
+	{
+		throw new \RuntimeException("could not create symlink from $src");
+	}
 
-	make_link($LocalSettings);
+	$currentLink = @readlink($dst);
+
+	if (!empty($currentLink) && $currentLink != $src)
+	{
+		// link exists but points to the wrong source
+		unlink($dst);
+		$currentLink = '';
+	}
+
+	if (empty($currentLink) && file_exists($dst))
+	{
+		// Destination exists but is not a link (may occur with change of underlying filesystems)
+		unlink($dst);
+		$currentLink = '';
+	}
+
+	if (empty($currentLink))
+	{
+		$cmd = 'ln -s ' . $src . ' ' . $dst;
+		runCommand($cmd);
+	}
+
+	// Touch the destination file so that the date is updated in any case.
+	// Useful for the LocalSettings.php file, it tells Chameleon to check for changes
+	// and eventually update the CSS out of the SCSS.
+	touch($dst);	
 }
 
 /**
@@ -535,12 +532,12 @@ function updateComposer()
 
 function installComposer($aComponent)
 {
-	if (!file_exists(root_web . $aComponent['link'] . '/composer.json'))
+	if (!file_exists(root_web . $aComponent['dest'] . '/composer.json'))
 	{
-		throw new \RuntimeException(root_web . $aComponent['link'] . "/composer.json not found - could not run composer");
+		throw new \RuntimeException(root_web . $aComponent['dest'] . "/composer.json not found - could not run composer");
 	}
 
-	$dir = root_web . $aComponent['link'];
+	$dir = root_web . $aComponent['dest'];
 
 	echo "\nInstalling components with composer in $dir\n";
 
@@ -582,52 +579,6 @@ function changeDir($newWorkingDir)
 {
 	echo "Working in $newWorkingDir\n";
 	chdir($newWorkingDir);
-}
-
-/**
- * Create symbolic links for each component
- * Can be called several times, even when the link already exist.
- * Will recreate the link if not pointing to the right destination
- */
-function make_link($aComponent)
-{
-	if (!isset($aComponent['link']))
-		return;
-
-	$src = root_web . $aComponent['dest'];
-	$dst = root_web . $aComponent['link'];
-
-	if (!file_exists($src))
-	{
-		throw new \RuntimeException("could not create symlink from $src");
-	}
-
-	$currentLink = @readlink($dst);
-
-	if (!empty($currentLink) && $currentLink != $src)
-	{
-		// link exists but points to the wrong source
-		unlink($dst);
-		$currentLink = '';
-	}
-
-	if (empty($currentLink) && file_exists($dst))
-	{
-		// Destination exists but is not a link (may occur with change of underlying filesystems)
-		unlink($dst);
-		$currentLink = '';
-	}
-
-	if (empty($currentLink))
-	{
-		$cmd = 'ln -s ' . $src . ' ' . $dst;
-		runCommand($cmd);
-	}
-
-	// Touch the destination file so that the date is updated in any case.
-	// Useful for the LocalSettings.php file, it tells Chameleon to check for changes
-	// and eventually update the CSS out of the SCSS.
-	touch($dst);
 }
 
 function echoUsageAndExit()
