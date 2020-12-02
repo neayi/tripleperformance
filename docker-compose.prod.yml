@@ -32,7 +32,9 @@ services:
     labels:
       - 'traefik.enable=true'
       - 'traefik.port=80'
-      - 'traefik.frontend.rule=Host:wiki.tripleperformance.fr'
+      - 'traefik.frontend.rule=Host:wiki.tripleperformance.fr, tripleperformance.fr, pratiques.tripleperformance.fr'
+      - 'traefik.frontend.redirect.regex=^https?://(pratiques.)?tripleperformance.fr/(.*)'
+      - 'traefik.frontend.redirect.replacement=https:/wiki.tripleperformance.fr/$${2}'
 
   web_preprod:
     image: docker.pkg.github.com/neayi/tripleperformance/wiki:$WIKI_VERSION_PREPROD
