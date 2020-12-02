@@ -14,6 +14,7 @@
             // Path to your source in container
             "pathMappings": {
                 "/var/www/html": "${workspaceFolder}/html",
+                "/var/www/insights": "${workspaceFolder}/insights",
             }
         },
         {
@@ -25,6 +26,7 @@
             "port": 9000,
             "pathMappings": {
                 "/var/www/html": "${workspaceFolder}/html",
+                "/var/www/insights": "${workspaceFolder}/insights",
             }
         }
     ]

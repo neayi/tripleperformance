@@ -1,3 +1,5 @@
+![build](https://github.com/neayi/tripleperformance/workflows/build/badge.svg)
+
 # tripleperformance
 
 Cette brique permet de versionner :
