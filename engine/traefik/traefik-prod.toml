@@ -12,7 +12,7 @@ debug = true
   [entryPoints.dashboard]
   address = ":9000"
     [entryPoints.dashboard.auth.basic]
-    users = ["neayi:$apr1$/5428SE9$jrZoFU12rfR.8j1.S1uzo1"]
+    users = ["neayi:$apr1$uLdBpQUA$cI8PON.uMbsbUSk27A57b1"]
   [entryPoints.http]
   address = ":80"
     [entryPoints.http.redirect]
