@@ -38,5 +38,5 @@ onHostRule = true
 [acme.httpChallenge]
 entryPoint = "http"
 [[acme.domains]]
-main = "*.tripleperformance.fr"
+main = "tripleperformance.fr"
 sans = ["tripleperformance.fr", "wiki.tripleperformance.fr", "phpmyadmin.tripleperformance.fr", "elasticsearch.tripleperformance.fr", "insights.tripleperformance.fr", "elasticvue.tripleperformance.fr", "traefik.tripleperformance.fr", "wiki.preprod.tripleperformance.fr", "parsoid.tripleperformance.fr", "insights.preprod.tripleperformance.fr"]
