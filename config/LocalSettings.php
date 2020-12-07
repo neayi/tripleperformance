@@ -109,7 +109,7 @@ $wgEnableUploads = true;
 $wgUseImageMagick = false; // disable on OVH https://www.mediawiki.org/wiki/Topic:Uysful50s28egg8a
 $wgImageMagickConvertCommand = "/usr/bin/convert";
 $wgFileExtensions[] = 'svg';
-$wgSVGConverter = 'ImagickExt';
+$wgSVGConverter = 'ImageMagick';
 
 $wgAllowExternalImages = true;
 
@@ -371,7 +371,7 @@ wfLoadExtension( 'DeleteBatch' );
 $wgGroupPermissions['sysop']['deletebatch'] = true;
 
 // Visual editor
-wfLoadExtension( 'VisualEditor' );
+//wfLoadExtension( 'VisualEditor' );
 
 // Enable by default for everybody
 $wgDefaultUserOptions['visualeditor-enable'] = 1;
