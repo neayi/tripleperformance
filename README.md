@@ -161,10 +161,26 @@ Lancer la migration d'Insights :
     docker-compose -f docker-compose.prod.yml exec --user="www-data:www-data" insights php artisan migrate
 
 
+# Tâches de maintenance diverses
+## Mediawiki
 
+Pour importer des images ou un fichier xml :
+
+    docker-compose run -v ~/wiki_builder/out/departements:/out web php /var/www/html/maintenance/importImages.php --user="ImportsTriplePerformance" /out/
+
+    docker-compose run -v ~/wiki_builder/out/departements:/out web php /var/www/html/maintenance/importDump.php --user="ImportsTriplePerformance" /out/wiki_departements.xml
+
+    docker-compose run web php /var/www/html/maintenance/rebuildrecentchanges.php
+    docker-compose run web php /var/www/html/maintenance/initSiteStats.php
+    docker-compose run web php /var/www/html/maintenance/runJobs.php
+
+
+## Mysql
 Pour importer une DB, utiliser la commande : 
 
     docker exec -i tripleperformance_prod_db_1 mysql -u root --password=xxxxxx wiki < bin/sql/wiki.sql
+
+
 
 # TODO
 - Tous les logs doivent être envoyés sur STDOUT ou STDERR, pas dans un fichier
