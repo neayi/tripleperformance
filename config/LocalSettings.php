@@ -230,7 +230,11 @@ else
 // Cookies
 $wgCookieExpiration = 180 * 86400; // 180 days
 $wgExtendedLoginCookieExpiration = null;
-
+$wgDefaultUserOptions['rememberpassword'] = 1;
+$wgHooks['AuthChangeFormFields'][] = function ($requests, $fieldInfo, &$formDescriptor, $action) {
+    $formDescriptor['rememberMe'] = ['type' => 'check', 'default' => true];
+    return true;
+  };
 
 // https://www.mediawiki.org/wiki/Manual:$wgFixDoubleRedirects
 $wgFixDoubleRedirects = true;
