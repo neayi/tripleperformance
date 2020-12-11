@@ -230,6 +230,11 @@ function getWikiComponents()
 							'html' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-googleAnalytics.git',
 							'branch' => $wiki_version);
 
+	https://www.mediawiki.org/wiki/Extension:HeadScript
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/HeadScript',
+							'html' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-HeadScript.git',
+							'branch' => $wiki_version);
+
 	// https://www.mediawiki.org/wiki/Extension:DynamicPageList3
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/DynamicPageList',
 							'html' => '--branch master https://gitlab.com/hydrawiki/extensions/DynamicPageList.git',

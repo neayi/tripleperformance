@@ -220,6 +220,41 @@ if('prod' === $env) {
     $wgAutoSitemap["freq"] = "weekly"; //default
     $wgAutoSitemap["priority"][NS_MAIN] = 1;
     $wgAutoSitemap["priority"][NS_CATEGORY] = 0.8;
+
+    wfLoadExtension( 'HeadScript' );
+    $wgHeadScriptCode = <<<'START_END_MARKER'
+    <!-- Facebook Pixel Code -->
+    <script>
+      !function(f,b,e,v,n,t,s)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', '705673526999195');
+      fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=705673526999195&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Facebook Pixel Code -->
+    <script type="text/javascript">
+    _linkedin_partner_id = "2661170";
+    window._linkedin_data_partner_ids = window._linkedin_data_partner_ids || [];
+    window._linkedin_data_partner_ids.push(_linkedin_partner_id);
+    </script><script type="text/javascript">
+    (function(){var s = document.getElementsByTagName("script")[0];
+    var b = document.createElement("script");
+    b.type = "text/javascript";b.async = true;
+    b.src = "https://snap.licdn.com/li.lms-analytics/insight.min.js";
+    s.parentNode.insertBefore(b, s);})();
+    </script>
+    <noscript>
+    <img height="1" width="1" style="display:none;" alt="" src="https://px.ads.linkedin.com/collect/?pid=2661170&fmt=gif" />
+    </noscript>
+START_END_MARKER;
 }
 else
 {
@@ -253,6 +288,7 @@ $egChameleonExternalStyleModules = array(
 if($debug) {
     \Bootstrap\BootstrapManager::getInstance()->addCacheTriggerFile(dirname(MW_CONFIG_FILE) . '/skins/skin-neayi/chameleon-tripleperformance-variables.scss');
     \Bootstrap\BootstrapManager::getInstance()->addCacheTriggerFile(dirname(MW_CONFIG_FILE) . '/skins/skin-neayi/chameleon-neayi.scss');
+    \Bootstrap\BootstrapManager::getInstance()->addCacheTriggerFile(dirname(MW_CONFIG_FILE) . '/skins/skin-neayi/_caracteristiques_exploitation.scss');
 }
 
 // Database and cross referencing
