@@ -188,26 +188,19 @@ $wgPFEnableStringFunctions = true;
 # Add more configuration options below.
 
 if('prod' === $env) {
-    require_once "$IP/extensions/googleAnalytics/googleAnalytics.php";
-    $wgGoogleAnalyticsAccount = 'UA-116409512-5';
+    // https://www.mediawiki.org/wiki/Extension:GTag
+    // https://mwusers.org/files/file/4-gtag/
+    // https://github.com/SkizNet/mediawiki-GTag
+    wfLoadExtension( 'GTag' );
+    $wgGTagAnalyticsId  = 'UA-116409512-5';
 
-    // Add HTML code for any additional web analytics (can be used alone or with $wgGoogleAnalyticsAccount)
-    $wgGoogleAnalyticsOtherCode = '<script type="text/javascript" src="https://analytics.example.com/tracking.js"></script>';
+    // If true, insert tracking code into sensitive pages such as Special:UserLogin and Special:Preferences. If false, no tracking code is added to these pages.
+    $wgGTagTrackSensitivePages = true;
 
-    // Optional configuration (for defaults see googleAnalytics.php)
-    // Store full IP address in Google Universal Analytics (see https://support.google.com/analytics/answer/2763052?hl=en for details)
-    $wgGoogleAnalyticsAnonymizeIP = false;
-    // Array with NUMERIC namespace IDs where web analytics code should NOT be included.
-    $wgGoogleAnalyticsIgnoreNsIDs = [500];
-    // Array with page names (see magic word {{FULLPAGENAME}}) where web analytics code should NOT be included.
-    $wgGoogleAnalyticsIgnorePages = ['ArticleX', 'Foo:Bar'];
-    // Array with special pages where web analytics code should NOT be included.
-    $wgGoogleAnalyticsIgnoreSpecials = ['Userlogin', 'Userlogout', 'Preferences', 'ChangePassword', 'OATH'];
-    // Use 'noanalytics' permission to exclude specific user groups from web analytics, e.g.
-    $wgGroupPermissions['sysop']['noanalytics'] = true;
-    $wgGroupPermissions['bot']['noanalytics'] = true;
-    // To exclude all logged in users give 'noanalytics' permission to 'user' group, i.e.
-    $wgGroupPermissions['user']['noanalytics'] = true;
+    // Use 'gtag-exempt' permission to exclude specific user groups from web analytics, e.g.
+    $wgGroupPermissions['sysop']['gtag-exempt'] = true;
+    $wgGroupPermissions['bot']['gtag-exempt'] = true;
+    $wgGroupPermissions['bureaucrat']['gtag-exempt'] = true;
 
     // SEO and Sitemap
     // https://www.mediawiki.org/wiki/Extension:AutoSitemap
@@ -362,7 +355,7 @@ $wgGroupPermissions['bureaucrat']['changeauthor'] = true; // Only bureaucrats ca
 // References and citations
 wfLoadExtension( 'Cite' );
 
-// CommentStreams
+// https://www.mediawiki.org/wiki/Extension:CommentStreams
 wfLoadExtension( 'CommentStreams' );
 $wgAllowDisplayTitle = true;
 $wgRestrictDisplayTitle = false;
@@ -378,11 +371,6 @@ $wgEchoUseJobQueue = true;
 $wgEnotifMinorEdits = false;
 $wgEnotifUseRealName = true;
 $wgUsersNotifiedOnAllChanges = [ 'Bertrand' ];
-
-// VisualEditor
-//wfLoadExtension( 'VisualEditor' );
-$wgVisualEditorTabMessages['editsource'] = null;
-$wgVisualEditorTabMessages['createsource'] = null;
 
 // Neayi login
 wfLoadExtension( 'PluggableAuth' );
@@ -406,8 +394,13 @@ $wgRealnamesLinkStyle = 'replace';
 wfLoadExtension( 'DeleteBatch' );
 $wgGroupPermissions['sysop']['deletebatch'] = true;
 
-// Visual editor
-//wfLoadExtension( 'VisualEditor' );
+// VisualEditor
+if (!$debug)
+{
+    wfLoadExtension( 'VisualEditor' );
+    $wgVisualEditorTabMessages['editsource'] = null;
+    $wgVisualEditorTabMessages['createsource'] = null;
+}
 
 // Enable by default for everybody
 $wgDefaultUserOptions['visualeditor-enable'] = 1;
@@ -416,7 +409,6 @@ $wgVisualEditorEnableWikitext = true;
 $wgDefaultUserOptions['visualeditor-newwikitext'] = 1;
 $wgHiddenPrefs[] = 'visualeditor-newwikitext';
 
-
 $wgVirtualRestConfig['modules']['parsoid'] = array(
     // URL to the Parsoid instance
     // Use port 8142 if you use the Debian package
@@ -424,6 +416,9 @@ $wgVirtualRestConfig['modules']['parsoid'] = array(
     // Parsoid "domain", see below (optional)
     'domain' => $parsoidDomain,
 );
+
+// https://www.mediawiki.org/wiki/Extension:VEForAll
+//wfLoadExtension( 'VEForAll' );
 
 // Disambiguator
 wfLoadExtension( 'Disambiguator' );
@@ -444,15 +439,12 @@ enableSemantics( 'tripleperformance.fr' );
 
 // Debug and error reporting :
 
-// MaintenanceShell
-// wfLoadExtension( 'MaintenanceShell' );
-// $wgGroupPermissions['developer']['maintenanceshell'] = true;
-
+if ($debug) {
 // error_reporting( -1 );
 // ini_set( 'display_errors', 1 );
 // $wgDebugLogFile = __DIR__ . '/debug.log';
 // $wgShowDebug = true;
-if($debug) {
+
     $wgShowExceptionDetails = true;
     $wgDebugToolbar = true;
     $wgResourceLoaderDebug = true;

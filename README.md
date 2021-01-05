@@ -164,20 +164,24 @@ Lancer la migration d'Insights :
 # Tâches de maintenance diverses
 ## Mediawiki
 
+Pour lancer runJobs.php
+
+    docker-compose run --rm web sh -c "php /var/www/html/maintenance/runJobs.php"
+
+
 Pour importer des images ou un fichier xml :
 
-    docker-compose run -rm -v ~/wiki_builder/out/departements:/out web php /var/www/html/maintenance/importImages.php --user="ImportsTriplePerformance" /out/
+    docker-compose run --rm -v ~/wiki_builder/out/departements:/out web php /var/www/html/maintenance/importImages.php --user="ImportsTriplePerformance" /out/
 
-    docker-compose run -rm -v ~/wiki_builder/out/departements:/out web php /var/www/html/maintenance/importDump.php --user="ImportsTriplePerformance" /out/wiki_departements.xml
+    docker-compose run --rm -v ~/wiki_builder/out/departements:/out web php /var/www/html/maintenance/importDump.php --user="ImportsTriplePerformance" /out/wiki_departements.xml
 
-    docker-compose run -rm sh -c "web php /var/www/html/maintenance/rebuildrecentchanges.php && php /var/www/html/maintenance/initSiteStats.php && php /var/www/html/maintenance/runJobs.php"
+    docker-compose run --rm web sh -c "php /var/www/html/maintenance/rebuildrecentchanges.php && php /var/www/html/maintenance/initSiteStats.php && php /var/www/html/maintenance/runJobs.php"
 
 
 ## Mysql
 Pour importer une DB, utiliser la commande : 
 
     docker-compose exec -T db mysql -u root --password=xxxxxx wiki < bin/sql/wiki.sql
-
 
 
 # TODO

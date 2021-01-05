@@ -202,7 +202,7 @@ function getWiki()
 	$wiki_install_dir = '/html';
 	$wiki_version = 'REL1_35';
 
-	return array(	'html' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki.git',
+	return array(	'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki.git',
 					'dest' => $wiki_install_dir,
 					'branch' => $wiki_version);
 }
@@ -225,114 +225,117 @@ function getWikiComponents()
 
 	// Regular Mediawiki extensions
 
-	// https://www.mediawiki.org/wiki/Extension:Google_Analytics_Integration
-	$components[] = array(	'dest' => $wiki_extensions_dir . '/googleAnalytics',
-							'html' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-googleAnalytics.git',
-							'branch' => $wiki_version);
+	// https://www.mediawiki.org/wiki/Extension:GTag
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/GTag',
+							'git' => 'https://github.com/SkizNet/mediawiki-GTag.git');
 
 	https://www.mediawiki.org/wiki/Extension:HeadScript
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/HeadScript',
-							'html' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-HeadScript.git',
+							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-HeadScript.git',
 							'branch' => $wiki_version);
 
 	// https://www.mediawiki.org/wiki/Extension:DynamicPageList3
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/DynamicPageList',
-							'html' => '--branch master https://gitlab.com/hydrawiki/extensions/DynamicPageList.git',
+							'git' => '--branch master https://gitlab.com/hydrawiki/extensions/DynamicPageList.git',
 							'tag' => "3.3.3");
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Elastica',
-							'html' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-Elastica.git',
+							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-Elastica.git',
 							'postinstall' => 'composer',
 							'branch' => $wiki_version);
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/CirrusSearch',
-							'html' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-CirrusSearch.git',
+							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-CirrusSearch.git',
 							'postinstall' => 'composer',
 							'branch' => $wiki_version);
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/EmbedVideo',
-							'html' => 'https://gitlab.com/hydrawiki/extensions/EmbedVideo.git');
+							'git' => 'https://gitlab.com/hydrawiki/extensions/EmbedVideo.git');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/RelatedArticles',
-							'html' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-RelatedArticles.git',
+							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-RelatedArticles.git',
 							'branch' => $wiki_version);
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Popups',
-							'html' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-Popups.git',
+							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-Popups.git',
 							'branch' => $wiki_version);
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Description2',
-							'html' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-Description2.git',
+							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-Description2.git',
 							'branch' => $wiki_version);
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/AutoSitemap',
-							'html' => 'https://github.com/dolfinus/AutoSitemap.git');
+							'git' => 'https://github.com/dolfinus/AutoSitemap.git');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Loops',
-							'html' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-Loops.git',
+							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-Loops.git',
 							'branch' => $wiki_version);
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Variables',
-							'html' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-Variables.git',
+							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-Variables.git',
 							'branch' => $wiki_version);
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/PluggableAuth',
-							'html' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-PluggableAuth.git',
+							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-PluggableAuth.git',
 							'branch' => $wiki_version);
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Echo',
-							'html' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-Echo.git',
+							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-Echo.git',
 							'branch' => $wiki_version);
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/DeleteBatch',
-							'html' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-DeleteBatch.git',
+							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-DeleteBatch.git',
 							'postinstall' => 'composer',
 							'branch' => $wiki_version);
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/VisualEditor',
-							'html' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-VisualEditor.git',
+							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-VisualEditor.git',
 							'postinstall' => 'submodules',
 							'branch' => $wiki_version);
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Disambiguator',
-							'html' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-Disambiguator.git',
+							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-Disambiguator.git',
 							'branch' => $wiki_version);
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/HitCounters',
-							'html' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-HitCounters.git',
+							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-HitCounters.git',
+							'branch' => $wiki_version);
+
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/VEForAll',
+							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-VEForAll.git',
 							'branch' => $wiki_version);
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/MassEditRegex',
-							'html' => '--branch '.$latest_wiki_version .' https://github.com/wikimedia/mediawiki-extensions-MassEditRegex.git',
+							'git' => '--branch '.$latest_wiki_version .' https://github.com/wikimedia/mediawiki-extensions-MassEditRegex.git',
 							'branch' => $latest_wiki_version);				
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Realnames',
-							'html' => 'https://github.com/ofbeaton/mediawiki-realnames.git');	
+							'git' => 'https://github.com/ofbeaton/mediawiki-realnames.git');	
 
 	// Neayi extensions and forks
 	$components[] = array(	'dest' => $wiki_skins_dir . '/skin-neayi',
-							'html' => 'https://github.com/neayi/skin-neayi.git');
+							'git' => 'https://github.com/neayi/skin-neayi.git');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/PDFDownloadCard',
-							'html' => 'https://github.com/neayi/PDFDownloadCard.git');
+							'git' => 'https://github.com/neayi/PDFDownloadCard.git');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Carousel',
-							'html' => 'https://github.com/neayi/ext-carousel.git');
+							'git' => 'https://github.com/neayi/ext-carousel.git');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/ChangeAuthor',
-							'html' => '--branch '.$neayi_wiki_version.' https://github.com/neayi/mediawiki-extensions-ChangeAuthor.git',
+							'git' => '--branch '.$neayi_wiki_version.' https://github.com/neayi/mediawiki-extensions-ChangeAuthor.git',
 							'branch' => $neayi_wiki_version);
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/NeayiAuth',
-							'html' => 'https://github.com/neayi/NeayiAuth.git',
+							'git' => 'https://github.com/neayi/NeayiAuth.git',
 							'postinstall' => 'composer');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/CommentStreams',
-							'html' => '--branch Neayi https://github.com/neayi/mediawiki-extensions-CommentStreams.git',
+							'git' => '--branch Neayi https://github.com/neayi/mediawiki-extensions-CommentStreams.git',
 							'branch' => 'Neayi');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/InputBox',
-							'html' => '--branch '.$neayi_wiki_version.' https://github.com/neayi/mediawiki-extensions-InputBox.git',
+							'git' => '--branch '.$neayi_wiki_version.' https://github.com/neayi/mediawiki-extensions-InputBox.git',
 							'branch' => $neayi_wiki_version);
 
 	return $components;
@@ -381,7 +384,7 @@ function linkWikiSettings()
  */
 function checkout_project($aComponent, $bForceRemoveFolder = false)
 {
-	if (!isset($aComponent['html']))
+	if (!isset($aComponent['git']))
 		return;
 
 	if (is_dir(root_web . $aComponent['dest'])) {
@@ -395,7 +398,7 @@ function checkout_project($aComponent, $bForceRemoveFolder = false)
 			throw new \RuntimeException('The dest dir already exists: '. root_web . $aComponent['dest']);
     }
 
-	$cmd = 'git clone -q ' . $aComponent['html'] . ' ' . root_web . $aComponent['dest'];
+	$cmd = 'git clone -q ' . $aComponent['git'] . ' ' . root_web . $aComponent['dest'];
 	runCommand($cmd);
 
 	if (!empty($aComponent['tag']))
