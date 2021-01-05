@@ -560,7 +560,7 @@ function installComposer($aComponent)
 
 function initSubModules($dir)
 {
-	changeDir(root_web . $aComponent['dest']);
+	changeDir($dir);
 
 	$cmd = 'git submodule update --init';
 	runCommand($cmd);	
