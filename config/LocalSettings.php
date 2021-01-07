@@ -381,7 +381,12 @@ $wgPluggableAuth_EnableAutoLogin = false;
 $wgPluggableAuth_EnableLocalLogin = false;
 
 $wgOAuthUri = getenv('INSIGHT_URL') . '/login?&';
-$wgOAuthUserApiByToken = 'http://insights/api/user?&';
+
+if ($env == 'preprod') 
+    $wgOAuthUserApiByToken = 'http://insights_preprod/api/user?&';
+else
+    $wgOAuthUserApiByToken = 'http://insights/api/user?&';
+
 $wgGroupPermissions['*']['autocreateaccount'] = true;
 $wgUseCombinedLoginLink = true;
 $wgAvatarsBaseUri = getenv('INSIGHT_URL') . '/storage/users/';
