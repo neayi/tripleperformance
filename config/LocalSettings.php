@@ -440,7 +440,7 @@ $wgGroupPermissions['sysop']['masseditregex'] = true;
 
 // Semantic Mediawiki
 enableSemantics( 'tripleperformance.fr' );
-
+$smwgConfigFileDir = $wgUploadDirectory;
 
 // Debug and error reporting :
 

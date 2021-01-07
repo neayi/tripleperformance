@@ -41,7 +41,7 @@ services:
     restart: always
     env_file: .env.preprod
     volumes:
-      - ./.data/images:/var/www/html/images
+      - ./.data/images_preprod:/var/www/html/images
     labels:
       - 'traefik.enable=true'
       - 'traefik.port=80'
