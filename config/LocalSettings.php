@@ -442,6 +442,9 @@ $wgGroupPermissions['sysop']['masseditregex'] = true;
 enableSemantics( 'tripleperformance.fr' );
 $smwgConfigFileDir = $wgUploadDirectory;
 
+if ($env == 'preprod') 
+    $wgEnableEmail = false; // Disable emails on preprod please.
+
 // Debug and error reporting :
 
 if ($debug) {
