@@ -69,11 +69,11 @@ reboot
 * Insights : `docker-compose run --rm --user="$UID:$GID" insights_php bash` (ou `docker-compose exec insights_php bash` en tant que root et si le service est up)
 
 ### Accès à phpMyAdmin
-* Dev : http://phpmyadmin.vcap.me
+* Dev : http://phpmyadmin.dev.tripleperformance.fr
 * Prod et preprod : http://vps793962.ovh.net:8181/
 
 ### Accès à elasticVue
-* Dev : http://elastic:xxxxxxxx@elasticvue.vcap.me/ (mot de passe dans le fichier `.env` --> `ELASTICSEARCH_SERVER`)
+* Dev : http://elastic:xxxxxxxx@elasticvue.dev.tripleperformance.fr/ (mot de passe dans le fichier `.env` --> `ELASTICSEARCH_SERVER`)
 * Prod et preprod : http://vps793962.ovh.net:8080/
 
 ### Extraction du code
@@ -103,14 +103,11 @@ Par défaut, la base créée sera `wiki`, mais il est possible d'importer aussi 
 Il faut aussi ajouter des images pour compléter la configuration. Ces images ne sont pas versionnées, voir avec un membre de l'équipe pour les récupérer d'une autre install.
 
 ### Indexation du wiki dans elasticSearch
-A ce stade le wiki et le q2a doivent être fonctionnels. Il faut encore indexer les pages du wiki dans elasticSearch :
+Dans cette opération, on indexe les pages du wiki dans elasticSearch à partir de la DB :
 
-    docker-compose exec web bash
-    cd /var/www/html/maintenance
-    ./setupElasticSearch.sh
+    docker-compose exec web php bin/build_project.php --initElasticSearch
 
-NB : ce script est créé au moment de l'installation par `build_project.php`
-On peut vérifier la bonne indexation en allant sur http://elasticvue.vcap.me/
+On peut vérifier la bonne indexation en allant sur http://elasticvue.dev.tripleperformance.fr/ ou en pratiquant une recherche dans le wiki.
 
 ### Mise à jour du code
 Quand on met à jour tripleperformance, il faut ensuite mettre à jour le code de chaque instance :
@@ -164,10 +161,28 @@ Lancer la migration d'Insights :
     docker-compose -f docker-compose.prod.yml exec --user="www-data:www-data" insights php artisan migrate
 
 
+# Tâches de maintenance diverses
+## Mediawiki
 
+Pour lancer runJobs.php
+
+    docker-compose -f docker-compose.prod.yml run --rm web sh -c "php /var/www/html/maintenance/runJobs.php"
+
+
+Pour importer des images ou un fichier xml :
+
+    docker-compose -f docker-compose.prod.yml run --rm -v ~/wiki_builder/out/departements:/out web php /var/www/html/maintenance/importImages.php --user="ImportsTriplePerformance" /out/
+
+    docker-compose -f docker-compose.prod.yml run --rm -v ~/wiki_builder/out/departements:/out web php /var/www/html/maintenance/importDump.php --user="ImportsTriplePerformance" /out/wiki_departements.xml
+
+    docker-compose -f docker-compose.prod.yml run --rm web sh -c "php /var/www/html/maintenance/rebuildrecentchanges.php && php /var/www/html/maintenance/initSiteStats.php && php /var/www/html/maintenance/runJobs.php"
+
+
+## Mysql
 Pour importer une DB, utiliser la commande : 
 
-    docker exec -i tripleperformance_prod_db_1 mysql -u root --password=xxxxxx wiki < bin/sql/wiki.sql
+    docker-compose -f docker-compose.prod.yml exec -T db mysql -u root --password=xxxxxx wiki < bin/sql/wiki.sql
+
 
 # TODO
 - Tous les logs doivent être envoyés sur STDOUT ou STDERR, pas dans un fichier

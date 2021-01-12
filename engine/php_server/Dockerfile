@@ -50,7 +50,7 @@ RUN pecl install -o -f redis \
 RUN pecl install apcu \
   && docker-php-ext-enable apcu
 
-RUN a2enmod rewrite headers
+RUN a2enmod rewrite headers deflate
 
 RUN test -z "$DEBUG_TOOLS" || ( \
         pecl install xdebug \

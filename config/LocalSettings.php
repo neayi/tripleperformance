@@ -109,7 +109,7 @@ $wgEnableUploads = true;
 $wgUseImageMagick = false; // disable on OVH https://www.mediawiki.org/wiki/Topic:Uysful50s28egg8a
 $wgImageMagickConvertCommand = "/usr/bin/convert";
 $wgFileExtensions[] = 'svg';
-$wgSVGConverter = 'ImagickExt';
+$wgSVGConverter = 'ImageMagick';
 
 $wgAllowExternalImages = true;
 
@@ -188,26 +188,19 @@ $wgPFEnableStringFunctions = true;
 # Add more configuration options below.
 
 if('prod' === $env) {
-    require_once "$IP/extensions/googleAnalytics/googleAnalytics.php";
-    $wgGoogleAnalyticsAccount = 'UA-116409512-5';
+    // https://www.mediawiki.org/wiki/Extension:GTag
+    // https://mwusers.org/files/file/4-gtag/
+    // https://github.com/SkizNet/mediawiki-GTag
+    wfLoadExtension( 'GTag' );
+    $wgGTagAnalyticsId  = 'UA-116409512-5';
 
-    // Add HTML code for any additional web analytics (can be used alone or with $wgGoogleAnalyticsAccount)
-    $wgGoogleAnalyticsOtherCode = '<script type="text/javascript" src="https://analytics.example.com/tracking.js"></script>';
+    // If true, insert tracking code into sensitive pages such as Special:UserLogin and Special:Preferences. If false, no tracking code is added to these pages.
+    $wgGTagTrackSensitivePages = true;
 
-    // Optional configuration (for defaults see googleAnalytics.php)
-    // Store full IP address in Google Universal Analytics (see https://support.google.com/analytics/answer/2763052?hl=en for details)
-    $wgGoogleAnalyticsAnonymizeIP = false;
-    // Array with NUMERIC namespace IDs where web analytics code should NOT be included.
-    $wgGoogleAnalyticsIgnoreNsIDs = [500];
-    // Array with page names (see magic word {{FULLPAGENAME}}) where web analytics code should NOT be included.
-    $wgGoogleAnalyticsIgnorePages = ['ArticleX', 'Foo:Bar'];
-    // Array with special pages where web analytics code should NOT be included.
-    $wgGoogleAnalyticsIgnoreSpecials = ['Userlogin', 'Userlogout', 'Preferences', 'ChangePassword', 'OATH'];
-    // Use 'noanalytics' permission to exclude specific user groups from web analytics, e.g.
-    $wgGroupPermissions['sysop']['noanalytics'] = true;
-    $wgGroupPermissions['bot']['noanalytics'] = true;
-    // To exclude all logged in users give 'noanalytics' permission to 'user' group, i.e.
-    $wgGroupPermissions['user']['noanalytics'] = true;
+    // Use 'gtag-exempt' permission to exclude specific user groups from web analytics, e.g.
+    $wgGroupPermissions['sysop']['gtag-exempt'] = true;
+    $wgGroupPermissions['bot']['gtag-exempt'] = true;
+    $wgGroupPermissions['bureaucrat']['gtag-exempt'] = true;
 
     // SEO and Sitemap
     // https://www.mediawiki.org/wiki/Extension:AutoSitemap
@@ -220,6 +213,41 @@ if('prod' === $env) {
     $wgAutoSitemap["freq"] = "weekly"; //default
     $wgAutoSitemap["priority"][NS_MAIN] = 1;
     $wgAutoSitemap["priority"][NS_CATEGORY] = 0.8;
+
+    wfLoadExtension( 'HeadScript' );
+    $wgHeadScriptCode = <<<'START_END_MARKER'
+    <!-- Facebook Pixel Code -->
+    <script>
+      !function(f,b,e,v,n,t,s)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', '705673526999195');
+      fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=705673526999195&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Facebook Pixel Code -->
+    <script type="text/javascript">
+    _linkedin_partner_id = "2661170";
+    window._linkedin_data_partner_ids = window._linkedin_data_partner_ids || [];
+    window._linkedin_data_partner_ids.push(_linkedin_partner_id);
+    </script><script type="text/javascript">
+    (function(){var s = document.getElementsByTagName("script")[0];
+    var b = document.createElement("script");
+    b.type = "text/javascript";b.async = true;
+    b.src = "https://snap.licdn.com/li.lms-analytics/insight.min.js";
+    s.parentNode.insertBefore(b, s);})();
+    </script>
+    <noscript>
+    <img height="1" width="1" style="display:none;" alt="" src="https://px.ads.linkedin.com/collect/?pid=2661170&fmt=gif" />
+    </noscript>
+START_END_MARKER;
 }
 else
 {
@@ -253,6 +281,7 @@ $egChameleonExternalStyleModules = array(
 if($debug) {
     \Bootstrap\BootstrapManager::getInstance()->addCacheTriggerFile(dirname(MW_CONFIG_FILE) . '/skins/skin-neayi/chameleon-tripleperformance-variables.scss');
     \Bootstrap\BootstrapManager::getInstance()->addCacheTriggerFile(dirname(MW_CONFIG_FILE) . '/skins/skin-neayi/chameleon-neayi.scss');
+    \Bootstrap\BootstrapManager::getInstance()->addCacheTriggerFile(dirname(MW_CONFIG_FILE) . '/skins/skin-neayi/_caracteristiques_exploitation.scss');
 }
 
 // Database and cross referencing
@@ -326,7 +355,7 @@ $wgGroupPermissions['bureaucrat']['changeauthor'] = true; // Only bureaucrats ca
 // References and citations
 wfLoadExtension( 'Cite' );
 
-// CommentStreams
+// https://www.mediawiki.org/wiki/Extension:CommentStreams
 wfLoadExtension( 'CommentStreams' );
 $wgAllowDisplayTitle = true;
 $wgRestrictDisplayTitle = false;
@@ -343,11 +372,6 @@ $wgEnotifMinorEdits = false;
 $wgEnotifUseRealName = true;
 $wgUsersNotifiedOnAllChanges = [ 'Bertrand' ];
 
-// VisualEditor
-//wfLoadExtension( 'VisualEditor' );
-$wgVisualEditorTabMessages['editsource'] = null;
-$wgVisualEditorTabMessages['createsource'] = null;
-
 // Neayi login
 wfLoadExtension( 'PluggableAuth' );
 wfLoadExtension( 'NeayiAuth' );
@@ -357,7 +381,12 @@ $wgPluggableAuth_EnableAutoLogin = false;
 $wgPluggableAuth_EnableLocalLogin = false;
 
 $wgOAuthUri = getenv('INSIGHT_URL') . '/login?&';
-$wgOAuthUserApiByToken = 'http://insights/api/user?&';
+
+if ($env == 'preprod') 
+    $wgOAuthUserApiByToken = 'http://insights_preprod/api/user?&';
+else
+    $wgOAuthUserApiByToken = 'http://insights/api/user?&';
+
 $wgGroupPermissions['*']['autocreateaccount'] = true;
 $wgUseCombinedLoginLink = true;
 $wgAvatarsBaseUri = getenv('INSIGHT_URL') . '/storage/users/';
@@ -370,8 +399,13 @@ $wgRealnamesLinkStyle = 'replace';
 wfLoadExtension( 'DeleteBatch' );
 $wgGroupPermissions['sysop']['deletebatch'] = true;
 
-// Visual editor
-wfLoadExtension( 'VisualEditor' );
+// VisualEditor
+if (!$debug)
+{
+    wfLoadExtension( 'VisualEditor' );
+    $wgVisualEditorTabMessages['editsource'] = null;
+    $wgVisualEditorTabMessages['createsource'] = null;
+}
 
 // Enable by default for everybody
 $wgDefaultUserOptions['visualeditor-enable'] = 1;
@@ -380,7 +414,6 @@ $wgVisualEditorEnableWikitext = true;
 $wgDefaultUserOptions['visualeditor-newwikitext'] = 1;
 $wgHiddenPrefs[] = 'visualeditor-newwikitext';
 
-
 $wgVirtualRestConfig['modules']['parsoid'] = array(
     // URL to the Parsoid instance
     // Use port 8142 if you use the Debian package
@@ -388,6 +421,9 @@ $wgVirtualRestConfig['modules']['parsoid'] = array(
     // Parsoid "domain", see below (optional)
     'domain' => $parsoidDomain,
 );
+
+// https://www.mediawiki.org/wiki/Extension:VEForAll
+//wfLoadExtension( 'VEForAll' );
 
 // Disambiguator
 wfLoadExtension( 'Disambiguator' );
@@ -402,17 +438,21 @@ wfLoadExtension( 'InputBox' );
 wfLoadExtension( 'MassEditRegex' );
 $wgGroupPermissions['sysop']['masseditregex'] = true;
 
+// Semantic Mediawiki
+enableSemantics( 'tripleperformance.fr' );
+$smwgConfigFileDir = $wgUploadDirectory;
+
+if ($env == 'preprod') 
+    $wgEnableEmail = false; // Disable emails on preprod please.
+
 // Debug and error reporting :
 
-// MaintenanceShell
-// wfLoadExtension( 'MaintenanceShell' );
-// $wgGroupPermissions['developer']['maintenanceshell'] = true;
-
+if ($debug) {
 // error_reporting( -1 );
 // ini_set( 'display_errors', 1 );
 // $wgDebugLogFile = __DIR__ . '/debug.log';
 // $wgShowDebug = true;
-if($debug) {
+
     $wgShowExceptionDetails = true;
     $wgDebugToolbar = true;
     $wgResourceLoaderDebug = true;
