@@ -528,9 +528,9 @@ function updateComposer()
 	$wiki_install_dir = getInstallDir();
 
 	if (empty($_ENV['ENV']) || $_ENV['ENV'] == 'dev')
-		$cmd = "composer update --no-interaction";
+		$cmd = "composer update --no-progress --no-interaction";
 	else
-		$cmd = "composer update --no-interaction --no-dev";
+		$cmd = "composer update --no-progress --no-interaction --no-dev";
 
 	echo "\nUpdating components with composer in $dir\n";
 
@@ -550,9 +550,9 @@ function installComposer($aComponent)
 	echo "\nInstalling components with composer in $dir\n";
 
 	if (empty($_ENV['ENV']) || $_ENV['ENV'] == 'dev')
-		$cmd = "composer install --no-interaction";
+		$cmd = "composer install --no-progress --no-interaction";
 	else
-		$cmd = "composer install --no-interaction --no-dev";
+		$cmd = "composer install --no-progress --no-interaction --no-dev";
 
 	changeDir($dir);
 	runCommand($cmd);	
