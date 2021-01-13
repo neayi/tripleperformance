@@ -61,6 +61,8 @@ $wgFavicon = "/skins/skin-neayi/favicon/favicon.ico";
 
 $wgEnableEmail = true;
 $wgEnableUserEmail = true; # UPO
+if ($env == 'preprod') 
+    $wgEnableEmail = false; // Disable emails on preprod please.
 
 $wgEmergencyContact = "bertrand.gorge@neayi.com";
 $wgPasswordSender = $emailSender;
@@ -370,7 +372,14 @@ $wgEchoUseJobQueue = true;
 
 $wgEnotifMinorEdits = false;
 $wgEnotifUseRealName = true;
-$wgUsersNotifiedOnAllChanges = [ 'Bertrand' ];
+
+// https://www.mediawiki.org/wiki/Extension:EditNotify
+$wgEditNotifyAlerts = array(
+	array(
+		'action' => array( 'create', 'edit' ),
+		'users' => array('Bertrand_Gorge')
+	)
+);
 
 // Neayi login
 wfLoadExtension( 'PluggableAuth' );
@@ -441,9 +450,6 @@ $wgGroupPermissions['sysop']['masseditregex'] = true;
 // Semantic Mediawiki
 enableSemantics( 'tripleperformance.fr' );
 $smwgConfigFileDir = $wgUploadDirectory;
-
-if ($env == 'preprod') 
-    $wgEnableEmail = false; // Disable emails on preprod please.
 
 // Debug and error reporting :
 
