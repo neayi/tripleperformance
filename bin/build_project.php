@@ -79,6 +79,16 @@ function create_wiki_env()
 
 	setOwner();
 
+	$env = getenv('ENV');
+	if ($env == 'dev')
+	{
+		foreach ($components as $aComponent)
+		{
+			if (preg_match('/:neayi/', $aComponent['git']))
+				setOwner(root_web . $aComponent['dest'], '1000');
+		}
+	}
+
 	echo "\n-- Wiki Done --\n\n";
 }
 
@@ -119,6 +129,16 @@ function update_wiki_env()
 	createElasticSearchScript();
 
 	setOwner();
+
+	$env = getenv('ENV');
+	if ($env == 'dev')
+	{
+		foreach ($components as $aComponent)
+		{
+			if (preg_match('/:neayi/', $aComponent['git']))
+				setOwner(root_web . $aComponent['dest'], '1000');
+		}
+	}
 
 	echo "\n-- Wiki updated --\n\n";
 }
@@ -329,8 +349,8 @@ function getWikiComponents()
 							'git' => 'https://github.com/neayi/ext-carousel.git');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/ChangeAuthor',
-							'git' => '--branch '.$neayi_wiki_version.' https://github.com/neayi/mediawiki-extensions-ChangeAuthor.git',
-							'branch' => $neayi_wiki_version);
+							'git' => '--branch '.$wiki_version.' https://github.com/neayi/mediawiki-extensions-ChangeAuthor.git',
+							'branch' => $wiki_version);
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/NeayiAuth',
 							'git' => 'https://github.com/neayi/NeayiAuth.git',
@@ -343,7 +363,25 @@ function getWikiComponents()
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/InputBox',
 							'git' => '--branch '.$neayi_wiki_version.' https://github.com/neayi/mediawiki-extensions-InputBox.git',
 							'branch' => $neayi_wiki_version);
+	
+	$env = getenv('ENV');
+	if ($env == 'dev')
+	{
+		foreach ($components as $k => $aComponent)
+			$components[$k]['git'] = str_replace('https://github.com/neayi', 'git@github.com:neayi', $aComponent['git']);
 
+		// Copy the files in ~/.ssh from /ssh 
+		if (!file_exists('/ssh'))
+		{
+			echo "\nCould not copy ssh keys from host. Please run build_project with the following:\n\n";
+			echo "docker-compose run --rm -v ~/.ssh:/ssh web php bin/build_project.php --update\n";
+			throw new \RuntimeException("Wrong command in dev environment");
+		}
+
+		runCommand('cp -r /ssh ~/.ssh');
+		runCommand('chmod 600 ~/.ssh/*');
+	}
+						
 	return $components;
 }
 
@@ -533,7 +571,8 @@ function updateComposer()
 {
 	$wiki_install_dir = getInstallDir();
 
-	if (empty($_ENV['ENV']) || $_ENV['ENV'] == 'dev')
+	$env = getenv('ENV');
+	if ($env == 'dev')
 		$cmd = "composer update --no-progress --no-interaction";
 	else
 		$cmd = "composer update --no-progress --no-interaction --no-dev";
@@ -555,7 +594,8 @@ function installComposer($aComponent)
 
 	echo "\nInstalling components with composer in $dir\n";
 
-	if (empty($_ENV['ENV']) || $_ENV['ENV'] == 'dev')
+	$env = getenv('ENV');
+	if ($env == 'dev')
 		$cmd = "composer install --no-progress --no-interaction";
 	else
 		$cmd = "composer install --no-progress --no-interaction --no-dev";
@@ -601,11 +641,12 @@ function echoUsageAndExit()
 	exit(0);
 }
 
-function setOwner()
+function setOwner($dir = '', $owner = 'www-data')
 {
-	$install_dir = getInstallDir();
+	if (empty($dir))
+		$dir = getInstallDir();
 
-	changeDir($install_dir);
-	$cmd = 'chown -R www-data:www-data .';
+	changeDir($dir);
+	$cmd = "chown -R $owner:$owner .";
 	runCommand($cmd);
 }
