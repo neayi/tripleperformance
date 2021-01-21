@@ -26,6 +26,7 @@ RUN apt-get update  \
     supervisor \
     vim \
     msmtp \
+	ssh \
 	&& rm -r /var/lib/apt/lists/*
 
 # Use GD
