@@ -242,6 +242,7 @@ function getWikiComponents()
 	// Composer components
 	$components[] = array(	'composer' => 'mediawiki/chameleon-skin' );
 	$components[] = array(	'composer' => 'mediawiki/semantic-media-wiki' );
+	$components[] = array(	'composer' => 'mediawiki/maps' );
 
 	// Regular Mediawiki extensions
 

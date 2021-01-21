@@ -451,6 +451,11 @@ $wgGroupPermissions['sysop']['masseditregex'] = true;
 enableSemantics( 'tripleperformance.fr' );
 $smwgConfigFileDir = $wgUploadDirectory;
 
+// Load the geo localisation SMW extension:
+// https://maps.extension.wiki/wiki/Installation
+wfLoadExtension( 'Maps' );
+$egMapsDefaultService = 'leaflet';
+
 // Debug and error reporting :
 
 if ($debug) {
