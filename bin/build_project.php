@@ -364,7 +364,10 @@ function getWikiComponents()
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/InputBox',
 							'git' => '--branch '.$neayi_wiki_version.' https://github.com/neayi/mediawiki-extensions-InputBox.git',
 							'branch' => $neayi_wiki_version);
-	
+
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/OpenGraph',
+							'git' => 'https://github.com/neayi/mediawiki-extensions-OpenGraph.git');	
+						   
 	$env = getenv('ENV');
 	if ($env == 'dev')
 	{

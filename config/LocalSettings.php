@@ -341,6 +341,7 @@ $wgPageImagesBlacklist = array(
 wfLoadExtension( 'TextExtracts' );
 wfLoadExtension( 'Description2' );
 $wgEnableMetaDescriptionFunctions = true;
+wfLoadExtension( 'OpenGraph' );
 
 // Popups (shows a preview of the page on hover)
 wfLoadExtension( 'Popups' );
