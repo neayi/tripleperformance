@@ -366,6 +366,8 @@ $wgCommentStreamsEnableVoting = true;
 $wgCommentStreamsEnableWatchlist = false;
 $wgDefaultUserOptions["echo-subscriptions-email-commentstreams-notification-category"] = true; // enable email notifications
 $wgDefaultUserOptions["echo-subscriptions-web-commentstreams-notification-category"] = true; // enable web notifications
+$wgGroupPermissions['csmoderator']['cs-moderator-edit'] = true;
+$wgCommentStreamsModeratorFastDelete = true;
 
 // Echo
 wfLoadExtension( 'Echo' );
@@ -456,6 +458,8 @@ $smwgConfigFileDir = $wgUploadDirectory;
 // https://maps.extension.wiki/wiki/Installation
 wfLoadExtension( 'Maps' );
 $egMapsDefaultService = 'leaflet';
+
+wfLoadExtension( 'SemanticResultFormats' );
 
 // Debug and error reporting :
 

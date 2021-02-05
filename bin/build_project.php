@@ -243,6 +243,7 @@ function getWikiComponents()
 	$components[] = array(	'composer' => 'mediawiki/chameleon-skin' );
 	$components[] = array(	'composer' => 'mediawiki/semantic-media-wiki' );
 	$components[] = array(	'composer' => 'mediawiki/maps' );
+	$components[] = array(	'composer' => 'mediawiki/semantic-result-formats' );
 
 	// Regular Mediawiki extensions
 
@@ -337,7 +338,6 @@ function getWikiComponents()
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/EditNotify',
 							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-EditNotify',
 							'branch' => $wiki_version);
-							
 
 	// Neayi extensions and forks
 	$components[] = array(	'dest' => $wiki_skins_dir . '/skin-neayi',
