@@ -35,6 +35,12 @@ Copier les fichiers `.env` et `docker-compose.override.yml`, et éventuellement 
     rm -rf .cache/ssl && mkdir .cache/ssl
     docker run --rm -v $(pwd):/src alpine:3.9 sh -c "/src/engine/traefik/dev/generate-certs.sh && chown -R $(id -u):$(id -g) /src/.cache/ssl"
 
+Attention : après avoir créé les certificats, il faut absolument recréer le container de Traefik, qui monte ces certificats dans un volume :
+
+    docker-compose up -d --force-recreate traefik
+
+### Installation des certificats dans les navigateurs
+
 Sous Windows : installer d'abord le certificat `root` puis le certificat `server` ainsi créés dans `.cache/ssl` dans [l'autorité racine de confiance](https://docs.microsoft.com/en-us/dotnet/framework/wcf/feature-details/how-to-create-temporary-certificates-for-use-during-development) - en pratique il faut double cliquer sur les fichiers .crt, puis cliquer sur **Installer un certificat**, Ordinateur local, et choisir **Autorités de certification racines de confiance**
 
 Pour installer le certificat dans Firefox, le plus simple est de faire en sorte que Firefox respecte les certificats racine de Windows en allant dans about:config, et en [changeant le réglage setting security.enterprise_roots.enabled à true](https://gist.github.com/cecilemuller/9492b848eb8fe46d462abeb26656c4f8).
