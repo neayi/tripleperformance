@@ -358,7 +358,7 @@ function getWikiComponents()
 							'postinstall' => 'composer');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/CommentStreams',
-							'git' => '--branch Neayi https://github.com/neayi/mediawiki-extensions-CommentStreams.git',
+							'git' => '--branch TriplePerformance https://github.com/neayi/mediawiki-extensions-CommentStreams.git',
 							'branch' => 'TriplePerformance');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/InputBox',
