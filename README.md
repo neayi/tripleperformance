@@ -76,11 +76,12 @@ reboot
 
 ### Accès à phpMyAdmin
 * Dev : http://phpmyadmin.dev.tripleperformance.fr
-* Prod et preprod : http://vps793962.ovh.net:8181/
+* Prod : http://phpmyadmin.tripleperformance.fr
+
 
 ### Accès à elasticVue
 * Dev : http://elastic:xxxxxxxx@elasticvue.dev.tripleperformance.fr/ (mot de passe dans le fichier `.env` --> `ELASTICSEARCH_SERVER`)
-* Prod et preprod : http://vps793962.ovh.net:8080/
+* Prod : http://elasticvue.tripleperformance.fr/
 
 ### Extraction du code
 

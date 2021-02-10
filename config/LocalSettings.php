@@ -368,6 +368,7 @@ $wgDefaultUserOptions["echo-subscriptions-email-commentstreams-notification-cate
 $wgDefaultUserOptions["echo-subscriptions-web-commentstreams-notification-category"] = true; // enable web notifications
 $wgGroupPermissions['csmoderator']['cs-moderator-edit'] = true;
 $wgCommentStreamsModeratorFastDelete = true;
+$wgCommentStreamsUserAvatarPropertyName = "A un avatar";
 
 // Echo
 wfLoadExtension( 'Echo' );

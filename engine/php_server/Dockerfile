@@ -60,6 +60,7 @@ RUN test -z "$DEBUG_TOOLS" || ( \
         	&& echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/xdebug.ini \
         	&& echo "xdebug.remote_host=host.docker.internal" >> /usr/local/etc/php/conf.d/xdebug.ini \
         	&& echo "xdebug.idekey=VSCODE" >> /usr/local/etc/php/conf.d/xdebug.ini \
+			&& echo "xdebug.remote_port = 9000" >> /usr/local/etc/php/conf.d/xdebug.ini \
         	&& echo "log_errors = On" >> /usr/local/etc/php/conf.d/error_log.ini \
         	&& echo "error_log = /dev/stderr" >> /usr/local/etc/php/conf.d/error_log.ini \
     )

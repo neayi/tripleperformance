@@ -8,7 +8,7 @@
             "name": "Listen for XDebug",
             "type": "php",
             "request": "launch",
-            "port": 9000,
+            "port": 9030,
             "hostname": "0.0.0.0",
 
             // Path to your source in container
@@ -23,7 +23,7 @@
             "request": "launch",
             "program": "${file}",
             "cwd": "${fileDirname}",
-            "port": 9000,
+            "port": 9030,
             "pathMappings": {
                 "/var/www/html": "${workspaceFolder}/html",
                 "/var/www/insights": "${workspaceFolder}/insights",

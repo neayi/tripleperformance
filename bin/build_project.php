@@ -359,7 +359,7 @@ function getWikiComponents()
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/CommentStreams',
 							'git' => '--branch Neayi https://github.com/neayi/mediawiki-extensions-CommentStreams.git',
-							'branch' => 'Neayi');
+							'branch' => 'TriplePerformance');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/InputBox',
 							'git' => '--branch '.$neayi_wiki_version.' https://github.com/neayi/mediawiki-extensions-InputBox.git',
