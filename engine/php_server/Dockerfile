@@ -22,6 +22,8 @@ RUN apt-get update  \
 	libpspell-dev \
 	libmagickwand-dev \
 	libxslt-dev --no-install-recommends \
+	ghostscript \
+	poppler-utils \
     cron \
     supervisor \
     vim \

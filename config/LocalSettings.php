@@ -108,7 +108,7 @@ $wgMemCachedServers = [];
 ## To enable image uploads, make sure the 'images' directory
 ## is writable, then set this to true:
 $wgEnableUploads = true;
-$wgUseImageMagick = false; // disable on OVH https://www.mediawiki.org/wiki/Topic:Uysful50s28egg8a
+$wgUseImageMagick = true; // disable on OVH https://www.mediawiki.org/wiki/Topic:Uysful50s28egg8a
 $wgImageMagickConvertCommand = "/usr/bin/convert";
 $wgFileExtensions[] = 'svg';
 $wgSVGConverter = 'ImageMagick';
@@ -178,13 +178,7 @@ wfLoadExtension( 'ParserFunctions' );
 $wgPFEnableStringFunctions = true;
 
 # PDFHandler in order to build thumbnails for PDFs
-//wfLoadExtension( 'PdfHandler' );
-//$wgPdfProcessor (default = "gs") // path to your ghostscript implementation
-//$wgPdfPostProcessor = "C:\Program Files\ImageMagick-7.0.9-Q16\magick.exe"; // (default = "convert") // path to your imagemagick convert
-//$wgPdfInfo = "C:\Program Files\Glyph & Cog\XpdfReader-win64\pdfinfo.exe"; // (default = "pdfinfo") // path to your pdfinfo
-// $wgPdftoText (default = "pdftotext") // path to your pdftotext
-// $wgPdfOutputExtension (default = "jpg") // preferred output format[3]
-// $wgPdfHandlerDpi (default = "150" ) //
+wfLoadExtension( 'PdfHandler' );
 
 # End of automatically generated settings.
 # Add more configuration options below.
@@ -413,12 +407,9 @@ wfLoadExtension( 'DeleteBatch' );
 $wgGroupPermissions['sysop']['deletebatch'] = true;
 
 // VisualEditor
-if (!$debug)
-{
-    wfLoadExtension( 'VisualEditor' );
-    $wgVisualEditorTabMessages['editsource'] = null;
-    $wgVisualEditorTabMessages['createsource'] = null;
-}
+wfLoadExtension( 'VisualEditor' );
+$wgVisualEditorTabMessages['editsource'] = null;
+$wgVisualEditorTabMessages['createsource'] = null;
 
 // Enable by default for everybody
 $wgDefaultUserOptions['visualeditor-enable'] = 1;
@@ -434,6 +425,38 @@ $wgVirtualRestConfig['modules']['parsoid'] = array(
     // Parsoid "domain", see below (optional)
     'domain' => $parsoidDomain,
 );
+
+wfLoadExtension( 'UploadWizard' );
+$wgUseInstantCommons = false;
+$wgUploadNavigationUrl = '/wiki/Special:UploadWizard';
+$wgUploadWizardConfig = array(
+    'autoAdd' => array(
+        //  'wikitext' => array(
+        //     'This file was uploaded with the UploadWizard extension.'
+        //     ),
+            'categories' => array(
+                "Fichier chargé avec l'assistant UploadWizard"	
+                ),
+        ), // Should be localised to the language of your wiki instance
+//        'feedbackPage' => 'Feedback about UploadWizard',
+//        'altUploadForm' => 'Special:Upload',
+    'feedbackLink' => false, // Disable the link for feedback (default: points to Commons)
+    'alternativeUploadToolsPage' => false, // Disable the link to alternative upload tools (default: points to Commons)
+    'enableFormData' => true, // Enable FileAPI uploads be used on supported browsers
+    'enableMultipleFiles' => true,
+    'enableMultiFileSelect' => false,
+    'uwLanguages' => array(
+        'fr' => 'Français',
+        'en' => 'English',
+        'de' => 'Deutsch'
+        ), // Selectable languages for file descriptions - defaults to 'en'
+    'tutorial' => array(
+            'skip' => true
+        ), // Skip the tutorial
+    'maxUploads' => 15, // Number of uploads with one form - defaults to 50
+    'fileExtensions' => $wgFileExtensions // omitting this may cause errors
+    );
+
 
 // https://www.mediawiki.org/wiki/Extension:VEForAll
 //wfLoadExtension( 'VEForAll' );
