@@ -427,7 +427,7 @@ $wgVirtualRestConfig['modules']['parsoid'] = array(
 );
 
 wfLoadExtension( 'UploadWizard' );
-$wgUseInstantCommons = false;
+$wgUseInstantCommons = true;
 $wgUploadNavigationUrl = '/wiki/Special:UploadWizard';
 $wgUploadWizardConfig = array(
     'autoAdd' => array(
@@ -439,7 +439,7 @@ $wgUploadWizardConfig = array(
                 ),
         ), // Should be localised to the language of your wiki instance
 //        'feedbackPage' => 'Feedback about UploadWizard',
-//        'altUploadForm' => 'Special:Upload',
+//    'altUploadForm' => 'Special:Upload',
     'feedbackLink' => false, // Disable the link for feedback (default: points to Commons)
     'alternativeUploadToolsPage' => false, // Disable the link to alternative upload tools (default: points to Commons)
     'enableFormData' => true, // Enable FileAPI uploads be used on supported browsers
