@@ -10,7 +10,7 @@ done
 
 docker exec tripleperformance_prod_db_1 rm /etc/mysql/conf.d/mysqlpassword.cnf
 
-scp -qi $DIR/ssh.cluster026.hosting.ovh.net.key $DIR/DBs/*-$(date +%Y%m%d).sql.gz neayicomwl@ssh.cluster026.hosting.ovh.net:~/backup
-scp -rqi $DIR/ssh.cluster026.hosting.ovh.net.key $DIR/../.data/images neayicomwl@ssh.cluster026.hosting.ovh.net:~/backup
+scp -qi $DIR/ssh.cluster026.hosting.ovh.net.key $DIR/DBs/*-$(date +%Y%m%d).sql.gz wkgv4271@neayi.com:~/backup
+scp -rqi $DIR/ssh.cluster026.hosting.ovh.net.key $DIR/../.data/images wkgv4271@neayi.com:~/backup
 
 find $DIR/DBs -name "*.gz" -type f -mtime +10 -exec rm -f {} \;
