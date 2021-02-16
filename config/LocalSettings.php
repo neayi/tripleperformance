@@ -363,6 +363,7 @@ $wgDefaultUserOptions["echo-subscriptions-web-commentstreams-notification-catego
 $wgGroupPermissions['csmoderator']['cs-moderator-edit'] = true;
 $wgCommentStreamsModeratorFastDelete = true;
 $wgCommentStreamsUserAvatarPropertyName = "A un avatar";
+$wgInsightsRootURL = getenv('INSIGHT_URL') . '/';
 
 // Echo
 wfLoadExtension( 'Echo' );
