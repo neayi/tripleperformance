@@ -165,6 +165,16 @@ $wgRightsIcon = "";
 # Path to the GNU diff3 utility. Used for conflict resolution.
 $wgDiff3 = "/usr/bin/diff3";
 
+# Define custome namespaces
+define("NS_STRUCTURE", 3000); // This MUST be even.
+define("NS_STRUCTURE_TALK", 3001); // This MUST be the following odd integer.
+
+// Add namespaces.
+$wgExtraNamespaces[NS_STRUCTURE] = "Structure";
+$wgExtraNamespaces[NS_STRUCTURE_TALK] = "Structure_talk"; // Note underscores in the namespace name.
+$wgContentNamespaces[] = NS_STRUCTURE;
+
+
 # The following permissions were set based on your choice in the installer
 $wgGroupPermissions['*']['createaccount'] = true;
 $wgGroupPermissions['*']['edit'] = false;
@@ -478,6 +488,7 @@ $wgGroupPermissions['sysop']['masseditregex'] = true;
 // Semantic Mediawiki
 enableSemantics( 'tripleperformance.fr' );
 $smwgConfigFileDir = $wgUploadDirectory;
+$smwgNamespacesWithSemanticLinks[NS_STRUCTURE] = true;
 
 // Load the geo localisation SMW extension:
 // https://maps.extension.wiki/wiki/Installation
