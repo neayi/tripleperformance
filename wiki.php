@@ -32,11 +32,19 @@ try {
         // docker-compose -f docker-compose.prod.yml run --rm -v ~/youtube:/out web_preprod php /var/www/html/maintenance/importDump.php /out/$file
         while ($arg = array_shift($argv))
         {
+            if (strpos($arg, '.xml') === false)
+                throw new Exception("Please import only xml files. $arg given.", 1);
+            
             $volume = '-v '.dirname($arg).':/out';
             $fullScript = $scriptPath . ' /out/' . basename($arg);
 
             $commandLines[] = getCommandLine($targetEnv, $fullScript, $volume);
         }
+
+        // You might want to run rebuildrecentchanges.php to regenerate RecentChanges,
+        // and initSiteStats.php to update page and revision counts
+        $commandLines[] = getCommandLine($targetEnv, getScriptPath('rebuildrecentchanges.php'));
+        $commandLines[] = getCommandLine($targetEnv, getScriptPath('initSiteStats.php'));               
     }
     else if ($script == 'importImages.php')
     {
@@ -49,9 +57,6 @@ try {
 
             $commandLines[] = getCommandLine($targetEnv, $fullScript, $volume);
         }
-
-        var_dump($commandLines);
-        exit();
     }    
     else
     {
