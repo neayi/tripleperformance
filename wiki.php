@@ -25,22 +25,56 @@ try {
     
     $scriptPath = getScriptPath($script);
 	
-    // Add the rest of the args:
-    while ($arg = array_shift($argv)) {
-        $scriptPath .= ' ' . $arg;
+    $commandLines = array();
+
+    if ($script == 'importDump.php')
+    {
+        // docker-compose -f docker-compose.prod.yml run --rm -v ~/youtube:/out web_preprod php /var/www/html/maintenance/importDump.php /out/$file
+        while ($arg = array_shift($argv))
+        {
+            $volume = '-v '.dirname($arg).':/out';
+            $fullScript = $scriptPath . ' /out/' . basename($arg);
+
+            $commandLines[] = getCommandLine($targetEnv, $fullScript, $volume);
+        }
+    }
+    else if ($script == 'importImages.php')
+    {
+        // docker-compose -f docker-compose.prod.yml run --rm -v ~/geco/images:/out web_preprod php /var/www/html/maintenance/importImages.php /out/
+
+        while ($arg = array_shift($argv))
+        {
+            $volume = '-v '.$arg.':/out';
+            $fullScript = $scriptPath . ' /out/';
+
+            $commandLines[] = getCommandLine($targetEnv, $fullScript, $volume);
+        }
+
+        var_dump($commandLines);
+        exit();
+    }    
+    else
+    {
+        // Add the rest of the args:
+        while ($arg = array_shift($argv)) {
+            $scriptPath .= ' ' . $arg;
+        }
+
+        $commandLines[] = getCommandLine($targetEnv, $scriptPath);
     }
 
-    $commandLine = getCommandLine($targetEnv, $scriptPath);
+    foreach ($commandLines as $commandLine)
+    {
+        echo $commandLine . "\n";
+        $return_var = 0;
+        passthru($commandLine, $return_var);
 
-    echo $commandLine . "\n";
-	$return_var = 0;
-	passthru($commandLine, $return_var);
-
-	if ($return_var !== 0)
-	{
-		$cwd = getcwd();
-		throw new \RuntimeException("Error while executing: $commandLine in $cwd");
-	}
+        if ($return_var !== 0)
+        {
+            $cwd = getcwd();
+            throw new \RuntimeException("Error while executing: $commandLine in $cwd");
+        }
+    }
 
 } catch (\Throwable $th) {
 	echo 'Exception: ',  $th->getMessage(), "\n";
@@ -48,9 +82,6 @@ try {
 }
 
 exit(0); // Success.
-
-
-
 
 function echoUsageAndExit()
 {
@@ -85,13 +116,13 @@ function getTargetEnv($env = '')
             throw new Exception("We are in dev environnement. Aborting", 1);
 
         case 'prod':
-            if (empty($env) || $env == '--preprod')
+            if ($env == '--preprod')
                 return 'preprod';
             
             if ($env == '--prod') 
                 return 'prod';
             
-            throw new Exception("We are in prod/preprod environnement. Aborting", 1);
+            throw new Exception("Please tell me --prod or --preprod. Aborting", 1);
 
         default:
             throw new Exception(".env not configured. Aborting", 1);
@@ -327,16 +358,19 @@ function getScriptPath($script)
     }
 }
 
-function getCommandLine($targetEnv, $script)
-{
+/**
+ * $volume -v ~/youtube:/out (in that case make sure the files you import are in /out)
+ */
+function getCommandLine($targetEnv, $script, $volume = '')
+{        
     switch ($targetEnv) {
         case 'dev':
-            return 'docker-compose run --rm web sh -c "'.$script.'"';
+            return 'docker-compose run --rm '.$volume.' web sh -c "'.$script.'"';
         
         case 'preprod':
-            return 'docker-compose -f docker-compose.prod.yml run --rm web_preprod sh -c "'.$script.'"';
+            return 'docker-compose -f docker-compose.prod.yml run --rm '.$volume.' web_preprod sh -c "'.$script.'"';
 
         case 'prod':
-            return 'docker-compose -f docker-compose.prod.yml run --rm web sh -c "'.$script.'"';
+            return 'docker-compose -f docker-compose.prod.yml run --rm '.$volume.' web sh -c "'.$script.'"';
     }
 }
