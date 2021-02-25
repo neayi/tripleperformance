@@ -320,7 +320,7 @@ function getScriptPath($script)
         case 'updateEntityCountMap.php' :
         case 'updateQueryDependencies.php' :
             // Semantic MediaWiki
-            return "php /var/www/html/extensions/SemanticMediawiki/maintenance/$script";
+            return "php /var/www/html/extensions/SemanticMediaWiki/maintenance/$script";
 
         default:
             throw new Exception("Unrecognized maintenance script: $script", 1);
