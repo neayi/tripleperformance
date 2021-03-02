@@ -27,7 +27,29 @@ try {
 	
     $commandLines = array();
 
-    if ($script == 'importDump.php')
+    if ($script == 'mysql')
+    {
+        if (!file_exists(__DIR__ . '/backup/.mysql.cnf'))
+            throw new Exception("Please create a ./backup/.mysql.cnf file with \n[client]\npassword=somepassword", 1);
+
+        $sqlFile = array_shift($argv);
+        if (strpos($sqlFile, '.sql') === false)
+            throw new Exception("please import a SQL file. Got $sqlFile", 1);
+            
+        $commandLines[] = getMysqlCommandLine($targetEnv, $scriptPath) .  ' < ' .  $sqlFile;        
+    }
+    else if ($script == 'mysqldump')
+    {
+        if (!file_exists(__DIR__ . '/backup/.mysql.cnf'))
+            throw new Exception("Please create a ./backup/.mysql.cnf file with \n[client]\npassword=somepassword", 1);
+
+        $sqlFile = array_shift($argv);
+        if (strpos($sqlFile, '.sql') === false)
+            throw new Exception("please export a SQL file. Got $sqlFile", 1);
+        
+        $commandLines[] = getMysqlCommandLine($targetEnv, $scriptPath) .  ' > ' .  $sqlFile;        
+    }
+    else if ($script == 'importDump.php')
     {
         // docker-compose -f docker-compose.prod.yml run --rm -v ~/youtube:/out web_preprod php /var/www/html/maintenance/importDump.php /out/$file
         while ($arg = array_shift($argv))
@@ -49,14 +71,15 @@ try {
     else if ($script == 'importImages.php')
     {
         // docker-compose -f docker-compose.prod.yml run --rm -v ~/geco/images:/out web_preprod php /var/www/html/maintenance/importImages.php /out/
-
-        while ($arg = array_shift($argv))
-        {
-            $volume = '-v '.$arg.':/out';
-            $fullScript = $scriptPath . ' /out/';
-
-            $commandLines[] = getCommandLine($targetEnv, $fullScript, $volume);
+        $folder = array_pop($argv);
+        $volume = '-v '.$folder.':/out';
+        while ($arg = array_shift($argv)) {
+            $scriptPath .= ' ' . $arg;
         }
+
+        $fullScript = $scriptPath . ' /out/';
+
+        $commandLines[] = getCommandLine($targetEnv, $fullScript, $volume);
     }    
     else
     {
@@ -358,6 +381,12 @@ function getScriptPath($script)
             // Semantic MediaWiki
             return "php /var/www/html/extensions/SemanticMediaWiki/maintenance/$script";
 
+        case 'mysql':
+            return '/usr/bin/mysql';
+
+        case 'mysqldump':
+            return '/usr/bin/mysqldump';
+            
         default:
             throw new Exception("Unrecognized maintenance script: $script", 1);
     }
@@ -379,3 +408,29 @@ function getCommandLine($targetEnv, $script, $volume = '')
             return 'docker-compose -f docker-compose.prod.yml run --rm '.$volume.' web sh -c "'.$script.'"';
     }
 }
+
+
+/**
+ * $volume -v ~/youtube:/out (in that case make sure the files you import are in /out)
+ */
+function getMysqlCommandLine($targetEnv, $script)
+{        
+    $extraParams = '';
+
+    if ($script =='/usr/bin/mysqldump')
+        $extraParams = '--single-transaction';
+
+    $volume = __DIR__ . '/backup:/backup';
+    switch ($targetEnv) {
+        case 'dev':
+            return "docker-compose run --rm -v $volume db $script --defaults-extra-file=/backup/.mysql.cnf $extraParams -P 3306 -h db -u root wiki";
+    
+        case 'preprod':
+            return "docker-compose -f docker-compose.prod.yml run --rm -v $volume db $script --defaults-extra-file=/backup/.mysql.cnf $extraParams -P 3306 -h db -u root wiki_preprod";
+
+        case 'prod':
+            return "docker-compose -f docker-compose.prod.yml run --rm -v $volume db $script --defaults-extra-file=/backup/.mysql.cnf $extraParams -P 3306 -h db -u root wiki_prod";
+    }
+}
+
+
