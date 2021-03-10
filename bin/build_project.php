@@ -372,24 +372,6 @@ function getWikiComponents()
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/OpenGraph',
 							'git' => 'https://github.com/neayi/mediawiki-extensions-OpenGraph.git');	
 						   
-	$env = getenv('ENV');
-	if ($env == 'dev')
-	{
-		foreach ($components as $k => $aComponent)
-			$components[$k]['git'] = str_replace('https://github.com/neayi', 'git@github.com:neayi', $aComponent['git']);
-
-		// Copy the files in ~/.ssh from /ssh 
-		if (!file_exists('/ssh'))
-		{
-			echo "\nCould not copy ssh keys from host. Please run build_project with the following:\n\n";
-			echo "docker-compose run --rm -v ~/.ssh:/ssh web php bin/build_project.php --update\n";
-			throw new \RuntimeException("Wrong command in dev environment");
-		}
-
-		runCommand('cp -r /ssh ~/.ssh');
-		runCommand('chmod 600 ~/.ssh/*');
-	}
-						
 	return $components;
 }
 
@@ -456,6 +438,8 @@ function checkout_project($aComponent, $bForceRemoveFolder = false)
 	if (!empty($aComponent['tag']))
 		switchToTag($aComponent);
 
+	setDevSSHRemote($aComponent);
+
 	// run post install steps when required
 	if (!empty($aComponent['postinstall']))
 	{
@@ -492,8 +476,16 @@ function pull_project($aComponent)
 		runCommand($cmd);
 	}	
 
-	$cmd = 'git pull -q';
-	runCommand($cmd);
+	$env = getenv('ENV');
+	if ($env == 'dev' && strpos($aComponent['git'], 'https://github.com/neayi') !== false)
+	{
+		echo "Please pull this repo yourself: " . $aComponent['dest'] . "\n";
+	}
+	else
+	{
+		$cmd = 'git pull -q';
+		runCommand($cmd);
+	}
 
 	// Make sure we are on the right branch:
 	if (!empty($aComponent['branch']))
@@ -502,6 +494,8 @@ function pull_project($aComponent)
 	// Make sure we are on the right tag:
 	if (!empty($aComponent['tag']))
 		switchToTag($aComponent);
+
+	setDevSSHRemote($aComponent);
 
 	// run post install steps when required
 	if (!empty($aComponent['postinstall']))
@@ -656,5 +650,25 @@ function setOwner($dir = '', $owner = 'www-data')
 
 	changeDir($dir);
 	$cmd = "chown -R $owner:$owner .";
+	runCommand($cmd);
+}
+
+/**
+ * On dev environments, we set the GIT origin to SSH instead of HTTP
+ */
+function setDevSSHRemote($aComponent)
+{
+	$env = getenv('ENV');
+	if ($env != 'dev')
+		return;
+
+	if (strpos($aComponent['git'], 'https://github.com/neayi') === false)
+		return;
+
+	changeDir(root_web . $aComponent['dest']);
+
+	$git = preg_replace('@^.*https://github.com/neayi@', 'git@github.com:neayi', $aComponent['git']);
+
+	$cmd = 'git remote set-url origin ' . $git;
 	runCommand($cmd);
 }
