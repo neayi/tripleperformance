@@ -21,3 +21,8 @@ version: '3.7'
 #  parsoid:
 #    ports:
 #      - "8080:8000"
+#
+#  # Uncomment if the container cannot connect to the host when using xdebug
+#  web:
+#    extra_hosts:
+#      - 'host.docker.internal:host-gateway'
