@@ -347,9 +347,6 @@ function getWikiComponents()
 	$components[] = array(	'dest' => $wiki_skins_dir . '/skin-neayi',
 							'git' => 'https://github.com/neayi/skin-neayi.git');
 
-	$components[] = array(	'dest' => $wiki_extensions_dir . '/PDFDownloadCard',
-							'git' => 'https://github.com/neayi/PDFDownloadCard.git');
-
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Carousel',
 							'git' => 'https://github.com/neayi/ext-carousel.git');
 

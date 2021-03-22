@@ -29,6 +29,10 @@ services:
       - 'traefik.enable=true'
       - 'traefik.port=80'
       - 'traefik.frontend.rule=Host:wiki.dev.tripleperformance.fr'
+    networks:
+      default:
+        aliases:
+          - wiki.dev.tripleperformance.fr
 
   insights_php:
     build:
@@ -48,6 +52,10 @@ services:
       - 'traefik.enable=true'
       - 'traefik.port=80'
       - 'traefik.frontend.rule=Host:insights.dev.tripleperformance.fr'
+    networks:
+      default:
+        aliases:
+          - insights.dev.tripleperformance.fr
 
   db:
     image: mysql:5.7

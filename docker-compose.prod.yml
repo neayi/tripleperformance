@@ -36,6 +36,10 @@ services:
       - 'traefik.frontend.redirect.regex=^https?://(pratiques.)?tripleperformance.fr/(.*)'
       - 'traefik.frontend.redirect.replacement=https://wiki.tripleperformance.fr/$${2}'
       - 'traefik.frontend.redirect.permanent=true'
+    networks:
+      default:
+        aliases:
+          - wiki.tripleperformance.fr
 
   web_preprod:
     image: docker.pkg.github.com/neayi/tripleperformance/wiki:$WIKI_VERSION_PREPROD
@@ -47,6 +51,10 @@ services:
       - 'traefik.enable=true'
       - 'traefik.port=80'
       - 'traefik.frontend.rule=Host:wiki.preprod.tripleperformance.fr'
+    networks:
+      default:
+        aliases:
+          - wiki.preprod.tripleperformance.fr
 
   insights:
     image: docker.pkg.github.com/neayi/insights/insights:$INSIGHTS_VERSION_PROD

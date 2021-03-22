@@ -46,7 +46,7 @@ $wgArticlePath = "/wiki/$1";
 $wgUsePathInfo = true;
 
 ## The protocol and server name to use in fully-qualified URLs
-$wgServer = $domainUrl;
+$wgServer = '//' . $domainName;
 
 ## The URL path to static resources (images, scripts, etc.)
 $wgResourceBasePath = $wgScriptPath;
@@ -300,7 +300,6 @@ wfLoadExtension( 'Scribunto' );
 $wgScribuntoDefaultEngine = 'luastandalone';
 
 // Neayi's extensions
-wfLoadExtension( 'PDFDownloadCard' );
 
 require_once "$IP/extensions/Carousel/Carousel.php";
 //$wgCarouselDisableMouseOver = true;
@@ -374,6 +373,7 @@ $wgGroupPermissions['csmoderator']['cs-moderator-edit'] = true;
 $wgCommentStreamsModeratorFastDelete = true;
 $wgCommentStreamsUserAvatarPropertyName = "A un avatar";
 $wgInsightsRootURL = getenv('INSIGHT_URL') . '/';
+$wgInsightsRootURLPHP= str_replace('https', 'http', getenv('INSIGHT_URL')) . '/';
 
 // Echo
 wfLoadExtension( 'Echo' );
@@ -398,7 +398,8 @@ $wgOAuthRedirectUri = "$domainUrl/index.php/Special:PluggableAuthLogin";
 $wgPluggableAuth_EnableAutoLogin = false;
 $wgPluggableAuth_EnableLocalLogin = false;
 
-$wgOAuthUri = getenv('INSIGHT_URL') . '/login?&';
+$wgOAuthUri = getenv('INSIGHT_URL') . '/register?&';
+//$wgOAuthUri = getenv('INSIGHT_URL') . '/login?&';
 
 if ($env == 'preprod') 
     $wgOAuthUserApiByToken = 'http://insights_preprod/api/user?&';
