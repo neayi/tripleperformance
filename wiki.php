@@ -399,13 +399,13 @@ function getCommandLine($targetEnv, $script, $volume = '')
 {        
     switch ($targetEnv) {
         case 'dev':
-            return 'docker-compose run --rm '.$volume.' web sh -c "'.$script.'"';
+            return 'docker-compose run --user="www-data:www-data" --rm '.$volume.' web sh -c "'.$script.'"';
         
         case 'preprod':
-            return 'docker-compose -f docker-compose.prod.yml run --rm '.$volume.' web_preprod sh -c "'.$script.'"';
+            return 'docker-compose -f docker-compose.prod.yml run --user="www-data:www-data" --rm '.$volume.' web_preprod sh -c "'.$script.'"';
 
         case 'prod':
-            return 'docker-compose -f docker-compose.prod.yml run --rm '.$volume.' web sh -c "'.$script.'"';
+            return 'docker-compose -f docker-compose.prod.yml run --user="www-data:www-data" --rm '.$volume.' web sh -c "'.$script.'"';
     }
 }
 
