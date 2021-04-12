@@ -368,7 +368,13 @@ function getWikiComponents()
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/OpenGraph',
 							'git' => 'https://github.com/neayi/mediawiki-extensions-OpenGraph.git');	
-						   
+
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/NeayiInteractions',
+							'git' => 'https://github.com/neayi/mw-NeayiInteractions.git');
+
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/NeayiNavbar',
+							'git' => 'https://github.com/neayi/mw-NeayiNavbar.git');
+
 	return $components;
 }
 
@@ -505,7 +511,7 @@ function pull_project($aComponent)
 			case 'submodules':
 				initSubModules(root_web . $aComponent['dest']);
 				break;
-				
+
 			default:
 				# code...
 				break;
