@@ -290,6 +290,10 @@ if($debug) {
     \Bootstrap\BootstrapManager::getInstance()->addCacheTriggerFile(dirname(MW_CONFIG_FILE) . '/skins/skin-neayi/_caracteristiques_exploitation.scss');
 }
 
+$egChameleonExternalStyleVariables = [
+    'primary' => '#00a46e'
+];
+
 // Database and cross referencing
 wfLoadExtension( 'DynamicPageList' );
 
@@ -374,6 +378,9 @@ $wgCommentStreamsModeratorFastDelete = true;
 $wgCommentStreamsUserAvatarPropertyName = "A un avatar";
 $wgInsightsRootURL = getenv('INSIGHT_URL') . '/';
 $wgInsightsRootURLPHP= str_replace('https', 'http', getenv('INSIGHT_URL')) . '/';
+
+wfLoadExtension( 'NeayiInteractions' );
+wfLoadExtension( 'NeayiNavbar' );
 
 // Echo
 wfLoadExtension( 'Echo' );
