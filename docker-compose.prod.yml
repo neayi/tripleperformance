@@ -89,7 +89,6 @@ services:
     env_file: .env
     volumes:
       - ./.data/mysql:/var/lib/mysql
-      - ./engine/mysql_ovh/mysqld_charset.cnf:/etc/mysql/conf.d/mysqld_charset.cnf:ro
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin

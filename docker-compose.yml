@@ -68,7 +68,6 @@ services:
     volumes:
       - data-mysql:/var/lib/mysql
       - ./bin/sql:/var/sql/
-      - ./engine/mysql_ovh/mysqld_charset.cnf:/etc/mysql/conf.d/mysqld_charset.cnf:ro
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
