@@ -445,6 +445,11 @@ $wgVirtualRestConfig['modules']['parsoid'] = array(
     'domain' => $parsoidDomain,
 );
 
+// Page forms and template data
+wfLoadExtension( 'TemplateData' );
+
+
+
 wfLoadExtension( 'UploadWizard' );
 $wgUseInstantCommons = true;
 $wgUploadNavigationUrl = '/wiki/Special:UploadWizard';
