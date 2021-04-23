@@ -60,13 +60,13 @@ try {
             $volume = '-v '.dirname($arg).':/out';
             $fullScript = $scriptPath . ' /out/' . basename($arg);
 
-            $commandLines[] = getCommandLine($targetEnv, $fullScript, $volume);
+            $commandLines[] = getCommandLine($targetEnv, $fullScript, $volume, false);
         }
 
         // You might want to run rebuildrecentchanges.php to regenerate RecentChanges,
         // and initSiteStats.php to update page and revision counts
-        $commandLines[] = getCommandLine($targetEnv, getScriptPath('rebuildrecentchanges.php'));
-        $commandLines[] = getCommandLine($targetEnv, getScriptPath('initSiteStats.php'));               
+        $commandLines[] = getCommandLine($targetEnv, getScriptPath('rebuildrecentchanges.php'), '', false);
+        $commandLines[] = getCommandLine($targetEnv, getScriptPath('initSiteStats.php'), '', false);
     }
     else if ($script == 'importImages.php')
     {
@@ -79,7 +79,7 @@ try {
 
         $fullScript = $scriptPath . ' /out/';
 
-        $commandLines[] = getCommandLine($targetEnv, $fullScript, $volume);
+        $commandLines[] = getCommandLine($targetEnv, $fullScript, $volume, false);
     }    
     else
     {
@@ -395,17 +395,21 @@ function getScriptPath($script)
 /**
  * $volume -v ~/youtube:/out (in that case make sure the files you import are in /out)
  */
-function getCommandLine($targetEnv, $script, $volume = '')
+function getCommandLine($targetEnv, $script, $volume = '', $bUseWwwData = true)
 {        
+    $user = '';
+    if ($bUseWwwData)
+        $user = '--user="www-data:www-data"';
+
     switch ($targetEnv) {
         case 'dev':
-            return 'docker-compose run --user="www-data:www-data" --rm '.$volume.' web sh -c "'.$script.'"';
+            return 'docker-compose run '.$user.' --rm '.$volume.' web sh -c "'.$script.'"';
         
         case 'preprod':
-            return 'docker-compose -f docker-compose.prod.yml run --user="www-data:www-data" --rm '.$volume.' web_preprod sh -c "'.$script.'"';
+            return 'docker-compose -f docker-compose.prod.yml run '.$user.' --rm '.$volume.' web_preprod sh -c "'.$script.'"';
 
         case 'prod':
-            return 'docker-compose -f docker-compose.prod.yml run --user="www-data:www-data" --rm '.$volume.' web sh -c "'.$script.'"';
+            return 'docker-compose -f docker-compose.prod.yml run '.$user.' --rm '.$volume.' web sh -c "'.$script.'"';
     }
 }
 
