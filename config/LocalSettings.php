@@ -447,8 +447,9 @@ $wgVirtualRestConfig['modules']['parsoid'] = array(
 
 // Page forms and template data
 wfLoadExtension( 'TemplateData' );
-
-
+wfLoadExtension( 'PageForms' );
+$wgPageFormsLinkAllRedLinksToForms = true;
+wfLoadExtension( 'SemanticFormsSelect' );
 
 wfLoadExtension( 'UploadWizard' );
 $wgUseInstantCommons = true;
@@ -483,10 +484,13 @@ $wgUploadWizardConfig = array(
 
 
 // https://www.mediawiki.org/wiki/Extension:VEForAll
-//wfLoadExtension( 'VEForAll' );
+wfLoadExtension( 'VEForAll' );
 
 // Disambiguator
 wfLoadExtension( 'Disambiguator' );
+
+wfLoadExtension( 'AdminLinks' );
+
 
 // Hit counter
 wfLoadExtension( 'HitCounters' );

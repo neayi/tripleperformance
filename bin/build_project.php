@@ -244,6 +244,7 @@ function getWikiComponents()
 	$components[] = array(	'composer' => 'mediawiki/semantic-media-wiki' );
 	$components[] = array(	'composer' => 'mediawiki/maps' );
 	$components[] = array(	'composer' => 'mediawiki/semantic-result-formats' );
+	$components[] = array(	'composer' => 'mediawiki/semantic-forms-select' ); // "~3.0"
 
 	// Regular Mediawiki extensions
 
@@ -341,6 +342,15 @@ function getWikiComponents()
 	// https://www.mediawiki.org/wiki/Extension:EditNotify
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/EditNotify',
 							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-EditNotify',
+							'branch' => $wiki_version);
+
+	// NOTE: PageForms was only forked to backport two fixes from REL1_36. When upgrading to this release, we should stop using our fork.
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/PageForms',
+							'git' => '--branch '.$wiki_version.' https://github.com/neayi/mediawiki-extensions-PageForms.git',
+							'branch' => $wiki_version);
+
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/AdminLinks',
+							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-AdminLinks.git',
 							'branch' => $wiki_version);
 
 	// Neayi extensions and forks
