@@ -88,7 +88,10 @@ try {
             $scriptPath .= ' ' . $arg;
         }
 
-        $commandLines[] = getCommandLine($targetEnv, $scriptPath);
+        if ($script == 'update.php')
+            $commandLines[] = getCommandLine($targetEnv, $scriptPath, '', false);
+        else
+            $commandLines[] = getCommandLine($targetEnv, $scriptPath);
     }
 
     foreach ($commandLines as $commandLine)
