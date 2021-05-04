@@ -245,6 +245,7 @@ function getWikiComponents()
 	$components[] = array(	'composer' => 'mediawiki/maps' );
 	$components[] = array(	'composer' => 'mediawiki/semantic-result-formats' );
 	$components[] = array(	'composer' => 'mediawiki/semantic-forms-select' ); // "~3.0"
+	$components[] = array(	'composer' => 'mediawiki/semantic-scribunto' ); // "~2.1"
 
 	// Regular Mediawiki extensions
 

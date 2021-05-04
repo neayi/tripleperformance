@@ -303,6 +303,8 @@ wfLoadExtension( 'Variables' );
 wfLoadExtension( 'Scribunto' );
 $wgScribuntoDefaultEngine = 'luastandalone';
 
+wfLoadExtension( 'SemanticScribunto' );
+
 // Neayi's extensions
 
 require_once "$IP/extensions/Carousel/Carousel.php";
