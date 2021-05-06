@@ -451,6 +451,8 @@ $wgVirtualRestConfig['modules']['parsoid'] = array(
 wfLoadExtension( 'TemplateData' );
 wfLoadExtension( 'PageForms' );
 $wgPageFormsLinkAllRedLinksToForms = true;
+$wgPageFormsAutocompleteOnAllChars = true;
+
 wfLoadExtension( 'SemanticFormsSelect' );
 
 wfLoadExtension( 'UploadWizard' );
