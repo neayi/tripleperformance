@@ -518,6 +518,12 @@ $egMapsDefaultService = 'leaflet';
 
 wfLoadExtension( 'SemanticResultFormats' );
 
+require_once "$IP/extensions/SemanticDrilldown/SemanticDrilldown.php";
+// Uncomment the two following in order to show tag clouds instead of simple links
+// $sdgFiltersSmallestFontSize=9;
+// $sdgFiltersLargestFontSize=25;
+$sdgHideCategoriesByDefault = true;
+
 // Debug and error reporting :
 
 if ($debug) {
