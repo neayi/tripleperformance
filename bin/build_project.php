@@ -337,6 +337,10 @@ function getWikiComponents()
 							'git' => '--branch '.$latest_wiki_version .' https://github.com/wikimedia/mediawiki-extensions-MassEditRegex.git',
 							'branch' => $latest_wiki_version);				
 
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/SemanticDrilldown',
+							'git' => '--branch master https://github.com/wikimedia/mediawiki-extensions-SemanticDrilldown.git',
+							'branch' => 'master');
+
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Realnames',
 							'git' => 'https://github.com/ofbeaton/mediawiki-realnames.git');	
 
