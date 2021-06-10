@@ -306,9 +306,7 @@ $wgScribuntoDefaultEngine = 'luastandalone';
 wfLoadExtension( 'SemanticScribunto' );
 
 // Neayi's extensions
-
-require_once "$IP/extensions/Carousel/Carousel.php";
-//$wgCarouselDisableMouseOver = true;
+wfLoadExtension( 'Carousel' );
 
 // CirrusSearch
 wfLoadExtension( 'Elastica' );
