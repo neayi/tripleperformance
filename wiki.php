@@ -384,6 +384,10 @@ function getScriptPath($script)
             // Semantic MediaWiki
             return "php /var/www/html/extensions/SemanticMediaWiki/maintenance/$script";
 
+        case 'removeSpamAccounts.php' :
+            // NeayiAuth
+            return "php /var/www/html/extensions/NeayiAuth/maintenance/$script";
+    
         case 'mysql':
             return '/usr/bin/mysql';
 
