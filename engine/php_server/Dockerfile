@@ -73,6 +73,13 @@ COPY engine/php_server/apache/000-default.conf /etc/apache2/sites-enabled/000-de
 COPY engine/php_server/apache/apache.prod.conf /etc/apache2/conf-available/z-app.conf
 RUN a2enconf z-app
 
+COPY engine/php_server/php/sendmail.ini /usr/local/etc/php/conf.d/sendmail.ini
+COPY engine/php_server/php/errorlog.ini /usr/local/etc/php/conf.d/errorlog.ini
+
+# Setup msmtp with mailtrap
+COPY engine/php_server/msmtp/msmtprc.mailtrap /etc/msmtprc
+RUN chmod 600 /etc/msmtprc && chown www-data /etc/msmtprc
+
 WORKDIR /var/www
 
 # ================================================
@@ -80,8 +87,6 @@ WORKDIR /var/www
 FROM base AS prod
 
 # Setup msmtp with sendgrid
-COPY engine/php_server/php/sendmail.ini /usr/local/etc/php/conf.d/sendmail.ini
-COPY engine/php_server/php/errorlog.ini /usr/local/etc/php/conf.d/errorlog.ini
 COPY engine/php_server/msmtp/msmtprc /etc/msmtprc
 RUN chmod 600 /etc/msmtprc && chown www-data /etc/msmtprc
 

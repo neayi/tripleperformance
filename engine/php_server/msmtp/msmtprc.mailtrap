@@ -1,0 +1,16 @@
+# Set default values for all following accounts.
+defaults
+tls on
+tls_trust_file /etc/ssl/certs/ca-certificates.crt
+logfile /var/log/msmtp.log
+
+# mailtrap (the password will be set during build using an environment variable)
+account default
+host smtp.mailtrap.io
+port 2525
+auth on
+user 6b76da7b18d1f5
+from hello@tripleperformance.fr
+logfile /var/log/msmtp.log
+#password *************
+passwordeval echo $MSMTP_SECRET

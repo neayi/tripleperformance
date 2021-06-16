@@ -390,10 +390,11 @@ $wgEnotifMinorEdits = false;
 $wgEnotifUseRealName = true;
 
 // https://www.mediawiki.org/wiki/Extension:EditNotify
+wfLoadExtension( 'EditNotify' );
 $wgEditNotifyAlerts = array(
 	array(
 		'action' => array( 'create', 'edit' ),
-		'users' => array('Bertrand_Gorge')
+		'users' => array('Bertrand_Gorge', 'AstridRobette')
 	)
 );
 
