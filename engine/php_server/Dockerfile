@@ -79,7 +79,7 @@ COPY engine/php_server/php/errorlog.ini /usr/local/etc/php/conf.d/errorlog.ini
 # Setup msmtp with mailtrap
 COPY engine/php_server/msmtp/msmtprc.mailtrap /etc/msmtprc
 RUN chmod 600 /etc/msmtprc && chown www-data /etc/msmtprc
-
+RUN ln -s /dev/stdout /var/log/msmtp.log
 WORKDIR /var/www
 
 # ================================================
