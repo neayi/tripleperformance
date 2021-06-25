@@ -287,6 +287,9 @@ $egChameleonExternalStyleModules = array(
     dirname(MW_CONFIG_FILE) . '/skins/skin-neayi/chameleon-neayi.scss' => 'afterMain'
 );
 
+// Allow custom CSS on Special Pages : 
+$wgAllowSiteCSSOnRestrictedPages = true;
+
 if($debug) {
     \Bootstrap\BootstrapManager::getInstance()->addCacheTriggerFile(dirname(MW_CONFIG_FILE) . '/skins/skin-neayi/chameleon-tripleperformance-variables.scss');
     \Bootstrap\BootstrapManager::getInstance()->addCacheTriggerFile(dirname(MW_CONFIG_FILE) . '/skins/skin-neayi/chameleon-neayi.scss');
