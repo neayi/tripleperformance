@@ -44,6 +44,8 @@ $wgScriptPath = "";
 $wgScriptExtension = ".php";
 $wgArticlePath = "/wiki/$1";
 $wgUsePathInfo = true;
+$wgForceHTTPS = true;
+$wgCanonicalServer = $domainUrl;
 
 ## The protocol and server name to use in fully-qualified URLs
 $wgServer = '//' . $domainName;
