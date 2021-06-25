@@ -23,7 +23,7 @@ $debug = false === getenv('DEBUG') ? 'dev' === $env : 'true' === strtolower((str
 $domainName = getenv('DOMAIN_NAME') ?: 'wiki.tripleperformance.fr'; // pratiques.dev.tripleperformance.fr, wiki.preprod.tripleperformance.fr
 $useHttps = true;
 $domainUrl = ($useHttps ? 'https' : 'http') . '://' . $domainName;
-$emailSender = 'dev' === $env ? 'bertrand.gorge@neayi.com' : 'no-reply@tripleperformance.com';
+$emailSender = 'no-reply@tripleperformance.com';
 $parsoidDomain = $env; // dev, prod, preprod
 
 // =================================================================
@@ -31,7 +31,7 @@ $parsoidDomain = $env; // dev, prod, preprod
 ## Uncomment this to disable output compression
 $wgDisableOutputCompression = !$debug;
 
-$wgSitename = "Wiki Triple Performance";
+$wgSitename = "Triple Performance";
 $wgMetaNamespace = "Triple_Performance";
 
 ## The URL base path to the directory containing the wiki;
@@ -63,12 +63,13 @@ $wgEnableEmail = true;
 $wgEnableUserEmail = true; # UPO
 if ($env == 'preprod') 
     $wgEnableEmail = false; // Disable emails on preprod please.
+$wgAllowHTMLEmail = true;
 
 $wgEmergencyContact = "bertrand.gorge@neayi.com";
 $wgPasswordSender = $emailSender;
 
-$wgEnotifUserTalk = 'prod' === $env; # UPO
-$wgEnotifWatchlist = 'prod' === $env; # UPO
+$wgEnotifUserTalk = false;
+$wgEnotifWatchlist = true;
 $wgEmailAuthentication = true;
 
 ## Database settings
