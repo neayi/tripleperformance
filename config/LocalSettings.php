@@ -388,6 +388,7 @@ wfLoadExtension( 'NeayiNavbar' );
 // Echo
 wfLoadExtension( 'Echo' );
 $wgEchoUseJobQueue = true;
+$wgEchoEmailFooterAddress = "<div style=\"padding: 100px 0 0 0; text-align:center\"><img src=\"https://wiki.tripleperformance.fr/images/1/1a/Logo_Triple_Performance.png\" width=\"300\"></div>";
 
 $wgEnotifMinorEdits = false;
 $wgEnotifUseRealName = true;
