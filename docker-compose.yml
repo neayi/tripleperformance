@@ -10,6 +10,9 @@ services:
       - 'traefik.enable=true'
       - 'traefik.port=9000'
       - 'traefik.frontend.rule=Host:traefik.dev.tripleperformance.fr'
+    networks:
+      - default
+      - traefik
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./engine/traefik/dev/traefik.toml:/etc/traefik/traefik.toml
@@ -111,6 +114,11 @@ services:
       - 'traefik.enable=true'
       - 'traefik.port=8000'
       - 'traefik.frontend.rule=Host:parsoid.dev.tripleperformance.fr'
+
+networks:
+  default: ~
+  traefik:
+    name: tripleperformance_traefik
 
 volumes:
   data-mysql:
