@@ -16,6 +16,7 @@ services:
       - tripleperformance_traefik
     volumes:
       - 'discourse_data:/bitnami'
+    env_file: .env
     environment:
       - POSTGRESQL_HOST=postgresql
       - POSTGRESQL_ROOT_USER=postgres
