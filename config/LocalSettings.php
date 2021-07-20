@@ -387,6 +387,7 @@ $wgInsightsRootURLPHP= str_replace('https', 'http', getenv('INSIGHT_URL')) . '/'
 
 wfLoadExtension( 'NeayiInteractions' );
 wfLoadExtension( 'NeayiNavbar' );
+wfLoadExtension( 'NeayiIntroJS' );
 
 // Echo
 wfLoadExtension( 'Echo' );

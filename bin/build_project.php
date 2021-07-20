@@ -390,6 +390,9 @@ function getWikiComponents()
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/NeayiNavbar',
 							'git' => 'https://github.com/neayi/mw-NeayiNavbar.git');
 
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/NeayiIntroJS',
+							'git' => 'https://github.com/neayi/mw-NeayiIntroJS.git');
+
 	return $components;
 }
 
