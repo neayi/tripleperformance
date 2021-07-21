@@ -297,7 +297,7 @@ if($debug) {
 }
 
 $egChameleonExternalStyleVariables = [
-    'primary' => '#00a46e'
+    'primary' => '#15A072'
 ];
 
 // Database and cross referencing
