@@ -27,6 +27,8 @@ services:
       - DISCOURSE_POSTGRESQL_USERNAME=bn_discourse
       - DISCOURSE_POSTGRESQL_PASSWORD=bitnami1
       - DISCOURSE_HOSTNAME
+      - ALLOW_EMPTY_PASSWORD=yes
+
   sidekiq:
     image: 'docker.io/bitnami/discourse:2-debian-10'
     depends_on:
@@ -40,6 +42,7 @@ services:
       - DISCOURSE_POSTGRESQL_PASSWORD=bitnami1
       - DISCOURSE_HOST=discourse
       - DISCOURSE_PORT=3000
+      - ALLOW_EMPTY_PASSWORD=yes
       - DISCOURSE_HOSTNAME
 
   postgresql:
@@ -48,6 +51,7 @@ services:
       - ALLOW_EMPTY_PASSWORD=yes
     volumes:
       - 'postgresql_data:/bitnami/postgresql'
+
   redis:
     image: 'docker.io/bitnami/redis:6.0-debian-10'
     environment:
