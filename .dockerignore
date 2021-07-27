@@ -19,3 +19,6 @@
 /insights
 wiki.zip
 bin/sql/wiki_prod-20201027.sql
+backup
+.git
+.github
