@@ -14,7 +14,7 @@
 **/node_modules/
 **/vendor/
 **/dist/
-
+/discourse/discourse-data
 /html
 /insights
 wiki.zip
