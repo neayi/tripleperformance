@@ -23,9 +23,7 @@ services:
       - 'traefik.frontend.rule=Host:$DISCOURSE_HOST'
       - 'traefik.docker.network=tripleperformance_traefik'
     volumes:
-#      - 'discourse_data:/bitnami/discourse'
       - ./discourse-data:/bitnami/discourse
-#      - ./discourse-config:/opt/bitnami/discourse/mounted-conf
     env_file: .env
     depends_on:
       - postgresql
@@ -52,8 +50,7 @@ services:
     depends_on:
       - discourse
     volumes:
-      - 'sidekiq_data:/bitnami/discourse'    
-#      - ./discourse-config:/opt/bitnami/discourse/mounted-conf
+      - ./discourse-data:/bitnami/discourse
     env_file: .env      
     command: /opt/bitnami/scripts/discourse-sidekiq/run.sh
     environment:
@@ -90,6 +87,4 @@ volumes:
   postgresql_data:
     driver: local
   redis_data:
-    driver: local
-  sidekiq_data:
     driver: local
