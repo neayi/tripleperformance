@@ -33,10 +33,16 @@ try {
             throw new Exception("Please create a ./backup/.mysql.cnf file with \n[client]\npassword=somepassword", 1);
 
         $sqlFile = array_shift($argv);
-        if (strpos($sqlFile, '.sql') === false)
+
+        if(empty($sqlFile)) {
+            // No file specified, open a mysql shell
+            $commandLines[] = getMysqlCommandLine($targetEnv, $scriptPath);
+        } elseif (strpos($sqlFile, '.sql') !== false) {
+            // A file is specified, import it
+            $commandLines[] = getMysqlCommandLine($targetEnv, $scriptPath) .  ' < ' .  $sqlFile;
+        } else {
             throw new Exception("please import a SQL file. Got $sqlFile", 1);
-            
-        $commandLines[] = getMysqlCommandLine($targetEnv, $scriptPath) .  ' < ' .  $sqlFile;        
+        }
     }
     else if ($script == 'mysqldump')
     {

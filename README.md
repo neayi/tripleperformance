@@ -101,6 +101,10 @@ Par défaut, la base créée sera `wiki`, mais il est possible d'importer aussi 
 
     docker-compose exec -w /var/sql db ./load_db.sh
 
+### Import d'une base existante
+
+    docker exec -i tripleperformance_db_1 mysql -u root -p<MYSQL_PASSWORD> wiki < $sql_file_path
+
 ### Installation de Insights
 
     docker-compose run --rm --user="$UID:$GID" insights_php ./install.sh

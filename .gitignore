@@ -15,3 +15,5 @@ backup/.mysql.cnf
 /.cache
 /.data
 /bin/sql/wiki_prod.sql
+/discourse/discourse-data
+/discourse/.env
