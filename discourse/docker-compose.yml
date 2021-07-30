@@ -6,9 +6,9 @@ services:
     volumes:
       - 'postgresql_data:/bitnami/postgresql'
     environment:
-      - ALLOW_EMPTY_PASSWORD=yes
       - POSTGRESQL_USERNAME=bn_discourse
-      - POSTGRESQL_DATABASE=bitnami_discourse
+      - POSTGRESQL_PASSWORD
+      - POSTGRESQL_DATABASE=$DISCOURSE_DATABASE_NAME
   redis:
     image: docker.io/bitnami/redis:6.0
     environment:
@@ -32,18 +32,19 @@ services:
       - default
       - tripleperformance_traefik
     environment:
-      - ALLOW_EMPTY_PASSWORD=yes
       - DISCOURSE_HOST
       - DISCOURSE_ENV=production
       - RAILS_ENV=production           
       - DISCOURSE_DATABASE_HOST=postgresql
       - DISCOURSE_DATABASE_PORT_NUMBER=5432
       - DISCOURSE_DATABASE_USER=bn_discourse
-      - DISCOURSE_DATABASE_NAME=bitnami_discourse
+      - DISCOURSE_DATABASE_PASSWORD
+      - DISCOURSE_DATABASE_NAME
       - DISCOURSE_REDIS_HOST=redis
       - DISCOURSE_REDIS_PORT_NUMBER=6379
       - POSTGRESQL_CLIENT_POSTGRES_USER=postgres
-      - POSTGRESQL_CLIENT_CREATE_DATABASE_NAME=bitnami_discourse
+      - POSTGRESQL_CLIENT_POSTGRES_PASSWORD
+      - POSTGRESQL_CLIENT_CREATE_DATABASE_NAME=$DISCOURSE_DATABASE_NAME
       - POSTGRESQL_CLIENT_CREATE_DATABASE_EXTENSIONS=hstore,pg_trgm
   sidekiq:
     image: docker.io/bitnami/discourse:2
@@ -56,12 +57,12 @@ services:
     environment:
       - DISCOURSE_ENV=production
       - RAILS_ENV=production      
-      - ALLOW_EMPTY_PASSWORD=yes
       - DISCOURSE_HOST
       - DISCOURSE_DATABASE_HOST=postgresql
       - DISCOURSE_DATABASE_PORT_NUMBER=5432
       - DISCOURSE_DATABASE_USER=bn_discourse
-      - DISCOURSE_DATABASE_NAME=bitnami_discourse
+      - DISCOURSE_DATABASE_PASSWORD
+      - DISCOURSE_DATABASE_NAME
       - DISCOURSE_REDIS_HOST=redis
       - DISCOURSE_REDIS_PORT_NUMBER=6379
 
