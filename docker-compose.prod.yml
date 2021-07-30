@@ -7,6 +7,9 @@ services:
     ports:
       - '80:80'
       - '443:443'
+    networks:
+      - default
+      - traefik
     labels:
       - 'traefik.enable=true'
       - 'traefik.port=9000'
@@ -143,3 +146,8 @@ services:
       - 'traefik.enable=true'
       - 'traefik.port=8000'
       - 'traefik.frontend.rule=Host:parsoid.tripleperformance.fr'
+
+networks:
+  default: ~
+  traefik:
+    name: tripleperformance_traefik
