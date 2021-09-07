@@ -21,7 +21,7 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 $env = getenv('ENV') ?: 'prod'; // dev, prod, preprod
 $debug = false === getenv('DEBUG') ? 'dev' === $env : 'true' === strtolower((string) getenv('DEBUG')); // true, false
 $domainName = getenv('DOMAIN_NAME') ?: 'wiki.tripleperformance.fr'; // pratiques.dev.tripleperformance.fr, wiki.preprod.tripleperformance.fr
-$useHttps = true;
+$useHttps = false;
 $domainUrl = ($useHttps ? 'https' : 'http') . '://' . $domainName;
 $emailSender = 'no-reply@tripleperformance.com';
 $parsoidDomain = $env; // dev, prod, preprod
@@ -44,7 +44,7 @@ $wgScriptPath = "";
 $wgScriptExtension = ".php";
 $wgArticlePath = "/wiki/$1";
 $wgUsePathInfo = true;
-$wgForceHTTPS = true;
+$wgForceHTTPS = $useHttps;
 $wgCanonicalServer = $domainUrl;
 
 ## The protocol and server name to use in fully-qualified URLs
@@ -350,6 +350,8 @@ $wgPageImagesBlacklist = array(
 		'db' => false,
 	),
 );
+// Bump the score of the first image
+$wgPageImagesScores['position'] = [ 99, 6, 4, 3 ];
 
 wfLoadExtension( 'TextExtracts' );
 wfLoadExtension( 'Description2' );
@@ -544,5 +546,5 @@ if ($debug) {
 
     $wgShowExceptionDetails = true;
     $wgDebugToolbar = true;
-    $wgResourceLoaderDebug = false;
+    $wgResourceLoaderDebug = true;
 } 
