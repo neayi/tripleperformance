@@ -27,7 +27,7 @@ services:
         - DEBUG_TOOLS=true
     env_file: .env
     volumes:
-      - ./:/var/www/
+      - ./:/var/www
     labels:
       - 'traefik.enable=true'
       - 'traefik.port=80'
@@ -79,7 +79,7 @@ services:
       - MYSQL_PASSWORD=wiki
     volumes:
       - data-mysql:/var/lib/mysql
-      - ./bin/sql:/var/sql/
+      - ./bin/sql:/var/sql
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin

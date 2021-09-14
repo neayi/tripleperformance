@@ -412,7 +412,7 @@ $wgEditNotifyAlerts = array(
 wfLoadExtension( 'PluggableAuth' );
 wfLoadExtension( 'NeayiAuth' );
 
-$wgOAuthRedirectUri = "$domainUrl/index.php/Special:PluggableAuthLogin";
+$wgOAuthRedirectUri = 'https://' . $domainName . "/index.php/Special:PluggableAuthLogin";
 $wgPluggableAuth_EnableAutoLogin = false;
 $wgPluggableAuth_EnableLocalLogin = false;
 
