@@ -18,6 +18,14 @@ docker-compose up -d
 docker-compose logs -f discourse
 ```
 
+##Créer un administrateur
+
+Lancer dans le container discourse les cmds suivantes
+
+cd /opt/bitnami/discourse
+
+bundle exec rake admin:create
+
 ## Adminer (PostgresSQL web ui)
 
 Go to [http://forum-adminer.dev.tripleperformance.fr](http://forum-adminer.dev.tripleperformance.fr/?pgsql=postgresql&username=bn_discourse&db=bitnami_application&ns=public)
