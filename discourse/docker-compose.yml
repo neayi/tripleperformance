@@ -10,13 +10,12 @@ services:
       - POSTGRESQL_USERNAME=bn_discourse
       - POSTGRESQL_PASSWORD
       - POSTGRESQL_DATABASE=${DISCOURSE_DATABASE_NAME:?err}
-      - ALLOW_EMPTY_PASSWORD=yes
     restart: always
 
   redis:
     image: docker.io/bitnami/redis:6.0
     environment:
-      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_PASSWORD=${DISCOURSE_REDIS_PASSWORD:?err}
     volumes:
       - 'redis_data:/bitnami/discourse'
     restart: always
@@ -43,7 +42,6 @@ services:
       - DISCOURSE_HOST
       - DISCOURSE_ENV=production
       - RAILS_ENV=production
-      - ALLOW_EMPTY_PASSWORD=yes
       - DISCOURSE_DATABASE_HOST=postgresql
       - DISCOURSE_DATABASE_PORT_NUMBER=5432
       - DISCOURSE_DATABASE_USER=bn_discourse
@@ -51,6 +49,7 @@ services:
       - DISCOURSE_DATABASE_NAME
       - DISCOURSE_REDIS_HOST=redis
       - DISCOURSE_REDIS_PORT_NUMBER=6379
+      - DISCOURSE_REDIS_PASSWORD
       - POSTGRESQL_CLIENT_POSTGRES_USER=postgres
       - POSTGRESQL_CLIENT_POSTGRES_PASSWORD
       - POSTGRESQL_CLIENT_CREATE_DATABASE_NAME=$DISCOURSE_DATABASE_NAME
@@ -70,16 +69,16 @@ services:
     command: /opt/bitnami/scripts/discourse-sidekiq/run.sh
     environment:
       - DISCOURSE_ENV=production
-      - RAILS_ENV=production      
+      - RAILS_ENV=production
       - DISCOURSE_HOST
       - DISCOURSE_DATABASE_HOST=postgresql
       - DISCOURSE_DATABASE_PORT_NUMBER=5432
       - DISCOURSE_DATABASE_USER=bn_discourse
       - DISCOURSE_DATABASE_PASSWORD
       - DISCOURSE_DATABASE_NAME
-      - ALLOW_EMPTY_PASSWORD=yes
       - DISCOURSE_REDIS_HOST=redis
       - DISCOURSE_REDIS_PORT_NUMBER=6379
+      - DISCOURSE_REDIS_PASSWORD
     restart: always
 
   adminer:
