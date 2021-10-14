@@ -63,7 +63,7 @@ $wgFavicon = "/skins/skin-neayi/favicon/favicon.ico";
 
 $wgEnableEmail = true;
 $wgEnableUserEmail = true; # UPO
-if ($env == 'preprod') 
+if ($env == 'preprod')
     $wgEnableEmail = false; // Disable emails on preprod please.
 $wgAllowHTMLEmail = true;
 
@@ -213,7 +213,7 @@ if('prod' === $env) {
 
     // SEO and Sitemap
     // https://www.mediawiki.org/wiki/Extension:AutoSitemap
-    wfLoadExtension( 'AutoSitemap' ); 
+    wfLoadExtension( 'AutoSitemap' );
     $wgAutoSitemap["notify"] = [];
 
     $wgAutoSitemap["notify"][] = "https://www.google.com/webmasters/sitemaps/ping?sitemap=$domainUrl/sitemap.xml";
@@ -287,7 +287,7 @@ $egChameleonExternalStyleModules = array(
     dirname(MW_CONFIG_FILE) . '/skins/skin-neayi/chameleon-neayi.scss' => 'afterMain'
 );
 
-// Allow custom CSS on Special Pages : 
+// Allow custom CSS on Special Pages :
 $wgAllowSiteCSSOnRestrictedPages = true;
 
 if($debug) {
@@ -419,7 +419,7 @@ $wgPluggableAuth_EnableLocalLogin = false;
 $wgOAuthUri = getenv('INSIGHT_URL') . '/register?&';
 //$wgOAuthUri = getenv('INSIGHT_URL') . '/login?&';
 
-if ($env == 'preprod') 
+if ($env == 'preprod')
     $wgOAuthUserApiByToken = 'http://insights_preprod/api/user?&';
 else
     $wgOAuthUserApiByToken = 'http://insights/api/user?&';
@@ -473,7 +473,7 @@ $wgUploadWizardConfig = array(
         //     'This file was uploaded with the UploadWizard extension.'
         //     ),
             'categories' => array(
-                "Fichier chargé avec l'assistant UploadWizard"	
+                "Fichier chargé avec l'assistant UploadWizard"
                 ),
         ), // Should be localised to the language of your wiki instance
 //        'feedbackPage' => 'Feedback about UploadWizard',
@@ -536,6 +536,10 @@ require_once "$IP/extensions/SemanticDrilldown/SemanticDrilldown.php";
 // $sdgFiltersLargestFontSize=25;
 $sdgHideCategoriesByDefault = true;
 
+https://github.com/p12tic/AddBodyClass
+require_once("$IP/extensions/AddBodyClass/AddBodyClass.php");
+
+
 // Debug and error reporting :
 
 if ($debug) {
@@ -547,4 +551,4 @@ if ($debug) {
     $wgShowExceptionDetails = true;
     $wgDebugToolbar = true;
     $wgResourceLoaderDebug = true;
-} 
+}

@@ -9,7 +9,7 @@ if (empty($argv[1]))
 try {
 	$GLOBALS['dry_run'] = false;
 
-	switch ($argv[1]) 
+	switch ($argv[1])
 	{
 		case '--update':
 			update_wiki_env();
@@ -30,7 +30,7 @@ try {
 		default:
 			echoUsageAndExit();
 	}
-	
+
 } catch (\Throwable $th) {
 	echo 'Exception: ',  $th->getMessage(), "\n";
 	echo "Stopping build.\n\n";
@@ -50,7 +50,7 @@ function create_wiki_env()
     checkout_project($wiki);
 
     linkWikiSettings();
-	
+
 	$wiki_install_dir = getInstallDir();
 
 	initSubModules($wiki_install_dir);
@@ -108,7 +108,7 @@ function update_wiki_env()
 	// Before pulling the wiki, lets restore composer.json
 	restore_composer();
 
-	pull_project($wiki);
+	// pull_project($wiki);
 
 	linkWikiSettings();
 
@@ -233,7 +233,7 @@ function getWikiComponents()
 	$wiki_install_dir = '/html';
 	$wiki_extensions_dir = '/html/extensions';
 	$wiki_skins_dir = '/html/skins';
-	$wiki_version = 'REL1_35';
+	$wiki_version = 'REL1_35'; // when migrating to 1_36, see page forms
 	$neayi_wiki_version = 'REL1_34'; // Since we have cloned a few repos, we have our changes in an old branch
 	$latest_wiki_version = 'REL1_35'; // For some extensions we are happy to just take the latest stable
 
@@ -335,14 +335,14 @@ function getWikiComponents()
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/MassEditRegex',
 							'git' => '--branch '.$latest_wiki_version .' https://github.com/wikimedia/mediawiki-extensions-MassEditRegex.git',
-							'branch' => $latest_wiki_version);				
+							'branch' => $latest_wiki_version);
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/SemanticDrilldown',
 							'git' => '--branch master https://github.com/wikimedia/mediawiki-extensions-SemanticDrilldown.git',
 							'branch' => 'master');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Realnames',
-							'git' => 'https://github.com/ofbeaton/mediawiki-realnames.git');	
+							'git' => 'https://github.com/ofbeaton/mediawiki-realnames.git');
 
 	// https://www.mediawiki.org/wiki/Extension:EditNotify
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/EditNotify',
@@ -357,6 +357,9 @@ function getWikiComponents()
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/AdminLinks',
 							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-AdminLinks.git',
 							'branch' => $wiki_version);
+
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/AddBodyClass',
+							'git' => 'https://github.com/p12tic/AddBodyClass.git');
 
 	// Neayi extensions and forks
 	$components[] = array(	'dest' => $wiki_skins_dir . '/skin-neayi',
@@ -382,7 +385,7 @@ function getWikiComponents()
 							'branch' => $neayi_wiki_version);
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/OpenGraph',
-							'git' => 'https://github.com/neayi/mediawiki-extensions-OpenGraph.git');	
+							'git' => 'https://github.com/neayi/mediawiki-extensions-OpenGraph.git');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/NeayiInteractions',
 							'git' => 'https://github.com/neayi/mw-NeayiInteractions.git');
@@ -431,7 +434,7 @@ function linkWikiSettings()
 	// Touch the destination file so that the date is updated in any case.
 	// Useful for the LocalSettings.php file, it tells Chameleon to check for changes
 	// and eventually update the CSS out of the SCSS.
-	touch($dst);	
+	touch($dst);
 }
 
 /**
@@ -447,13 +450,13 @@ function checkout_project($aComponent, $bForceRemoveFolder = false)
 		{
 			// remove the existing folder before cloning
 			$cmd = 'rm -r ' . root_web . $aComponent['dest'];
-			runCommand($cmd);			
+			runCommand($cmd);
 		}
 		else
 			throw new \RuntimeException('The dest dir already exists: '. root_web . $aComponent['dest']);
     }
 
-	$cmd = 'git clone ' . $aComponent['git'] . ' ' . root_web . $aComponent['dest'];
+	$cmd = 'git clone -q ' . $aComponent['git'] . ' ' . root_web . $aComponent['dest'];
 	runCommand($cmd);
 
 	if (!empty($aComponent['tag']))
@@ -477,7 +480,7 @@ function checkout_project($aComponent, $bForceRemoveFolder = false)
 				# code...
 				break;
 		}
-	}	
+	}
 }
 
 function pull_project($aComponent)
@@ -495,7 +498,7 @@ function pull_project($aComponent)
 		// If we are using a tag, then we need to checkout to master first in order to avoid an error
 		$cmd = 'git checkout -q master'; // todo : change master with the right branch name
 		runCommand($cmd);
-	}	
+	}
 
 	$env = getenv('ENV');
 	if ($env == 'dev' && strpos($aComponent['git'], 'https://github.com/neayi') !== false)
@@ -510,7 +513,7 @@ function pull_project($aComponent)
 
 	// Make sure we are on the right branch:
 	if (!empty($aComponent['branch']))
-		switchToBranch($aComponent);		
+		switchToBranch($aComponent);
 
 	// Make sure we are on the right tag:
 	if (!empty($aComponent['tag']))
@@ -534,7 +537,7 @@ function pull_project($aComponent)
 				# code...
 				break;
 		}
-	}	
+	}
 }
 
 /**
@@ -574,7 +577,7 @@ function git_status_project($aComponent)
 }
 
 /**
- * Add a component to the main composer file. 
+ * Add a component to the main composer file.
  * Requires a composer update after that.
  */
 function addComponentToComposer($aComponent)
@@ -624,7 +627,7 @@ function installComposer($aComponent)
 		$cmd = "composer install --no-progress --no-interaction --no-dev";
 
 	changeDir($dir);
-	runCommand($cmd);	
+	runCommand($cmd);
 }
 
 function initSubModules($dir)
@@ -632,7 +635,7 @@ function initSubModules($dir)
 	changeDir($dir);
 
 	$cmd = 'git submodule update --init';
-	runCommand($cmd);	
+	runCommand($cmd);
 }
 
 function runCommand($cmd)
@@ -641,7 +644,7 @@ function runCommand($cmd)
 
 	if ($GLOBALS['dry_run'])
 		return '';
-	
+
 	$return_var = 0;
 	passthru($cmd, $return_var);
 
