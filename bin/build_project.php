@@ -212,7 +212,7 @@ function restore_composer()
 	$wiki_install_dir = getInstallDir();
 	changeDir($wiki_install_dir);
 
-	$cmd = 'git checkout -- composer.json';
+	$cmd = 'rm -f composer.local.json';
 	runCommand($cmd);
 }
 
@@ -246,6 +246,10 @@ function getWikiComponents()
 	$components[] = array(	'composer' => 'mediawiki/semantic-result-formats' );
 	$components[] = array(	'composer' => 'mediawiki/semantic-forms-select' ); // "~3.0"
 	$components[] = array(	'composer' => 'mediawiki/semantic-scribunto' ); // "~2.1"
+
+	// Force Elastic Search to be on 6.7 in order to be compatible with Elastica. SMW tends to get the
+	// latest 6.8.x version which fails to work.
+	$components[] = array(	'composer' => 'elasticsearch/elasticsearch:6.7.*' );
 
 	// Regular Mediawiki extensions
 
@@ -584,7 +588,7 @@ function addComponentToComposer($aComponent)
 {
 	$wiki_install_dir = getInstallDir();
 
-	$cmd = "composer require --no-interaction --no-update " . $aComponent['composer'];
+	$cmd = "COMPOSER=composer.local.json composer require --no-interaction --no-update " . $aComponent['composer'];
 
 	changeDir($wiki_install_dir);
 	runCommand($cmd);

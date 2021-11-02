@@ -97,7 +97,7 @@ services:
       discovery.type: single-node
       xpack.security.enabled: "true"
       http.cors.enabled: "true"
-      http.cors.allow-origin: "http://localhost:8080"
+      http.cors.allow-origin: "http://elasticvue.dev.tripleperformance.fr"
       http.cors.allow-headers: X-Requested-With,Content-Type,Content-Length,Authorization
     ulimits:
       memlock:

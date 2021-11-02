@@ -22,9 +22,9 @@ try {
         $script = $targetEnv;
         $targetEnv = getTargetEnv();
     }
-    
+
     $scriptPath = getScriptPath($script);
-	
+
     $commandLines = array();
 
     if ($script == 'mysql')
@@ -52,8 +52,8 @@ try {
         $sqlFile = array_shift($argv);
         if (strpos($sqlFile, '.sql') === false)
             throw new Exception("please export a SQL file. Got $sqlFile", 1);
-        
-        $commandLines[] = getMysqlCommandLine($targetEnv, $scriptPath) .  ' > ' .  $sqlFile;        
+
+        $commandLines[] = getMysqlCommandLine($targetEnv, $scriptPath) .  ' > ' .  $sqlFile;
     }
     else if ($script == 'importDump.php')
     {
@@ -62,7 +62,7 @@ try {
         {
             if (strpos($arg, '.xml') === false)
                 throw new Exception("Please import only xml files. $arg given.", 1);
-            
+
             $volume = '-v '.dirname($arg).':/out';
             $fullScript = $scriptPath . ' /out/' . basename($arg);
 
@@ -86,7 +86,7 @@ try {
         $fullScript = $scriptPath . ' /out/';
 
         $commandLines[] = getCommandLine($targetEnv, $fullScript, $volume, false);
-    }    
+    }
     else
     {
         // Add the rest of the args:
@@ -131,9 +131,9 @@ function isTargetEnv($env)
     switch ($env) {
         case '--dev':
         case '--prod':
-        case '--preprod':            
+        case '--preprod':
             return true;
-    }    
+    }
 
     return false;
 }
@@ -147,7 +147,7 @@ function getTargetEnv($env = '')
 
     switch ($envData['ENV']) {
         case 'dev':
-            if (empty($env) || $env == '--dev') 
+            if (empty($env) || $env == '--dev')
                 return 'dev';
 
             throw new Exception("We are in dev environnement. Aborting", 1);
@@ -155,15 +155,15 @@ function getTargetEnv($env = '')
         case 'prod':
             if ($env == '--preprod')
                 return 'preprod';
-            
-            if ($env == '--prod') 
+
+            if ($env == '--prod')
                 return 'prod';
-            
+
             throw new Exception("Please tell me --prod or --preprod. Aborting", 1);
 
         default:
             throw new Exception(".env not configured. Aborting", 1);
-    }   
+    }
 }
 
 function getScriptPath($script)
@@ -370,6 +370,10 @@ function getScriptPath($script)
             // Regular MW scripts:
             return "php /var/www/html/maintenance/$script";
 
+        case 'setupElasticSearch.sh' :
+            // Regular MW scripts:
+            return "/var/www/html/maintenance/$script";
+
         case 'disposeOutdatedEntities.php' :
         case 'dumpRDF.php' :
         case 'populateHashField.php' :
@@ -393,13 +397,13 @@ function getScriptPath($script)
         case 'removeSpamAccounts.php' :
             // NeayiAuth
             return "php /var/www/html/extensions/NeayiAuth/maintenance/$script";
-    
+
         case 'mysql':
             return '/usr/bin/mysql';
 
         case 'mysqldump':
             return '/usr/bin/mysqldump';
-            
+
         default:
             throw new Exception("Unrecognized maintenance script: $script", 1);
     }
@@ -409,7 +413,7 @@ function getScriptPath($script)
  * $volume -v ~/youtube:/out (in that case make sure the files you import are in /out)
  */
 function getCommandLine($targetEnv, $script, $volume = '', $bUseWwwData = true)
-{        
+{
     $user = '';
     if ($bUseWwwData)
         $user = '--user="www-data:www-data"';
@@ -417,7 +421,7 @@ function getCommandLine($targetEnv, $script, $volume = '', $bUseWwwData = true)
     switch ($targetEnv) {
         case 'dev':
             return 'docker-compose run '.$user.' --rm '.$volume.' web sh -c "'.$script.'"';
-        
+
         case 'preprod':
             return 'docker-compose -f docker-compose.prod.yml run '.$user.' --rm '.$volume.' web_preprod sh -c "'.$script.'"';
 
@@ -431,7 +435,7 @@ function getCommandLine($targetEnv, $script, $volume = '', $bUseWwwData = true)
  * $volume -v ~/youtube:/out (in that case make sure the files you import are in /out)
  */
 function getMysqlCommandLine($targetEnv, $script)
-{        
+{
     $extraParams = '';
 
     if ($script =='/usr/bin/mysqldump')
@@ -441,7 +445,7 @@ function getMysqlCommandLine($targetEnv, $script)
     switch ($targetEnv) {
         case 'dev':
             return "docker-compose run --rm -v $volume db $script --defaults-extra-file=/backup/.mysql.cnf $extraParams -P 3306 -h db -u root wiki";
-    
+
         case 'preprod':
             return "docker-compose -f docker-compose.prod.yml run --rm -v $volume db $script --defaults-extra-file=/backup/.mysql.cnf $extraParams -P 3306 -h db -u root wiki_preprod";
 
