@@ -520,6 +520,15 @@ enableSemantics( 'tripleperformance.fr' );
 $smwgConfigFileDir = $wgUploadDirectory;
 $smwgNamespacesWithSemanticLinks[NS_STRUCTURE] = true;
 
+// https://github.com/SemanticMediaWiki/SemanticExtraSpecialProperties/blob/master/docs/configuration.md
+wfLoadExtension( 'SemanticExtraSpecialProperties' );
+$sespgEnabledPropertyList = [
+	'_PAGEID',
+	'_CUSER',
+    '_EUSER',
+    '_VIEWS'
+];
+
 // Load the geo localisation SMW extension:
 // https://maps.extension.wiki/wiki/Installation
 wfLoadExtension( 'Maps' );

@@ -27,7 +27,7 @@ Copier les fichiers `.env` et `docker-compose.override.yml`, et éventuellement 
     cp .env.dev.dist .env
     cp insights/.env.example insights/.env
     cp docker-compose.override.yml.dist docker-compose.override.yml
-    
+
     mkdir -p .cache/ssl .cache/composer
 
 ### Création des certificats de dev
@@ -45,7 +45,7 @@ Sous Windows : installer d'abord le certificat `root` puis le certificat `server
 
 Pour installer le certificat dans Firefox, le plus simple est de faire en sorte que Firefox respecte les certificats racine de Windows en allant dans about:config, et en [changeant le réglage setting security.enterprise_roots.enabled à true](https://gist.github.com/cecilemuller/9492b848eb8fe46d462abeb26656c4f8).
 
-Pour utiliser le certificat avec Chrome sous Linix, aller dans [chrome://settings/certificates](chrome://settings/certificates), cliquez sur "Authorities", et importez le certificat root.pem (NB : sous Windows, Chrome utilise les certificats de la machine). 
+Pour utiliser le certificat avec Chrome sous Linix, aller dans [chrome://settings/certificates](chrome://settings/certificates), cliquez sur "Authorities", et importez le certificat root.pem (NB : sous Windows, Chrome utilise les certificats de la machine).
 
 Pour les autres OS ou navigateurs, [ajouter le certificat root au système](https://manuals.gfi.com/en/kerio/connect/content/server-configuration/ssl-certificates/adding-trusted-root-certificates-to-the-server-1605.html)
 et redémarrez votre pc, au cas où.
@@ -80,8 +80,9 @@ reboot
 
 
 ### Accès à elasticVue
-* Dev : http://elastic:xxxxxxxx@elasticvue.dev.tripleperformance.fr/ (mot de passe dans le fichier `.env` --> `ELASTICSEARCH_SERVER`)
-* Prod : http://elasticvue.tripleperformance.fr/
+* Dev : https://elasticvue.dev.tripleperformance.fr/
+* Prod : https://elasticvue.tripleperformance.fr/
+* Utiliser comme url de connexion : https://elastic:xxxxxxxx@elasticsearch.tripleperformance.fr (mot de passe dans le fichier `.env` --> `ELASTICSEARCH_SERVER`)
 
 ### Extraction du code
 
@@ -91,13 +92,13 @@ En cas d'erreur, relancer la commande avec:
 
     docker-compose exec web php bin/build_project.php --update
 
-Ces deux commandes font la création du dossier `/var/www/src`, dans lesquels on trouvera d'une part un dossier html (le web root de chacun des domaines) et un dossier html/extensions (les extensions et plugins utilisés dans notre setup). 
+Ces deux commandes font la création du dossier `/var/www/src`, dans lesquels on trouvera d'une part un dossier html (le web root de chacun des domaines) et un dossier html/extensions (les extensions et plugins utilisés dans notre setup).
 Les fichiers de configuration sont aussi ajoutés via lien symbolique à partir du dossier /var/www/scripts/settings
 
 ### Création des bases de données
 Une fois le code extrait, il faut ajouter la base de données.
 
-Par défaut, la base créée sera `wiki`, mais il est possible d'importer aussi une base de prod en créant le fichier `bin/sql/wiki_prod.sql` avant de lancer le script. 
+Par défaut, la base créée sera `wiki`, mais il est possible d'importer aussi une base de prod en créant le fichier `bin/sql/wiki_prod.sql` avant de lancer le script.
 
     docker-compose exec -w /var/sql db ./load_db.sh
 
@@ -146,7 +147,7 @@ On ira ensuite mettre à jour spécifiquement le wiki :
     git clone git@github.com:neayi/tripleperformance.git
     cd tripleperformance
     git clone git@github.com:neayi/insights.git insights
-    
+
     cp .env.prod.dist .env
     cp .env.preprod.dist .env.preprod
     cp insights/.env.example insights/.env
@@ -156,7 +157,7 @@ Modifier les fichiers .env, et en particulier vérifier la version des images à
 
     mkdir -p .data/elasticsearch && chmod o+w .data/elasticsearch
     mkdir -p .data/insights_prod_storage && chmod o+w .data/insights_prod_storage
-    mkdir -p .data/insights_preprod_storage && chmod o+w .data/insights_preprod_storage    
+    mkdir -p .data/insights_preprod_storage && chmod o+w .data/insights_preprod_storage
     touch .data/acme.json && chmod 600 .data/acme.json
 
 Configurer les fichiers .env, puis :
@@ -190,7 +191,7 @@ Pour importer des images ou un fichier xml :
 
 
 ## Mysql
-Pour importer une DB, utiliser la commande : 
+Pour importer une DB, utiliser la commande :
 
     docker-compose -f docker-compose.prod.yml exec -T db mysql -u root --password=xxxxxx wiki < bin/sql/wiki.sql
 

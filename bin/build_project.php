@@ -246,9 +246,10 @@ function getWikiComponents()
 	$components[] = array(	'composer' => 'mediawiki/semantic-result-formats' );
 	$components[] = array(	'composer' => 'mediawiki/semantic-forms-select' ); // "~3.0"
 	$components[] = array(	'composer' => 'mediawiki/semantic-scribunto' ); // "~2.1"
+	$components[] = array(	'composer' => 'mediawiki/semantic-extra-special-properties' ); // "~2.1"
 
 	// Force Elastic Search to be on 6.7 in order to be compatible with Elastica. SMW tends to get the
-	// latest 6.8.x version which fails to work.
+	// latest 6.8.x version which fails to work. REMOVE THIS WHEN SemanticMediawiki will be on version 4
 	$components[] = array(	'composer' => 'elasticsearch/elasticsearch:6.7.*' );
 
 	// Regular Mediawiki extensions
