@@ -18,3 +18,4 @@ backup/.mysql.cnf
 /discourse/discourse-data
 /discourse/.env
 /discourse/.pgpass
+/backup/DBs/
