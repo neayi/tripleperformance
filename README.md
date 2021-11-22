@@ -78,19 +78,30 @@ reboot
 * Dev : http://phpmyadmin.dev.tripleperformance.fr
 * Prod : http://phpmyadmin.tripleperformance.fr
 
-
 ### Accès à elasticVue
 * Dev : https://elasticvue.dev.tripleperformance.fr/
 * Prod : https://elasticvue.tripleperformance.fr/
 * Utiliser comme url de connexion : https://elastic:xxxxxxxx@elasticsearch.tripleperformance.fr (mot de passe dans le fichier `.env` --> `ELASTICSEARCH_SERVER`)
 
+### Restauration d'une base de données de backup
+
+Utiliser wiki.php mysql :
+
+    php wiki.php mysql backup/DBs/wiki_prod-20211116.sql
+
+NB : il faudra créer un fichier `.mysql.cnf` dans le dossier backup avec le mot de passe root de la DB :
+
+    cat > backup/.mysql.cnf
+    [client]
+    password=root
+
 ### Extraction du code
 
-    docker-compose exec web php bin/build_project.php --create-env
+    php wiki.php build_project.php --create-env
 
 En cas d'erreur, relancer la commande avec:
 
-    docker-compose exec web php bin/build_project.php --update
+    php wiki.php build_project.php --update
 
 Ces deux commandes font la création du dossier `/var/www/src`, dans lesquels on trouvera d'une part un dossier html (le web root de chacun des domaines) et un dossier html/extensions (les extensions et plugins utilisés dans notre setup).
 Les fichiers de configuration sont aussi ajoutés via lien symbolique à partir du dossier /var/www/scripts/settings

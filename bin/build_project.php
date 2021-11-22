@@ -220,7 +220,7 @@ function getWiki()
 {
 	// Mediawiki
 	$wiki_install_dir = '/html';
-	$wiki_version = 'REL1_35';
+	$wiki_version = 'REL1_37';
 
 	return array(	'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki.git',
 					'dest' => $wiki_install_dir,
@@ -233,9 +233,9 @@ function getWikiComponents()
 	$wiki_install_dir = '/html';
 	$wiki_extensions_dir = '/html/extensions';
 	$wiki_skins_dir = '/html/skins';
-	$wiki_version = 'REL1_35'; // when migrating to 1_36, see page forms
-	$neayi_wiki_version = 'REL1_34'; // Since we have cloned a few repos, we have our changes in an old branch
-	$latest_wiki_version = 'REL1_35'; // For some extensions we are happy to just take the latest stable
+	$wiki_version = 'REL1_37'; // when migrating to 1_36, see page forms
+	$latest_wiki_version = 'REL1_37'; // For some extensions we are happy to just take the latest stable
+	$previous_wiki_version = 'REL1_36'; // For some extensions we are happy to just take the latest stable
 
 	$components = array();
 
@@ -354,9 +354,8 @@ function getWikiComponents()
 							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-EditNotify',
 							'branch' => $wiki_version);
 
-	// NOTE: PageForms was only forked to backport two fixes from REL1_36. When upgrading to this release, we should stop using our fork.
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/PageForms',
-							'git' => '--branch '.$wiki_version.' https://github.com/neayi/mediawiki-extensions-PageForms.git',
+							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-PageForms.git',
 							'branch' => $wiki_version);
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/AdminLinks',
@@ -366,6 +365,10 @@ function getWikiComponents()
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/AddBodyClass',
 							'git' => 'https://github.com/p12tic/AddBodyClass.git');
 
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/ChangeAuthor',
+							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-ChangeAuthor.git',
+							'branch' => $wiki_version);
+
 	// Neayi extensions and forks
 	$components[] = array(	'dest' => $wiki_skins_dir . '/skin-neayi',
 							'git' => 'https://github.com/neayi/skin-neayi.git');
@@ -373,9 +376,6 @@ function getWikiComponents()
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Carousel',
 							'git' => 'https://github.com/neayi/ext-carousel.git');
 
-	$components[] = array(	'dest' => $wiki_extensions_dir . '/ChangeAuthor',
-							'git' => '--branch '.$wiki_version.' https://github.com/neayi/mediawiki-extensions-ChangeAuthor.git',
-							'branch' => $wiki_version);
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/NeayiAuth',
 							'git' => 'https://github.com/neayi/NeayiAuth.git',
@@ -386,8 +386,8 @@ function getWikiComponents()
 							'branch' => 'TriplePerformance');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/InputBox',
-							'git' => '--branch '.$neayi_wiki_version.' https://github.com/neayi/mediawiki-extensions-InputBox.git',
-							'branch' => $neayi_wiki_version);
+							'git' => '--branch REL1_34 https://github.com/neayi/mediawiki-extensions-InputBox.git',
+							'branch' => 'REL1_34');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/OpenGraph',
 							'git' => 'https://github.com/neayi/mediawiki-extensions-OpenGraph.git');

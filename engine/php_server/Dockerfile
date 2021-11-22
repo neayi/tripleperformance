@@ -1,4 +1,4 @@
-FROM php:7.3-apache AS base
+FROM php:7.4-apache AS base
 
 ARG DEBUG_TOOLS
 
