@@ -366,6 +366,9 @@ function getWikiComponents()
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/AddBodyClass',
 							'git' => 'https://github.com/p12tic/AddBodyClass.git');
 
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/PDFEmbed',
+							'git' => 'https://github.com/WolfgangFahl/PDFEmbed.git');
+
 	// Neayi extensions and forks
 	$components[] = array(	'dest' => $wiki_skins_dir . '/skin-neayi',
 							'git' => 'https://github.com/neayi/skin-neayi.git');

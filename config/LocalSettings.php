@@ -192,6 +192,7 @@ $wgPFEnableStringFunctions = true;
 
 # PDFHandler in order to build thumbnails for PDFs
 wfLoadExtension( 'PdfHandler' );
+wfLoadExtension( 'PDFEmbed' );
 
 # End of automatically generated settings.
 # Add more configuration options below.
