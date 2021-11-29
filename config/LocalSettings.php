@@ -516,6 +516,7 @@ wfLoadExtension( 'MassEditRegex' );
 $wgGroupPermissions['sysop']['masseditregex'] = true;
 
 // Semantic Mediawiki
+wfLoadExtension( 'SemanticMediaWiki' );
 enableSemantics( 'tripleperformance.fr' );
 $smwgConfigFileDir = $wgUploadDirectory;
 $smwgNamespacesWithSemanticLinks[NS_STRUCTURE] = true;

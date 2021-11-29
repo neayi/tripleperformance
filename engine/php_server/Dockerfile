@@ -32,12 +32,11 @@ RUN apt-get update  \
 	&& rm -r /var/lib/apt/lists/*
 
 # Use GD
-RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ \
-	--with-jpeg-dir=/usr/include/
+RUN docker-php-ext-configure gd
 
 RUN docker-php-ext-install -j$(nproc) \
-	mysqli exif mbstring zip dba bz2 calendar bcmath gettext gmp intl pdo pdo_mysql pspell gd \
-	iconv soap sockets sysvmsg sysvsem sysvshm wddx xmlrpc xsl
+	mysqli exif zip dba bz2 calendar bcmath gettext gmp intl pdo pdo_mysql pspell gd \
+	iconv soap sockets sysvmsg sysvsem sysvshm xmlrpc xsl
 
 # Image magick
 RUN pecl install imagick \
