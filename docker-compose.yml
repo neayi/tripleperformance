@@ -31,7 +31,7 @@ services:
     labels:
       - 'traefik.enable=true'
       - 'traefik.port=80'
-      - 'traefik.frontend.rule=Host:wiki.dev.tripleperformance.fr'
+      - 'traefik.frontend.rule=Host:wiki.dev.tripleperformance.fr, 3perf.fr'
     networks:
       default:
         aliases:

@@ -359,6 +359,13 @@ wfLoadExtension( 'Description2' );
 $wgEnableMetaDescriptionFunctions = true;
 wfLoadExtension( 'OpenGraph' );
 
+wfLoadExtension( 'UrlShortener' );
+$wgUrlShortenerTemplate = '/r/$1';
+$wgUrlShortenerServer = "3perf.fr";
+$wgUrlShortenerAllowedDomains = array(
+	'(.*\.)?tripleperformance\.fr'
+);
+
 // Popups (shows a preview of the page on hover)
 wfLoadExtension( 'Popups' );
 $wgPopupsHideOptInOnPreferencesPage = true;
