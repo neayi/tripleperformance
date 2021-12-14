@@ -349,11 +349,6 @@ function getWikiComponents()
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Realnames',
 							'git' => 'https://github.com/ofbeaton/mediawiki-realnames.git');
 
-	// https://www.mediawiki.org/wiki/Extension:EditNotify
-	$components[] = array(	'dest' => $wiki_extensions_dir . '/EditNotify',
-							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-EditNotify',
-							'branch' => $wiki_version);
-
 	// NOTE: PageForms was only forked to backport two fixes from REL1_36. When upgrading to this release, we should stop using our fork.
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/PageForms',
 							'git' => '--branch '.$wiki_version.' https://github.com/neayi/mediawiki-extensions-PageForms.git',
@@ -372,6 +367,9 @@ function getWikiComponents()
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/PDFEmbed',
 							'git' => 'https://github.com/WolfgangFahl/PDFEmbed.git');
+
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/SlackNotifications',
+							'git' => 'https://github.com/kulttuuri/SlackNotifications.git');
 
 	// Neayi extensions and forks
 	$components[] = array(	'dest' => $wiki_skins_dir . '/skin-neayi',

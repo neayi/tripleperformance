@@ -176,7 +176,7 @@ define("NS_STRUCTURE_TALK", 3001); // This MUST be the following odd integer.
 $wgExtraNamespaces[NS_STRUCTURE] = "Structure";
 $wgExtraNamespaces[NS_STRUCTURE_TALK] = "Structure_talk"; // Note underscores in the namespace name.
 $wgContentNamespaces[] = NS_STRUCTURE;
-
+$wgNamespacesToBeSearchedDefault[NS_STRUCTURE] = true;
 
 # The following permissions were set based on your choice in the installer
 $wgGroupPermissions['*']['createaccount'] = true;
@@ -407,15 +407,6 @@ $wgEchoEmailFooterAddress = "<div style=\"padding: 100px 0 0 0; text-align:cente
 $wgEnotifMinorEdits = false;
 $wgEnotifUseRealName = true;
 
-// https://www.mediawiki.org/wiki/Extension:EditNotify
-wfLoadExtension( 'EditNotify' );
-$wgEditNotifyAlerts = array(
-	array(
-		'action' => array( 'create', 'edit' ),
-		'users' => array('Bertrand_Gorge', 'AstridRobette')
-	)
-);
-
 // Neayi login
 wfLoadExtension( 'PluggableAuth' );
 wfLoadExtension( 'NeayiAuth' );
@@ -553,9 +544,23 @@ require_once "$IP/extensions/SemanticDrilldown/SemanticDrilldown.php";
 // $sdgFiltersLargestFontSize=25;
 $sdgHideCategoriesByDefault = true;
 
-https://github.com/p12tic/AddBodyClass
+// https://github.com/p12tic/AddBodyClass
 require_once("$IP/extensions/AddBodyClass/AddBodyClass.php");
 
+if('prod' === $env)
+{
+    // https://github.com/kulttuuri/SlackNotifications
+    require_once("$IP/extensions/SlackNotifications/SlackNotifications.php");
+    $wgSlackIncomingWebhookUrl = "https://hooks.slack.com/services/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";
+    $wgSlackFromName = "Triple Performance";
+    $wgSlackNotificationWikiUrl = "https://wiki.tripleperformance.fr/";
+    $wgSlackNotificationWikiUrlEnding = "wiki/";
+    $wgSlackIncludePageUrls = true;
+    $wgSlackIncludeUserUrls = false;
+    $wgSlackIgnoreMinorEdits = true;
+    $wgSlackEmoji = ":tripleperformance:";
+    $wgSlackExcludedPermission = "bot"; // bots and admin
+}
 
 // Debug and error reporting :
 
