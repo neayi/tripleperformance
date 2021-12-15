@@ -547,24 +547,20 @@ $sdgHideCategoriesByDefault = true;
 // https://github.com/p12tic/AddBodyClass
 require_once("$IP/extensions/AddBodyClass/AddBodyClass.php");
 
-if('prod' === $env)
+$slackWebHook = getenv('SLACK_WEBHOOK');
+if (!empty($slackWebHook))
 {
     // https://github.com/kulttuuri/SlackNotifications
-
-    $slackWebHook = getenv('SLACK_WEBHOOK');
-    if (!empty($slackWebHook))
-    {
-        require_once("$IP/extensions/SlackNotifications/SlackNotifications.php");
-        $wgSlackIncomingWebhookUrl = $slackWebHook;
-        $wgSlackFromName = "Triple Performance";
-        $wgSlackNotificationWikiUrl = "https://wiki.tripleperformance.fr/";
-        $wgSlackNotificationWikiUrlEnding = "wiki/";
-        $wgSlackIncludePageUrls = true;
-        $wgSlackIncludeUserUrls = false;
-        $wgSlackIgnoreMinorEdits = true;
-        $wgSlackEmoji = ":tripleperformance:";
-        $wgSlackExcludedPermission = "bot"; // bots and admin
-    }
+    wfLoadExtension( 'SlackNotifications' );
+    $wgSlackIncomingWebhookUrl = $slackWebHook;
+    $wgSlackFromName = "Triple Performance";
+    $wgSlackNotificationWikiUrl = "https://wiki.tripleperformance.fr/";
+    $wgSlackNotificationWikiUrlEnding = "wiki/";
+    $wgSlackIncludePageUrls = true;
+    $wgSlackIncludeUserUrls = false;
+    $wgSlackIgnoreMinorEdits = true;
+    $wgSlackEmoji = ":tripleperformance:";
+    $wgSlackExcludedPermission = "bot"; // bots and admin
 }
 
 // Debug and error reporting :
