@@ -555,7 +555,7 @@ if (!empty($slackWebHook))
     $wgSlackIncomingWebhookUrl = $slackWebHook;
     $wgSlackFromName = "Triple Performance";
     $wgSlackNotificationWikiUrl = "https://wiki.tripleperformance.fr/";
-    $wgSlackNotificationWikiUrlEnding = "wiki/";
+    $wgSlackNotificationWikiUrlEnding = "index.php?title=";
     $wgSlackIncludePageUrls = true;
     $wgSlackIncludeUserUrls = false;
     $wgSlackIgnoreMinorEdits = true;
