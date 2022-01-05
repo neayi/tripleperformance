@@ -395,7 +395,7 @@ function getWikiComponents()
 							'branch' => $neayi_wiki_version);
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/OpenGraph',
-							'git' => 'https://github.com/neayi/mediawiki-extensions-OpenGraph.git');
+							'git' => 'https://github.com/hiroyukisato/mediawiki-extensions-OpenGraph.git');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/NeayiInteractions',
 							'git' => 'https://github.com/neayi/mw-NeayiInteractions.git');
