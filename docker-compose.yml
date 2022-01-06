@@ -92,7 +92,7 @@ services:
     image: redis
 
   elasticsearch:
-    image: elasticsearch:6.8.6
+    image: elasticsearch:6.8.22
     environment:
       discovery.type: single-node
       xpack.security.enabled: "true"

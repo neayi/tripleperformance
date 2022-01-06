@@ -106,7 +106,7 @@ services:
     restart: always
 
   elasticsearch:
-    image: elasticsearch:6.8.6
+    image: elasticsearch:6.8.22
     restart: always
     environment:
       discovery.type: single-node
