@@ -398,6 +398,10 @@ function getScriptPath($script)
             // NeayiAuth
             return "php /var/www/html/extensions/NeayiAuth/maintenance/$script";
 
+        case 'updateExternalLinks.php' :
+            // RottenLinks
+            return "php /var/www/html/extensions/RottenLinks/maintenance/$script";
+
         case 'mysql':
             return '/usr/bin/mysql';
 
