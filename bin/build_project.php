@@ -362,6 +362,9 @@ function getWikiComponents()
 							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-UrlShortener.git',
 							'branch' => $wiki_version);
 
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/RottenLinks',
+							'git' => 'https://github.com/miraheze/RottenLinks.git');
+
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/AddBodyClass',
 							'git' => 'https://github.com/p12tic/AddBodyClass.git');
 

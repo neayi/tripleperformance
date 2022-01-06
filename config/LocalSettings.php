@@ -563,6 +563,9 @@ if (!empty($slackWebHook))
     $wgSlackExcludedPermission = "bot"; // bots and admin
 }
 
+// https://www.mediawiki.org/wiki/Extension:RottenLinks
+wfLoadExtension( 'RottenLinks' );
+
 // Debug and error reporting :
 
 if ($debug) {
