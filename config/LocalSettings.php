@@ -510,9 +510,8 @@ wfLoadExtension( 'HitCounters' );
 // InputBox to have a search input on the home page
 wfLoadExtension( 'InputBox' );
 
-// Add categories to pages quickly
-wfLoadExtension( 'MassEditRegex' );
-$wgGroupPermissions['sysop']['masseditregex'] = true;
+// https://www.mediawiki.org/wiki/Extension:Replace_Text
+wfLoadExtension( 'ReplaceText' );
 
 // Semantic Mediawiki
 enableSemantics( 'tripleperformance.fr' );

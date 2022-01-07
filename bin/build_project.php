@@ -338,10 +338,6 @@ function getWikiComponents()
 							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-UploadWizard.git',
 							'branch' => $wiki_version);
 
-	$components[] = array(	'dest' => $wiki_extensions_dir . '/MassEditRegex',
-							'git' => '--branch '.$latest_wiki_version .' https://github.com/wikimedia/mediawiki-extensions-MassEditRegex.git',
-							'branch' => $latest_wiki_version);
-
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/SemanticDrilldown',
 							'git' => '--branch master https://github.com/wikimedia/mediawiki-extensions-SemanticDrilldown.git',
 							'branch' => 'master');
