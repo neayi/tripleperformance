@@ -197,6 +197,50 @@ wfLoadExtension( 'PDFEmbed' );
 # End of automatically generated settings.
 # Add more configuration options below.
 
+// Semantic Mediawiki
+enableSemantics( 'tripleperformance.fr' );
+$smwgConfigFileDir = $wgUploadDirectory;
+$smwgNamespacesWithSemanticLinks[NS_STRUCTURE] = true;
+
+// https://github.com/SemanticMediaWiki/SemanticExtraSpecialProperties/blob/master/docs/configuration.md
+wfLoadExtension( 'SemanticExtraSpecialProperties' );
+$sespgEnabledPropertyList = [
+	'_PAGEID',
+	'_CUSER',
+    '_EUSER',
+    '_VIEWS'
+];
+
+// SEO and Sitemap
+// https://www.mediawiki.org/wiki/Extension:AutoSitemap
+wfLoadExtension( 'AutoSitemap' );
+$wgAutoSitemap["notify"] = [];
+
+$wgAutoSitemap["freq"] = "weekly"; //default
+$wgAutoSitemap["priority"][NS_MAIN] = 1;
+$wgAutoSitemap["priority"][NS_CATEGORY] = 0.8;
+
+// Exclude SMW namespaces: https://www.semantic-mediawiki.org/wiki/Help:Namespaces
+$wgAutoSitemap["exclude_namespaces"] = [NS_TALK,
+                                        NS_USER,
+                                        NS_USER_TALK,
+                                        NS_PROJECT_TALK,
+                                        NS_MEDIAWIKI,
+                                        NS_MEDIAWIKI_TALK,
+                                        NS_TEMPLATE,
+                                        NS_TEMPLATE_TALK,
+                                        NS_HELP,
+                                        NS_HELP_TALK,
+                                        NS_CATEGORY_TALK,
+                                        SMW_NS_CONCEPT,
+                                        SMW_NS_CONCEPT_TALK,
+                                        SMW_NS_PROPERTY,
+                                        SMW_NS_PROPERTY_TALK,
+                                        SMW_NS_RULE,
+                                        SMW_NS_RULE_TALK,
+                                        SMW_NS_SCHEMA,
+                                        SMW_NS_SCHEMA_TALK];
+
 if('prod' === $env) {
     // https://www.mediawiki.org/wiki/Extension:GTag
     // https://mwusers.org/files/file/4-gtag/
@@ -212,17 +256,9 @@ if('prod' === $env) {
     $wgGroupPermissions['bot']['gtag-exempt'] = true;
     $wgGroupPermissions['bureaucrat']['gtag-exempt'] = true;
 
-    // SEO and Sitemap
-    // https://www.mediawiki.org/wiki/Extension:AutoSitemap
-    wfLoadExtension( 'AutoSitemap' );
-    $wgAutoSitemap["notify"] = [];
-
+    // Only notify on production servers
     $wgAutoSitemap["notify"][] = "https://www.google.com/webmasters/sitemaps/ping?sitemap=$domainUrl/sitemap.xml";
     $wgAutoSitemap["notify"][] = "https://www.bing.com/webmaster/ping.aspx?sitemap=$domainUrl/sitemap.xml";
-
-    $wgAutoSitemap["freq"] = "weekly"; //default
-    $wgAutoSitemap["priority"][NS_MAIN] = 1;
-    $wgAutoSitemap["priority"][NS_CATEGORY] = 0.8;
 
     wfLoadExtension( 'HeadScript' );
     $wgHeadScriptCode = <<<'START_END_MARKER'
@@ -512,20 +548,6 @@ wfLoadExtension( 'InputBox' );
 
 // https://www.mediawiki.org/wiki/Extension:Replace_Text
 wfLoadExtension( 'ReplaceText' );
-
-// Semantic Mediawiki
-enableSemantics( 'tripleperformance.fr' );
-$smwgConfigFileDir = $wgUploadDirectory;
-$smwgNamespacesWithSemanticLinks[NS_STRUCTURE] = true;
-
-// https://github.com/SemanticMediaWiki/SemanticExtraSpecialProperties/blob/master/docs/configuration.md
-wfLoadExtension( 'SemanticExtraSpecialProperties' );
-$sespgEnabledPropertyList = [
-	'_PAGEID',
-	'_CUSER',
-    '_EUSER',
-    '_VIEWS'
-];
 
 // Load the geo localisation SMW extension:
 // https://maps.extension.wiki/wiki/Installation
