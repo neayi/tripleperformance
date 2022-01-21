@@ -4,7 +4,7 @@ ARG DEBUG_TOOLS
 
 RUN apt-get update  \
   && apt-get remove -y exim \
-  && apt-get install -y \
+  && apt-get install -y --no-install-recommends \
 	libpng-dev \
 	aptitude \
 	git \
@@ -21,6 +21,7 @@ RUN apt-get update  \
 	libkrb5-dev \
 	libpspell-dev \
 	libmagickwand-dev \
+	libonig-dev \
 	libxslt-dev --no-install-recommends \
 	ghostscript \
 	poppler-utils \
@@ -31,13 +32,23 @@ RUN apt-get update  \
 	ssh \
 	&& rm -rf /var/lib/apt/lists/*
 
-# Use GD
-RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ \
-	--with-jpeg-dir=/usr/include/
-
-RUN docker-php-ext-install -j$(nproc) \
-	mysqli exif mbstring zip dba bz2 calendar bcmath gettext gmp intl pdo pdo_mysql pspell gd \
-	iconv soap sockets sysvmsg sysvsem sysvshm wddx xmlrpc xsl
+# Install PHP extensions
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) gd \
+    && docker-php-ext-install pdo_mysql \
+    && docker-php-ext-install mysqli \
+    && docker-php-ext-install zip \
+    && docker-php-ext-install exif \
+    && docker-php-ext-install bz2 \
+    && docker-php-ext-install calendar \
+    && docker-php-ext-install bcmath \
+    && docker-php-ext-install gettext \
+    && docker-php-ext-install intl \
+    && docker-php-ext-install pdo \
+    && docker-php-ext-install iconv \
+    && docker-php-ext-install xmlrpc \
+    && docker-php-ext-install xsl \
+    && docker-php-source delete
 
 # Image magick
 RUN pecl install imagick \
