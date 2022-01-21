@@ -1,4 +1,4 @@
-FROM php:7.3-apache AS base
+FROM php:7.4-apache AS base
 
 ARG DEBUG_TOOLS
 
@@ -29,7 +29,7 @@ RUN apt-get update  \
     vim \
     msmtp \
 	ssh \
-	&& rm -r /var/lib/apt/lists/*
+	&& rm -rf /var/lib/apt/lists/*
 
 # Use GD
 RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ \
