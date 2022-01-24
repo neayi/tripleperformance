@@ -241,6 +241,10 @@ $wgAutoSitemap["exclude_namespaces"] = [NS_TALK,
                                         SMW_NS_SCHEMA,
                                         SMW_NS_SCHEMA_TALK];
 
+// Add some color to the browser (in mobile mode)
+wfLoadExtension( 'HeadScript' );
+$wgHeadScriptCode = '<meta name="theme-color" content="#15A072">';
+
 if('prod' === $env) {
     // https://www.mediawiki.org/wiki/Extension:GTag
     // https://mwusers.org/files/file/4-gtag/
@@ -260,8 +264,7 @@ if('prod' === $env) {
     $wgAutoSitemap["notify"][] = "https://www.google.com/webmasters/sitemaps/ping?sitemap=$domainUrl/sitemap.xml";
     $wgAutoSitemap["notify"][] = "https://www.bing.com/webmaster/ping.aspx?sitemap=$domainUrl/sitemap.xml";
 
-    wfLoadExtension( 'HeadScript' );
-    $wgHeadScriptCode = <<<'START_END_MARKER'
+    $wgHeadScriptCode .= <<<'START_END_MARKER'
     <!-- Facebook Pixel Code -->
     <script>
       !function(f,b,e,v,n,t,s)
