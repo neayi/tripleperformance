@@ -246,6 +246,8 @@ wfLoadExtension( 'HeadScript' );
 $wgHeadScriptCode = '<meta name="theme-color" content="#15A072">';
 
 if('prod' === $env) {
+    $wgEnableCanonicalServerLink = true;
+
     // https://www.mediawiki.org/wiki/Extension:GTag
     // https://mwusers.org/files/file/4-gtag/
     // https://github.com/SkizNet/mediawiki-GTag

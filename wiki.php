@@ -395,8 +395,11 @@ function getScriptPath($script)
             return "php /var/www/html/extensions/SemanticMediaWiki/maintenance/$script";
 
         case 'removeSpamAccounts.php' :
-            // NeayiAuth
+	    // NeayiAuth
             return "php /var/www/html/extensions/NeayiAuth/maintenance/$script";
+
+	case 'runSyncWithMailchimp.php' :
+	    return "php /var/www/html/extensions/TriplePerformanceKitchen/bin/$script";
 
         case 'updateExternalLinks.php' :
             // RottenLinks
