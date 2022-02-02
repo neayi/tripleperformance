@@ -68,6 +68,9 @@ services:
     #  dockerfile: dockerfiles/php/Dockerfile
     #  target: prod_sources
     restart: always
+    networks:
+      - default
+      - traefik
     volumes:
       - ./.data/insights_prod_storage:/var/www/html/storage/app/public
     labels:
