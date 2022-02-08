@@ -371,7 +371,6 @@ function getScriptPath($script)
             return "php /var/www/html/maintenance/$script";
 
         case 'setupElasticSearch.sh' :
-            // Regular MW scripts:
             return "/var/www/html/maintenance/$script";
 
         case 'disposeOutdatedEntities.php' :
@@ -398,8 +397,8 @@ function getScriptPath($script)
 	    // NeayiAuth
             return "php /var/www/html/extensions/NeayiAuth/maintenance/$script";
 
-	case 'runSyncWithMailchimp.php' :
-	    return "php /var/www/html/extensions/TriplePerformanceKitchen/bin/$script";
+        case 'runSyncWithMailchimp.php' :
+            return "php /var/www/html/extensions/TriplePerformanceKitchen/bin/$script";
 
         case 'updateExternalLinks.php' :
             // RottenLinks

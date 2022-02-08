@@ -176,6 +176,10 @@ define("NS_STRUCTURE_TALK", 3001); // This MUST be the following odd integer.
 $wgExtraNamespaces[NS_STRUCTURE] = "Structure";
 $wgExtraNamespaces[NS_STRUCTURE_TALK] = "Structure_talk"; // Note underscores in the namespace name.
 $wgContentNamespaces[] = NS_STRUCTURE;
+$wgContentNamespaces[] = NS_CATEGORY;
+$wgContentNamespaces[] = NS_STRUCTURE;
+$wgNamespacesToBeSearchedDefault[NS_STRUCTURE] = true;
+$wgNamespacesToBeSearchedDefault[NS_CATEGORY] = true;
 $wgNamespacesToBeSearchedDefault[NS_STRUCTURE] = true;
 
 # The following permissions were set based on your choice in the installer

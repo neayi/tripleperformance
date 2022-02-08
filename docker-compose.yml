@@ -105,6 +105,10 @@ services:
         hard: -1
     volumes:
       - data01:/usr/share/elasticsearch/data
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.port=9200'
+      - 'traefik.frontend.rule=Host:elasticsearch.dev.tripleperformance.fr'
 
   elasticvue:
     image: cars10/elasticvue
