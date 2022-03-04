@@ -217,6 +217,8 @@ $sespgEnabledPropertyList = [
     '_NREV',
     '_PAGEIMG'
 ];
+$sespgUseFixedTables = true;
+$sespgExcludeBotEdits = true;
 
 // SEO and Sitemap
 // https://www.mediawiki.org/wiki/Extension:AutoSitemap
