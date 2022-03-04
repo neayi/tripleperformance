@@ -209,10 +209,13 @@ $smwgNamespacesWithSemanticLinks[NS_STRUCTURE] = true;
 // https://github.com/SemanticMediaWiki/SemanticExtraSpecialProperties/blob/master/docs/configuration.md
 wfLoadExtension( 'SemanticExtraSpecialProperties' );
 $sespgEnabledPropertyList = [
-	'_PAGEID',
-	'_CUSER',
+    '_PAGEID',
+    '_CUSER',
     '_EUSER',
-    '_VIEWS'
+    '_VIEWS',
+    '_PAGELGTH',
+    '_NREV',
+    '_PAGEIMG'
 ];
 
 // SEO and Sitemap
