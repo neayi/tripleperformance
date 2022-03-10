@@ -610,6 +610,6 @@ if ($debug) {
 // $wgShowDebug = true;
 
     $wgShowExceptionDetails = true;
-//    $wgDebugToolbar = true;
+    $wgDebugToolbar = true;
     $wgResourceLoaderDebug = true;
 }

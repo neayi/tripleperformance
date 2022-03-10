@@ -72,7 +72,7 @@ RUN test -z "$DEBUG_TOOLS" || ( \
             && echo "xdebug.discover_client_host=on" >> /usr/local/etc/php/conf.d/xdebug.ini \
             && echo "xdebug.mode=debug" >> /usr/local/etc/php/conf.d/xdebug.ini \
             && echo "xdebug.client_host=host.docker.internal" >> /usr/local/etc/php/conf.d/xdebug.ini \
-            && echo "xdebug.client_port=9000" >> /usr/local/etc/php/conf.d/xdebug.ini \
+            && echo "xdebug.client_port=9003" >> /usr/local/etc/php/conf.d/xdebug.ini \
             && echo "xdebug.idekey=VSCODE" >> /usr/local/etc/php/conf.d/xdebug.ini \
             && echo "log_errors = On" >> /usr/local/etc/php/conf.d/error_log.ini \
             && echo "error_log = /dev/stderr" >> /usr/local/etc/php/conf.d/error_log.ini \

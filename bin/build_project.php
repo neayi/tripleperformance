@@ -326,10 +326,6 @@ function getWikiComponents()
 							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-Disambiguator.git',
 							'branch' => $wiki_version);
 
-	$components[] = array(	'dest' => $wiki_extensions_dir . '/HitCounters',
-							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-HitCounters.git',
-							'branch' => $wiki_version);
-
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/VEForAll',
 							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-VEForAll.git',
 							'branch' => $wiki_version);
@@ -371,6 +367,11 @@ function getWikiComponents()
 							'git' => 'https://github.com/kulttuuri/SlackNotifications.git');
 
 	// Neayi extensions and forks
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/HitCounters',
+							'git' => '--branch Neayi https://github.com/neayi/mediawiki-extensions-HitCounters.git',
+							'branch' => 'Neayi',
+							'postinstall' => 'composer');
+
 	$components[] = array(	'dest' => $wiki_skins_dir . '/skin-neayi',
 							'git' => 'https://github.com/neayi/skin-neayi.git');
 
