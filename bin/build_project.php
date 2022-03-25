@@ -236,6 +236,7 @@ function getWikiComponents()
 	$wiki_version = 'REL1_35'; // when migrating to 1_36, see page forms
 	$neayi_wiki_version = 'REL1_34'; // Since we have cloned a few repos, we have our changes in an old branch
 	$latest_wiki_version = 'REL1_35'; // For some extensions we are happy to just take the latest stable
+	$semanticdrilldown_wiki_version = 'REL1_36'; // For some extensions we are happy to just take the latest stable
 
 	$components = array();
 
@@ -335,7 +336,7 @@ function getWikiComponents()
 							'branch' => $wiki_version);
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/SemanticDrilldown',
-							'git' => '--branch master https://github.com/wikimedia/mediawiki-extensions-SemanticDrilldown.git',
+							'git' => '--branch '.$semanticdrilldown_wiki_version.' https://github.com/wikimedia/mediawiki-extensions-SemanticDrilldown.git',
 							'branch' => 'master');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Realnames',
