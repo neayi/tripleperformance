@@ -383,6 +383,17 @@ $wgObjectCaches['redis'] = [
 ];
 $wgMainCacheType = 'redis';
 $wgSessionCacheType = 'redis';
+$wgCirrusSearchUseCompletionSuggester = 'yes';
+$wgCirrusSearchCompletionSettings = 'fuzzy-subphrases';
+$wgCirrusSearchPhraseSuggestProfiles = 'default';
+$wgCirrusSearchCompletionSuggesterSubphrases = [
+   'build' => true,
+   'use' => true,
+   'type' => 'anywords',
+   'limit' => 10,
+];
+$wgCirrusSearchCompletionSuggesterUseDefaultSort = true;
+
 
 // More parser functions
 wfLoadExtension( 'EmbedVideo' );

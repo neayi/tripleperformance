@@ -373,6 +373,24 @@ function getScriptPath($script)
         case 'setupElasticSearch.sh' :
             return "/var/www/html/maintenance/$script";
 
+        case 'CheckIndexes.php' :
+        case 'CirrusNeedsToBeBuilt.php' :
+        case 'CopySearchIndex.php' :
+        case 'DumpIndex.php' :
+        case 'ForceSearchIndex.php' :
+        case 'FreezeWritesToCluster.php' :
+        case 'IndexNamespaces.php' :
+        case 'Metastore.php' :
+        case 'RunSearch.php' :
+        case 'Saneitize.php' :
+        case 'SaneitizeJobs.php' :
+        case 'UpdateDYMIndexTemplates.php' :
+        case 'UpdateOneSearchIndexConfig.php' :
+        case 'UpdateSearchIndexConfig.php' :
+        case 'UpdateSuggesterIndex.php' :
+        case 'elasticsearch-scripts' :
+            return "php /var/www/html/extensions/CirrusSearch/maintenance/$script";
+
         case 'disposeOutdatedEntities.php' :
         case 'dumpRDF.php' :
         case 'populateHashField.php' :
