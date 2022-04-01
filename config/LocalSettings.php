@@ -408,7 +408,8 @@ $wgPageImagesScores['position'] = [ 99, 6, 4, 3 ];
 wfLoadExtension( 'TextExtracts' );
 wfLoadExtension( 'Description2' );
 $wgEnableMetaDescriptionFunctions = true;
-wfLoadExtension( 'OpenGraph' );
+
+wfLoadExtension( 'OpenGraphMeta' );
 
 wfLoadExtension( 'UrlShortener' );
 $wgUrlShortenerTemplate = '/r/$1';

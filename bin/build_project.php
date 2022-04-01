@@ -395,8 +395,9 @@ function getWikiComponents()
 							'git' => '--branch '.$neayi_wiki_version.' https://github.com/neayi/mediawiki-extensions-InputBox.git',
 							'branch' => $neayi_wiki_version);
 
-	$components[] = array(	'dest' => $wiki_extensions_dir . '/OpenGraph',
-							'git' => 'https://github.com/hiroyukisato/mediawiki-extensions-OpenGraph.git');
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/OpenGraphMeta',
+							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-OpenGraphMeta.git',
+							'branch' => $wiki_version);
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/NeayiInteractions',
 							'git' => 'https://github.com/neayi/mw-NeayiInteractions.git');
