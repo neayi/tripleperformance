@@ -318,11 +318,6 @@ function getWikiComponents()
 							'postinstall' => 'composer',
 							'branch' => $wiki_version);
 
-	// $components[] = array(	'dest' => $wiki_extensions_dir . '/VisualEditor',
-	// 						'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-VisualEditor.git',
-	// 						'postinstall' => 'submodules',
-	// 						'branch' => $wiki_version);
-
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Disambiguator',
 							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-Disambiguator.git',
 							'branch' => $wiki_version);
@@ -353,6 +348,10 @@ function getWikiComponents()
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/UrlShortener',
 							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-UrlShortener.git',
+							'branch' => $wiki_version);
+
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/Link_Attributes',
+							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-Link_Attributes.git',
 							'branch' => $wiki_version);
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/RottenLinks',
