@@ -394,7 +394,6 @@ $wgCirrusSearchCompletionSuggesterSubphrases = [
 ];
 $wgCirrusSearchCompletionSuggesterUseDefaultSort = true;
 
-
 // More parser functions
 wfLoadExtension( 'EmbedVideo' );
 

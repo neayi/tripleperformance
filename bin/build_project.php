@@ -53,7 +53,7 @@ function create_wiki_env()
 
 	$wiki_install_dir = getInstallDir();
 
-	initSubModules($wiki_install_dir);
+	initWikiSubModules($wiki_install_dir);
 
 	$components = getWikiComponents();
 	foreach ($components as $aComponent)
@@ -318,10 +318,10 @@ function getWikiComponents()
 							'postinstall' => 'composer',
 							'branch' => $wiki_version);
 
-	$components[] = array(	'dest' => $wiki_extensions_dir . '/VisualEditor',
-							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-VisualEditor.git',
-							'postinstall' => 'submodules',
-							'branch' => $wiki_version);
+	// $components[] = array(	'dest' => $wiki_extensions_dir . '/VisualEditor',
+	// 						'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-VisualEditor.git',
+	// 						'postinstall' => 'submodules',
+	// 						'branch' => $wiki_version);
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Disambiguator',
 							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-Disambiguator.git',
@@ -639,6 +639,44 @@ function installComposer($aComponent)
 		$cmd = "composer install --no-progress --no-interaction --no-dev";
 
 	changeDir($dir);
+	runCommand($cmd);
+}
+
+function initWikiSubModules($dir)
+{
+	changeDir($dir);
+
+	$cmd = 'git submodule init';
+	runCommand($cmd);
+
+	// Remove unwanted extensions:
+	$unwantedExtensions = array('extensions/CiteThisPage',
+								'extensions/CodeEditor',
+								'extensions/ConfirmEdit',
+								'extensions/Gadgets',
+								'extensions/ImageMap',
+								'extensions/InputBox',
+								'extensions/Interwiki',
+								'extensions/LocalisationUpdate',
+								'extensions/Nuke',
+								'extensions/OATHAuth',
+								'extensions/Poem',
+								'extensions/Renameuser',
+								'extensions/SecureLinkFixer',
+								'extensions/SpamBlacklist',
+								'extensions/SyntaxHighlight_GeSHi',
+								'extensions/TitleBlacklist',
+								'extensions/WikiEditor',
+								'skins/MonoBook',
+								'skins/Timeless',
+								'skins/Vector');
+	foreach ($unwantedExtensions as $anUnwantedExtension)
+	{
+		$cmd = "git submodule deinit $anUnwantedExtension";
+		runCommand($cmd);
+	}
+
+	$cmd = 'git submodule update';
 	runCommand($cmd);
 }
 
