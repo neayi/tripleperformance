@@ -193,6 +193,7 @@ $wgGroupPermissions['*']['edit'] = false;
 wfLoadExtension( 'MultimediaViewer' );
 wfLoadExtension( 'ParserFunctions' );
 $wgPFEnableStringFunctions = true;
+$wgPFStringLengthLimit = 1500;
 
 # PDFHandler in order to build thumbnails for PDFs
 wfLoadExtension( 'PdfHandler' );
