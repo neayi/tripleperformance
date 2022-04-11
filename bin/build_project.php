@@ -322,6 +322,11 @@ function getWikiComponents()
 							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-Disambiguator.git',
 							'branch' => $wiki_version);
 
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/VisualEditor',
+							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-VisualEditor.git',
+							'postinstall' => 'submodules',
+							'branch' => $wiki_version);
+
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/VEForAll',
 							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-VEForAll.git',
 							'branch' => $wiki_version);
@@ -666,6 +671,7 @@ function initWikiSubModules($dir)
 								'extensions/SyntaxHighlight_GeSHi',
 								'extensions/TitleBlacklist',
 								'extensions/WikiEditor',
+								'extensions/VisualEditor',
 								'skins/MonoBook',
 								'skins/Timeless',
 								'skins/Vector');
