@@ -362,9 +362,6 @@ function getWikiComponents()
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/RottenLinks',
 							'git' => 'https://github.com/miraheze/RottenLinks.git');
 
-	$components[] = array(	'dest' => $wiki_extensions_dir . '/AddBodyClass',
-							'git' => 'https://github.com/p12tic/AddBodyClass.git');
-
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/PDFEmbed',
 							'git' => 'https://github.com/WolfgangFahl/PDFEmbed.git');
 

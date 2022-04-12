@@ -594,10 +594,6 @@ require_once "$IP/extensions/SemanticDrilldown/SemanticDrilldown.php";
 // $sdgFiltersLargestFontSize=25;
 $sdgHideCategoriesByDefault = true;
 
-// https://github.com/p12tic/AddBodyClass
-require_once("$IP/extensions/AddBodyClass/AddBodyClass.php");
-$wgCategoriesAsBodyClasses = true;
-
 $slackWebHook = getenv('SLACK_WEBHOOK');
 if (!empty($slackWebHook))
 {
