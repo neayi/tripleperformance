@@ -355,10 +355,6 @@ function getWikiComponents()
 							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-UrlShortener.git',
 							'branch' => $wiki_version);
 
-	$components[] = array(	'dest' => $wiki_extensions_dir . '/Link_Attributes',
-							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-Link_Attributes.git',
-							'branch' => $wiki_version);
-
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/RottenLinks',
 							'git' => 'https://github.com/miraheze/RottenLinks.git');
 
@@ -373,6 +369,10 @@ function getWikiComponents()
 							'git' => '--branch Neayi https://github.com/neayi/mediawiki-extensions-HitCounters.git',
 							'branch' => 'Neayi',
 							'postinstall' => 'composer');
+
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/Link_Attributes',
+							'git' => '--branch Neayi https://github.com/neayi/mediawiki-extensions-Link_Attributes.git',
+							'branch' => 'Neayi');
 
 	$components[] = array(	'dest' => $wiki_skins_dir . '/skin-neayi',
 							'git' => 'https://github.com/neayi/skin-neayi.git');
