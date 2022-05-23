@@ -118,6 +118,9 @@ $wgSVGConverter = 'ImageMagick';
 
 $wgAllowExternalImages = true;
 
+// Maximum amount of virtual memory available to shell processes under Linux, in KiB.
+$wgMaxShellMemory = 614400;
+
 // Allow PDF
 $wgFileExtensions[] = 'pdf';
 
