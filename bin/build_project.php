@@ -364,6 +364,9 @@ function getWikiComponents()
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/SlackNotifications',
 							'git' => 'https://github.com/kulttuuri/SlackNotifications.git');
 
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/LinkTitles',
+							'git' => 'https://github.com/bovender/LinkTitles.git');
+
 	// Neayi extensions and forks
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/HitCounters',
 							'git' => '--branch Neayi https://github.com/neayi/mediawiki-extensions-HitCounters.git',

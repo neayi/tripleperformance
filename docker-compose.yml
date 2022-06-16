@@ -129,6 +129,20 @@ services:
       - 'traefik.port=8000'
       - 'traefik.frontend.rule=Host:parsoid.dev.tripleperformance.fr'
 
+  wordpress:
+    image: wordpress
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wordpressuser
+      WORDPRESS_DB_PASSWORD: examplepass
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - ./wordpress:/var/www/html
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.port=80'
+      - 'traefik.frontend.rule=Host:wordpress.dev.tripleperformance.fr'
+
 networks:
   default: ~
   traefik:

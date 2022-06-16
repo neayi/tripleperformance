@@ -616,6 +616,17 @@ if (!empty($slackWebHook))
 // https://www.mediawiki.org/wiki/Extension:RottenLinks
 wfLoadExtension( 'RottenLinks' );
 
+// https://www.mediawiki.org/wiki/Extension:LinkTitles
+wfLoadExtension( 'LinkTitles' );
+$wgLinkTitlesParseOnEdit = true;
+$wgLinkTitlesParseOnRender = false;
+$wgLinkTitlesSmartMode = true; // Case insensitive
+$wgLinkTitlesSourceNamespaces = [NS_MAIN, NS_STRUCTURE, NS_CATEGORY];
+$wgLinkTitlesTargetNamespaces = [NS_MAIN, NS_STRUCTURE, NS_CATEGORY];
+$wgLinkTitlesSamenamespace = true;
+$wgLinkTitlesSkipTemplates = true;
+$wgLinkTitlesFirstOnly = true;
+
 // Debug and error reporting :
 
 if ($debug) {
