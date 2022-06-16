@@ -618,7 +618,7 @@ wfLoadExtension( 'RottenLinks' );
 
 // https://www.mediawiki.org/wiki/Extension:LinkTitles
 wfLoadExtension( 'LinkTitles' );
-$wgLinkTitlesParseOnEdit = true;
+$wgLinkTitlesParseOnEdit = false;
 $wgLinkTitlesParseOnRender = false;
 $wgLinkTitlesSmartMode = true; // Case insensitive
 $wgLinkTitlesSourceNamespaces = [NS_MAIN, NS_STRUCTURE, NS_CATEGORY];
