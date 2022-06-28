@@ -76,6 +76,7 @@ function create_wiki_env()
 		mkdir($tempImageDir);
 
 	createElasticSearchScript();
+	createBluebeesRedirect();
 
 	setOwner();
 
@@ -127,6 +128,7 @@ function update_wiki_env()
 	upgradeWiki();
 
 	createElasticSearchScript();
+	createBluebeesRedirect();
 
 	setOwner();
 
@@ -188,6 +190,20 @@ function createElasticSearchScript()
 
 	file_put_contents($scriptPath, $lines);
 	chmod($scriptPath, 0755);  // notation octale : valeur du mode correcte
+}
+
+/**
+ * Create a small redirect to BlueBees
+ */
+function createBluebeesRedirect()
+{
+	$scriptPath =   root_web . '/html/crowdfunding-2022.php';
+
+	$lines = array();
+	$lines[] = "<?php\n";
+	$lines[] = "header('location: https://bluebees.fr/fr/project/1022');\n";
+
+	file_put_contents($scriptPath, $lines);
 }
 
 /**
@@ -364,8 +380,9 @@ function getWikiComponents()
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/SlackNotifications',
 							'git' => 'https://github.com/kulttuuri/SlackNotifications.git');
 
+	// Revert to bovender when our fixes are merged
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/LinkTitles',
-							'git' => 'https://github.com/bovender/LinkTitles.git');
+							'git' => 'https://github.com/neayi/LinkTitles.git');
 
 	// Neayi extensions and forks
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/HitCounters',
