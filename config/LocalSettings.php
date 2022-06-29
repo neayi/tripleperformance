@@ -280,7 +280,6 @@ if('prod' === $env) {
 
     // Only notify on production servers
     $wgAutoSitemap["notify"][] = "https://www.google.com/webmasters/sitemaps/ping?sitemap=$domainUrl/sitemap.xml";
-    $wgAutoSitemap["notify"][] = "https://www.bing.com/webmaster/ping.aspx?sitemap=$domainUrl/sitemap.xml";
 
     $wgHeadScriptCode .= <<<'START_END_MARKER'
     <!-- Facebook Pixel Code -->
