@@ -241,7 +241,7 @@ function getWikiComponents()
 
 	// Composer components
 	$components[] = array(	'composer' => 'mediawiki/chameleon-skin' );
-	$components[] = array(	'composer' => 'mediawiki/semantic-media-wiki' );
+	$components[] = array(	'composer' => 'mediawiki/semantic-media-wiki "~4.0.1"' );
 	$components[] = array(	'composer' => 'mediawiki/maps' );
 	$components[] = array(	'composer' => 'mediawiki/semantic-result-formats' );
 	$components[] = array(	'composer' => 'mediawiki/semantic-forms-select' ); // "~3.0"
@@ -368,6 +368,9 @@ function getWikiComponents()
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/ChangeAuthor',
 							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-ChangeAuthor.git',
 							'branch' => $wiki_version);
+
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/PDFEmbed',
+							'git' => 'https://github.com/WolfgangFahl/PDFEmbed.git');
 
 	// Neayi extensions and forks
 	$components[] = array(	'dest' => $wiki_skins_dir . '/skin-neayi',

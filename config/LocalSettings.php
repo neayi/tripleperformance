@@ -118,6 +118,9 @@ $wgSVGConverter = 'ImageMagick';
 
 $wgAllowExternalImages = true;
 
+// Maximum amount of virtual memory available to shell processes under Linux, in KiB.
+$wgMaxShellMemory = 614400;
+
 // Allow PDF
 $wgFileExtensions[] = 'pdf';
 
@@ -176,7 +179,11 @@ define("NS_STRUCTURE_TALK", 3001); // This MUST be the following odd integer.
 $wgExtraNamespaces[NS_STRUCTURE] = "Structure";
 $wgExtraNamespaces[NS_STRUCTURE_TALK] = "Structure_talk"; // Note underscores in the namespace name.
 $wgContentNamespaces[] = NS_STRUCTURE;
-
+$wgContentNamespaces[] = NS_CATEGORY;
+$wgContentNamespaces[] = NS_STRUCTURE;
+$wgNamespacesToBeSearchedDefault[NS_STRUCTURE] = true;
+$wgNamespacesToBeSearchedDefault[NS_CATEGORY] = true;
+$wgNamespacesToBeSearchedDefault[NS_STRUCTURE] = true;
 
 # The following permissions were set based on your choice in the installer
 $wgGroupPermissions['*']['createaccount'] = true;
@@ -189,14 +196,74 @@ $wgGroupPermissions['*']['edit'] = false;
 wfLoadExtension( 'MultimediaViewer' );
 wfLoadExtension( 'ParserFunctions' );
 $wgPFEnableStringFunctions = true;
+$wgPFStringLengthLimit = 1500;
+
+// wfLoadExtension( 'Link_Attributes' ); // TODO : add to the build project
 
 # PDFHandler in order to build thumbnails for PDFs
 wfLoadExtension( 'PdfHandler' );
+wfLoadExtension( 'PDFEmbed' );
 
 # End of automatically generated settings.
 # Add more configuration options below.
 
+// Semantic Mediawiki
+enableSemantics( 'tripleperformance.fr' );
+$smwgConfigFileDir = $wgUploadDirectory;
+$smwgNamespacesWithSemanticLinks[NS_STRUCTURE] = true;
+
+// https://github.com/SemanticMediaWiki/SemanticExtraSpecialProperties/blob/master/docs/configuration.md
+wfLoadExtension( 'SemanticExtraSpecialProperties' );
+$sespgEnabledPropertyList = [
+    '_PAGEID',
+    '_CUSER',
+    '_EUSER',
+    '_VIEWS',
+    '_PAGELGTH',
+    '_NREV',
+    '_PAGEIMG'
+];
+$sespgUseFixedTables = true;
+$sespgExcludeBotEdits = true;
+
+// SEO and Sitemap
+// https://www.mediawiki.org/wiki/Extension:AutoSitemap
+wfLoadExtension( 'AutoSitemap' );
+$wgAutoSitemap["notify"] = [];
+
+$wgAutoSitemap["freq"] = "weekly"; //default
+$wgAutoSitemap["priority"][NS_MAIN] = 1;
+$wgAutoSitemap["priority"][NS_CATEGORY] = 0.8;
+$wgAutoSitemap["server"] = 'https://' . $domainName;
+
+// Exclude SMW namespaces: https://www.semantic-mediawiki.org/wiki/Help:Namespaces
+$wgAutoSitemap["exclude_namespaces"] = [NS_TALK,
+                                        NS_USER,
+                                        NS_USER_TALK,
+                                        NS_PROJECT_TALK,
+                                        NS_MEDIAWIKI,
+                                        NS_MEDIAWIKI_TALK,
+                                        NS_TEMPLATE,
+                                        NS_TEMPLATE_TALK,
+                                        NS_HELP,
+                                        NS_HELP_TALK,
+                                        NS_CATEGORY_TALK,
+                                        SMW_NS_CONCEPT,
+                                        SMW_NS_CONCEPT_TALK,
+                                        SMW_NS_PROPERTY,
+                                        SMW_NS_PROPERTY_TALK,
+                                        SMW_NS_RULE,
+                                        SMW_NS_RULE_TALK,
+                                        SMW_NS_SCHEMA,
+                                        SMW_NS_SCHEMA_TALK];
+
+// Add some color to the browser (in mobile mode)
+wfLoadExtension( 'HeadScript' );
+$wgHeadScriptCode = '<meta name="theme-color" content="#15A072">';
+
 if('prod' === $env) {
+    $wgEnableCanonicalServerLink = true;
+
     // https://www.mediawiki.org/wiki/Extension:GTag
     // https://mwusers.org/files/file/4-gtag/
     // https://github.com/SkizNet/mediawiki-GTag
@@ -211,20 +278,10 @@ if('prod' === $env) {
     $wgGroupPermissions['bot']['gtag-exempt'] = true;
     $wgGroupPermissions['bureaucrat']['gtag-exempt'] = true;
 
-    // SEO and Sitemap
-    // https://www.mediawiki.org/wiki/Extension:AutoSitemap
-    wfLoadExtension( 'AutoSitemap' );
-    $wgAutoSitemap["notify"] = [];
-
+    // Only notify on production servers
     $wgAutoSitemap["notify"][] = "https://www.google.com/webmasters/sitemaps/ping?sitemap=$domainUrl/sitemap.xml";
-    $wgAutoSitemap["notify"][] = "https://www.bing.com/webmaster/ping.aspx?sitemap=$domainUrl/sitemap.xml";
 
-    $wgAutoSitemap["freq"] = "weekly"; //default
-    $wgAutoSitemap["priority"][NS_MAIN] = 1;
-    $wgAutoSitemap["priority"][NS_CATEGORY] = 0.8;
-
-    wfLoadExtension( 'HeadScript' );
-    $wgHeadScriptCode = <<<'START_END_MARKER'
+    $wgHeadScriptCode .= <<<'START_END_MARKER'
     <!-- Facebook Pixel Code -->
     <script>
       !function(f,b,e,v,n,t,s)
@@ -331,6 +388,16 @@ $wgObjectCaches['redis'] = [
 ];
 $wgMainCacheType = 'redis';
 $wgSessionCacheType = 'redis';
+$wgCirrusSearchUseCompletionSuggester = 'yes';
+$wgCirrusSearchCompletionSettings = 'fuzzy-subphrases';
+$wgCirrusSearchPhraseSuggestProfiles = 'default';
+$wgCirrusSearchCompletionSuggesterSubphrases = [
+   'build' => true,
+   'use' => true,
+   'type' => 'anywords',
+   'limit' => 10,
+];
+$wgCirrusSearchCompletionSuggesterUseDefaultSort = true;
 
 // More parser functions
 wfLoadExtension( 'EmbedVideo' );
@@ -356,7 +423,15 @@ $wgPageImagesScores['position'] = [ 99, 6, 4, 3 ];
 wfLoadExtension( 'TextExtracts' );
 wfLoadExtension( 'Description2' );
 $wgEnableMetaDescriptionFunctions = true;
-wfLoadExtension( 'OpenGraph' );
+
+//wfLoadExtension( 'OpenGraphMeta' ); // TODO : add to the build project
+
+//wfLoadExtension( 'UrlShortener' ); // TODO : add to the build project
+$wgUrlShortenerTemplate = '/r/$1';
+$wgUrlShortenerServer = "3perf.fr";
+$wgUrlShortenerAllowedDomains = array(
+	'(.*\.)?tripleperformance\.fr'
+);
 
 // Popups (shows a preview of the page on hover)
 wfLoadExtension( 'Popups' );
@@ -387,6 +462,12 @@ $wgCommentStreamsUserAvatarPropertyName = "A un avatar";
 $wgInsightsRootURL = getenv('INSIGHT_URL') . '/';
 $wgInsightsRootURLPHP= str_replace('https', 'http', getenv('INSIGHT_URL')) . '/';
 
+$wgInsightsRootAPIURL = getenv('INSIGHT_API_URL') . '/';
+$wgDiscourseAPIKey = getenv('DISCOURSE_API_KEY');
+$wgDiscourseHost = getenv('DISCOURSE_API_HOST');
+$wgDiscourseURL = getenv('DISCOURSE_ROOT_URL');
+$wgDiscourseDefaultCategoryId = getenv('DISCOURSE_DEFAULT_CATEGORY');
+
 wfLoadExtension( 'NeayiInteractions' );
 wfLoadExtension( 'NeayiNavbar' );
 wfLoadExtension( 'NeayiIntroJS' );
@@ -398,15 +479,6 @@ $wgEchoEmailFooterAddress = "<div style=\"padding: 100px 0 0 0; text-align:cente
 
 $wgEnotifMinorEdits = false;
 $wgEnotifUseRealName = true;
-
-// https://www.mediawiki.org/wiki/Extension:EditNotify
-wfLoadExtension( 'EditNotify' );
-$wgEditNotifyAlerts = array(
-	array(
-		'action' => array( 'create', 'edit' ),
-		'users' => array('Bertrand_Gorge', 'AstridRobette')
-	)
-);
 
 // Neayi login
 wfLoadExtension( 'PluggableAuth' );
@@ -511,24 +583,8 @@ wfLoadExtension( 'HitCounters' );
 // InputBox to have a search input on the home page
 wfLoadExtension( 'InputBox' );
 
-// Add categories to pages quickly
-wfLoadExtension( 'MassEditRegex' );
-$wgGroupPermissions['sysop']['masseditregex'] = true;
-
-// Semantic Mediawiki
-wfLoadExtension( 'SemanticMediaWiki' );
-enableSemantics( 'tripleperformance.fr' );
-$smwgConfigFileDir = $wgUploadDirectory;
-$smwgNamespacesWithSemanticLinks[NS_STRUCTURE] = true;
-
-// https://github.com/SemanticMediaWiki/SemanticExtraSpecialProperties/blob/master/docs/configuration.md
-wfLoadExtension( 'SemanticExtraSpecialProperties' );
-$sespgEnabledPropertyList = [
-	'_PAGEID',
-	'_CUSER',
-    '_EUSER',
-    '_VIEWS'
-];
+// https://www.mediawiki.org/wiki/Extension:Replace_Text
+wfLoadExtension( 'ReplaceText' );
 
 // Load the geo localisation SMW extension:
 // https://maps.extension.wiki/wiki/Installation
@@ -546,9 +602,35 @@ require_once "$IP/extensions/SemanticDrilldown/SemanticDrilldown.php";
 // $sdgFiltersLargestFontSize=25;
 $sdgHideCategoriesByDefault = true;
 
-https://github.com/p12tic/AddBodyClass
-require_once("$IP/extensions/AddBodyClass/AddBodyClass.php");
+$slackWebHook = getenv('SLACK_WEBHOOK');
+if (!empty($slackWebHook))
+{
+    // https://github.com/kulttuuri/SlackNotifications
+    wfLoadExtension( 'SlackNotifications' );
+    $wgSlackIncomingWebhookUrl = $slackWebHook;
+    $wgSlackFromName = "Triple Performance";
+    $wgSlackNotificationWikiUrl = "https://wiki.tripleperformance.fr/";
+    $wgSlackNotificationWikiUrlEnding = "index.php?title=";
+    $wgSlackIncludePageUrls = true;
+    $wgSlackIncludeUserUrls = false;
+    $wgSlackIgnoreMinorEdits = true;
+    $wgSlackEmoji = ":tripleperformance:";
+    $wgSlackExcludedPermission = "bot"; // bots and admin
+}
 
+// https://www.mediawiki.org/wiki/Extension:RottenLinks
+// wfLoadExtension( 'RottenLinks' ); // TODO : add to the build project
+
+// https://www.mediawiki.org/wiki/Extension:LinkTitles
+//wfLoadExtension( 'LinkTitles' ); // TODO : add to the build project
+$wgLinkTitlesParseOnEdit = false;
+$wgLinkTitlesParseOnRender = false;
+$wgLinkTitlesSmartMode = true; // Case insensitive
+$wgLinkTitlesSourceNamespaces = [NS_MAIN, NS_STRUCTURE, NS_CATEGORY];
+$wgLinkTitlesTargetNamespaces = [NS_MAIN, NS_STRUCTURE, NS_CATEGORY, NS_USER];
+$wgLinkTitlesSamenamespace = true;
+$wgLinkTitlesSkipTemplates = true;
+$wgLinkTitlesFirstOnly = true;
 
 // Debug and error reporting :
 
