@@ -351,9 +351,10 @@ function getWikiComponents()
 							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-UploadWizard.git',
 							'branch' => $wiki_version);
 
+	// Fork until the open bugs are merged - don't forget to target the right branch eventually. Today only the master branch works
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/SemanticDrilldown',
-							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-SemanticDrilldown.git',
-							'branch' => $wiki_version);
+							'git' => '--branch master https://github.com/neayi/mediawiki-extensions-SemanticDrilldown.git',
+							'branch' => 'master');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Realnames',
 							'git' => 'https://github.com/ofbeaton/mediawiki-realnames.git');

@@ -198,7 +198,7 @@ wfLoadExtension( 'ParserFunctions' );
 $wgPFEnableStringFunctions = true;
 $wgPFStringLengthLimit = 1500;
 
-// wfLoadExtension( 'Link_Attributes' ); // TODO : add to the build project
+wfLoadExtension( 'Link_Attributes' );
 
 # PDFHandler in order to build thumbnails for PDFs
 wfLoadExtension( 'PdfHandler' );
@@ -249,15 +249,21 @@ $wgAutoSitemap["exclude_namespaces"] = [NS_TALK,
                                         NS_TEMPLATE_TALK,
                                         NS_HELP,
                                         NS_HELP_TALK,
-                                        NS_CATEGORY_TALK,
-                                        SMW_NS_CONCEPT,
-                                        SMW_NS_CONCEPT_TALK,
-                                        SMW_NS_PROPERTY,
-                                        SMW_NS_PROPERTY_TALK,
-                                        SMW_NS_RULE,
-                                        SMW_NS_RULE_TALK,
-                                        SMW_NS_SCHEMA,
-                                        SMW_NS_SCHEMA_TALK];
+                                        NS_CATEGORY_TALK];
+
+// We declare the SMW namespaces directly because of this:
+// https://github.com/SemanticMediaWiki/SemanticMediaWiki/issues/5281
+$wgAutoSitemap["exclude_namespaces"][] = 102; // SMW_NS_PROPERTY;
+$wgAutoSitemap["exclude_namespaces"][] = 103; // SMW_NS_PROPERTY_TALK;
+$wgAutoSitemap["exclude_namespaces"][] = 108; // SMW_NS_CONCEPT;
+$wgAutoSitemap["exclude_namespaces"][] = 109; // SMW_NS_CONCEPT_TALK;
+$wgAutoSitemap["exclude_namespaces"][] = 114; // SMW_NS_RULE;
+$wgAutoSitemap["exclude_namespaces"][] = 115; // SMW_NS_RULE_TALK;
+$wgAutoSitemap["exclude_namespaces"][] = 112; // SMW_NS_SCHEMA;
+$wgAutoSitemap["exclude_namespaces"][] = 113; // SMW_NS_SCHEMA_TALK;
+
+$wgAutoSitemap["exclude_namespaces"][] = 844; // CommentStreams;
+$wgAutoSitemap["exclude_namespaces"][] = 845; // CommentStreams talk;
 
 // Add some color to the browser (in mobile mode)
 wfLoadExtension( 'HeadScript' );
@@ -426,9 +432,9 @@ wfLoadExtension( 'TextExtracts' );
 wfLoadExtension( 'Description2' );
 $wgEnableMetaDescriptionFunctions = true;
 
-//wfLoadExtension( 'OpenGraphMeta' ); // TODO : add to the build project
+wfLoadExtension( 'OpenGraphMeta' );
 
-//wfLoadExtension( 'UrlShortener' ); // TODO : add to the build project
+wfLoadExtension( 'UrlShortener' );
 $wgUrlShortenerTemplate = '/r/$1';
 $wgUrlShortenerServer = "3perf.fr";
 $wgUrlShortenerAllowedDomains = array(
@@ -621,10 +627,10 @@ if (!empty($slackWebHook))
 }
 
 // https://www.mediawiki.org/wiki/Extension:RottenLinks
-// wfLoadExtension( 'RottenLinks' ); // TODO : add to the build project
+wfLoadExtension( 'RottenLinks' );
 
 // https://www.mediawiki.org/wiki/Extension:LinkTitles
-//wfLoadExtension( 'LinkTitles' ); // TODO : add to the build project
+wfLoadExtension( 'LinkTitles' );
 $wgLinkTitlesParseOnEdit = false;
 $wgLinkTitlesParseOnRender = false;
 $wgLinkTitlesSmartMode = true; // Case insensitive
