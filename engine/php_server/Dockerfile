@@ -4,7 +4,7 @@ ARG DEBUG_TOOLS
 
 RUN apt-get update  \
   && apt-get remove -y exim \
-  && apt-get install -y \
+  && apt-get install -y --no-install-recommends \
 	libpng-dev \
 	aptitude \
 	git \
@@ -21,6 +21,7 @@ RUN apt-get update  \
 	libkrb5-dev \
 	libpspell-dev \
 	libmagickwand-dev \
+	libonig-dev \
 	libxslt-dev --no-install-recommends \
 	ghostscript \
 	poppler-utils \
@@ -29,14 +30,25 @@ RUN apt-get update  \
     vim \
     msmtp \
 	ssh \
-	&& rm -r /var/lib/apt/lists/*
+	&& rm -rf /var/lib/apt/lists/*
 
-# Use GD
-RUN docker-php-ext-configure gd
-
-RUN docker-php-ext-install -j$(nproc) \
-	mysqli exif zip dba bz2 calendar bcmath gettext gmp intl pdo pdo_mysql pspell gd \
-	iconv soap sockets sysvmsg sysvsem sysvshm xmlrpc xsl
+# Install PHP extensions
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) gd \
+    && docker-php-ext-install pdo_mysql \
+    && docker-php-ext-install mysqli \
+    && docker-php-ext-install zip \
+    && docker-php-ext-install exif \
+    && docker-php-ext-install bz2 \
+    && docker-php-ext-install calendar \
+    && docker-php-ext-install bcmath \
+    && docker-php-ext-install gettext \
+    && docker-php-ext-install intl \
+    && docker-php-ext-install pdo \
+    && docker-php-ext-install iconv \
+    && docker-php-ext-install xmlrpc \
+    && docker-php-ext-install xsl \
+    && docker-php-source delete
 
 # Image magick
 RUN pecl install imagick \
@@ -60,7 +72,7 @@ RUN test -z "$DEBUG_TOOLS" || ( \
             && echo "xdebug.discover_client_host=on" >> /usr/local/etc/php/conf.d/xdebug.ini \
             && echo "xdebug.mode=debug" >> /usr/local/etc/php/conf.d/xdebug.ini \
             && echo "xdebug.client_host=host.docker.internal" >> /usr/local/etc/php/conf.d/xdebug.ini \
-            && echo "xdebug.client_port=9000" >> /usr/local/etc/php/conf.d/xdebug.ini \
+            && echo "xdebug.client_port=9003" >> /usr/local/etc/php/conf.d/xdebug.ini \
             && echo "xdebug.idekey=VSCODE" >> /usr/local/etc/php/conf.d/xdebug.ini \
             && echo "log_errors = On" >> /usr/local/etc/php/conf.d/error_log.ini \
             && echo "error_log = /dev/stderr" >> /usr/local/etc/php/conf.d/error_log.ini \

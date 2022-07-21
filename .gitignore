@@ -19,3 +19,4 @@ backup/.mysql.cnf
 /discourse/.env
 /discourse/.pgpass
 /backup/DBs/
+/wordpress/

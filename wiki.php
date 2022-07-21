@@ -39,7 +39,7 @@ try {
             $commandLines[] = getMysqlCommandLine($targetEnv, $scriptPath);
         } elseif (strpos($sqlFile, '.sql') !== false) {
             // A file is specified, import it
-            $commandLines[] = getMysqlCommandLine($targetEnv, $scriptPath) .  ' < ' .  $sqlFile;
+            $commandLines[] = getMysqlCommandLine($targetEnv, $scriptPath, $sqlFile);
         } else {
             throw new Exception("please import a SQL file. Got $sqlFile", 1);
         }
@@ -53,7 +53,7 @@ try {
         if (strpos($sqlFile, '.sql') === false)
             throw new Exception("please export a SQL file. Got $sqlFile", 1);
 
-        $commandLines[] = getMysqlCommandLine($targetEnv, $scriptPath) .  ' > ' .  $sqlFile;
+        $commandLines[] = getMysqlCommandLine($targetEnv, $scriptPath, $sqlFile);
     }
     else if ($script == 'importDump.php')
     {
@@ -371,8 +371,25 @@ function getScriptPath($script)
             return "php /var/www/html/maintenance/$script";
 
         case 'setupElasticSearch.sh' :
-            // Regular MW scripts:
             return "/var/www/html/maintenance/$script";
+
+        case 'CheckIndexes.php' :
+        case 'CirrusNeedsToBeBuilt.php' :
+        case 'CopySearchIndex.php' :
+        case 'DumpIndex.php' :
+        case 'ForceSearchIndex.php' :
+        case 'FreezeWritesToCluster.php' :
+        case 'IndexNamespaces.php' :
+        case 'Metastore.php' :
+        case 'RunSearch.php' :
+        case 'Saneitize.php' :
+        case 'SaneitizeJobs.php' :
+        case 'UpdateDYMIndexTemplates.php' :
+        case 'UpdateOneSearchIndexConfig.php' :
+        case 'UpdateSearchIndexConfig.php' :
+        case 'UpdateSuggesterIndex.php' :
+        case 'elasticsearch-scripts' :
+            return "php /var/www/html/extensions/CirrusSearch/maintenance/$script";
 
         case 'disposeOutdatedEntities.php' :
         case 'dumpRDF.php' :
@@ -397,6 +414,13 @@ function getScriptPath($script)
         case 'removeSpamAccounts.php' :
             // NeayiAuth
             return "php /var/www/html/extensions/NeayiAuth/maintenance/$script";
+
+        case 'runSyncWithMailchimp.php' :
+            return "php /var/www/html/extensions/TriplePerformanceKitchen/bin/$script";
+
+        case 'updateExternalLinks.php' :
+            // RottenLinks
+            return "php /var/www/html/extensions/RottenLinks/maintenance/$script";
 
         case 'mysql':
             return '/usr/bin/mysql';
@@ -423,7 +447,7 @@ function getCommandLine($targetEnv, $script, $volume = '', $bUseWwwData = true)
 
     switch ($targetEnv) {
         case 'dev':
-            return 'docker-compose run '.$user.' --rm '.$volume.' web sh -c "'.$script.'"';
+            return 'docker compose run '.$user.' --rm '.$volume.' web sh -c "'.$script.'"';
 
         case 'preprod':
             return 'docker-compose -f docker-compose.prod.yml run '.$user.' --rm '.$volume.' web_preprod sh -c "'.$script.'"';
@@ -433,27 +457,28 @@ function getCommandLine($targetEnv, $script, $volume = '', $bUseWwwData = true)
     }
 }
 
-
-/**
- * $volume -v ~/youtube:/out (in that case make sure the files you import are in /out)
- */
-function getMysqlCommandLine($targetEnv, $script)
+function getMysqlCommandLine($targetEnv, $script, $sqlBatchFile = '')
 {
-    $extraParams = '';
+    $extraParams = '--silent';
 
     if ($script =='/usr/bin/mysqldump')
-        $extraParams = '--single-transaction';
+        $extraParams .= ' --single-transaction';
+
+    if (!empty($sqlBatchFile) && strpos($script, 'mysqldump') === false)
+        $sqlBatchFile = " < $sqlBatchFile";
+    else if (!empty($sqlBatchFile) && strpos($script, 'mysqldump') !== false)
+        $sqlBatchFile = " > $sqlBatchFile";
 
     $volume = __DIR__ . '/backup:/backup';
     switch ($targetEnv) {
         case 'dev':
-            return "docker-compose run --rm -v $volume db $script --defaults-extra-file=/backup/.mysql.cnf $extraParams -P 3306 -h db -u root wiki";
+            return "docker compose run --rm -v $volume db sh -c \"$script --defaults-extra-file=/backup/.mysql.cnf $extraParams -P 3306 -h db -u root wiki $sqlBatchFile\"";
 
         case 'preprod':
-            return "docker-compose -f docker-compose.prod.yml run --rm -v $volume db $script --defaults-extra-file=/backup/.mysql.cnf $extraParams -P 3306 -h db -u root wiki_preprod";
+            return "docker-compose -f docker-compose.prod.yml run --rm -v $volume db sh -c \"$script --defaults-extra-file=/backup/.mysql.cnf $extraParams -P 3306 -h db -u root wiki_preprod $sqlBatchFile\"";
 
         case 'prod':
-            return "docker-compose -f docker-compose.prod.yml run --rm -v $volume db $script --defaults-extra-file=/backup/.mysql.cnf $extraParams -P 3306 -h db -u root wiki_prod";
+            return "docker-compose -f docker-compose.prod.yml run --rm -v $volume db sh -c \"$script --defaults-extra-file=/backup/.mysql.cnf $extraParams -P 3306 -h db -u root wiki_prod $sqlBatchFile\"";
     }
 }
 

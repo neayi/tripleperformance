@@ -53,7 +53,7 @@ function create_wiki_env()
 
 	$wiki_install_dir = getInstallDir();
 
-	initSubModules($wiki_install_dir);
+	initWikiSubModules($wiki_install_dir);
 
 	$components = getWikiComponents();
 	foreach ($components as $aComponent)
@@ -76,6 +76,7 @@ function create_wiki_env()
 		mkdir($tempImageDir);
 
 	createElasticSearchScript();
+	createBluebeesRedirect();
 
 	setOwner();
 
@@ -127,6 +128,7 @@ function update_wiki_env()
 	upgradeWiki();
 
 	createElasticSearchScript();
+	createBluebeesRedirect();
 
 	setOwner();
 
@@ -191,6 +193,20 @@ function createElasticSearchScript()
 }
 
 /**
+ * Create a small redirect to BlueBees
+ */
+function createBluebeesRedirect()
+{
+	$scriptPath =   root_web . '/html/crowdfunding-2022.php';
+
+	$lines = array();
+	$lines[] = "<?php\n";
+	$lines[] = "header('location: https://bluebees.fr/fr/project/1022');\n";
+
+	file_put_contents($scriptPath, $lines);
+}
+
+/**
  * Launch the elasticSearch setup scripts
  */
 function initElasticSearch()
@@ -234,17 +250,18 @@ function getWikiComponents()
 	$wiki_extensions_dir = '/html/extensions';
 	$wiki_skins_dir = '/html/skins';
 	$wiki_version = 'REL1_37'; // when migrating to 1_36, see page forms
+	$neayi_wiki_version = 'REL1_34'; // Since we have cloned a few repos, we have our changes in an old branch
 	$latest_wiki_version = 'REL1_37'; // For some extensions we are happy to just take the latest stable
 	$previous_wiki_version = 'REL1_36'; // For some extensions we are happy to just take the latest stable
 
 	$components = array();
 
 	// Composer components
-	$components[] = array(	'composer' => 'mediawiki/chameleon-skin' );
+	$components[] = array(	'composer' => 'mediawiki/chameleon-skin "~4.1"' );
 	$components[] = array(	'composer' => 'mediawiki/semantic-media-wiki "~4.0.1"' );
 	$components[] = array(	'composer' => 'mediawiki/maps' );
 	$components[] = array(	'composer' => 'mediawiki/semantic-result-formats' );
-	$components[] = array(	'composer' => 'mediawiki/semantic-forms-select' ); // "~3.0"
+	$components[] = array(	'composer' => 'mediawiki/semantic-forms-select "~4.0.0-beta"' ); // "~3.0"
 	$components[] = array(	'composer' => 'mediawiki/semantic-scribunto' ); // "~2.1"
 	$components[] = array(	'composer' => 'mediawiki/semantic-extra-special-properties' ); // "~2.1"
 
@@ -264,9 +281,9 @@ function getWikiComponents()
 							'branch' => $wiki_version);
 
 	// https://www.mediawiki.org/wiki/Extension:DynamicPageList3
-	$components[] = array(	'dest' => $wiki_extensions_dir . '/DynamicPageList',
-							'git' => '--branch master https://gitlab.com/hydrawiki/extensions/DynamicPageList.git',
-							'tag' => "3.3.3");
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/DynamicPageList3',
+							'git' => '--branch '.$wiki_version.' https://github.com/Universal-Omega/DynamicPageList3.git',
+							'branch' => $wiki_version);
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Elastica',
 							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-Elastica.git',
@@ -317,17 +334,13 @@ function getWikiComponents()
 							'postinstall' => 'composer',
 							'branch' => $wiki_version);
 
-	$components[] = array(	'dest' => $wiki_extensions_dir . '/VisualEditor',
-							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-VisualEditor.git',
-							'postinstall' => 'submodules',
-							'branch' => $wiki_version);
-
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Disambiguator',
 							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-Disambiguator.git',
 							'branch' => $wiki_version);
 
-	$components[] = array(	'dest' => $wiki_extensions_dir . '/HitCounters',
-							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-HitCounters.git',
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/VisualEditor',
+							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-VisualEditor.git',
+							'postinstall' => 'submodules',
 							'branch' => $wiki_version);
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/VEForAll',
@@ -338,21 +351,12 @@ function getWikiComponents()
 							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-UploadWizard.git',
 							'branch' => $wiki_version);
 
-	$components[] = array(	'dest' => $wiki_extensions_dir . '/MassEditRegex',
-							'git' => '--branch '.$latest_wiki_version .' https://github.com/wikimedia/mediawiki-extensions-MassEditRegex.git',
-							'branch' => $latest_wiki_version);
-
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/SemanticDrilldown',
-							'git' => '--branch master https://github.com/wikimedia/mediawiki-extensions-SemanticDrilldown.git',
-							'branch' => 'master');
+							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-SemanticDrilldown.git',
+							'branch' => $wiki_version);
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Realnames',
 							'git' => 'https://github.com/ofbeaton/mediawiki-realnames.git');
-
-	// https://www.mediawiki.org/wiki/Extension:EditNotify
-	$components[] = array(	'dest' => $wiki_extensions_dir . '/EditNotify',
-							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-EditNotify',
-							'branch' => $wiki_version);
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/PageForms',
 							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-PageForms.git',
@@ -362,38 +366,59 @@ function getWikiComponents()
 							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-AdminLinks.git',
 							'branch' => $wiki_version);
 
-	$components[] = array(	'dest' => $wiki_extensions_dir . '/AddBodyClass',
-							'git' => 'https://github.com/p12tic/AddBodyClass.git');
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/UrlShortener',
+							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-UrlShortener.git',
+							'branch' => $wiki_version);
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/ChangeAuthor',
 							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-ChangeAuthor.git',
 							'branch' => $wiki_version);
 
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/RottenLinks',
+							'git' => 'https://github.com/miraheze/RottenLinks.git');
+
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/PDFEmbed',
 							'git' => 'https://github.com/WolfgangFahl/PDFEmbed.git');
 
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/SlackNotifications',
+							'git' => 'https://github.com/kulttuuri/SlackNotifications.git');
+
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/OpenGraphMeta',
+							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-OpenGraphMeta.git',
+							'branch' => $wiki_version);
+
+	// Revert to bovender when our fixes are merged
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/LinkTitles',
+							'git' => 'https://github.com/neayi/LinkTitles.git');
+
 	// Neayi extensions and forks
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/HitCounters',
+							'git' => '--branch Neayi1_37 https://github.com/neayi/mediawiki-extensions-HitCounters.git',
+							'branch' => 'Neayi1_37',
+							'postinstall' => 'composer');
+
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/Link_Attributes',
+							'git' => '--branch Neayi https://github.com/neayi/mediawiki-extensions-Link_Attributes.git',
+							'branch' => 'Neayi');
+
 	$components[] = array(	'dest' => $wiki_skins_dir . '/skin-neayi',
 							'git' => 'https://github.com/neayi/skin-neayi.git');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Carousel',
 							'git' => 'https://github.com/neayi/ext-carousel.git');
 
-
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/NeayiAuth',
 							'git' => 'https://github.com/neayi/NeayiAuth.git',
 							'postinstall' => 'composer');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/CommentStreams',
-							'git' => '--branch TriplePerformance https://github.com/neayi/mediawiki-extensions-CommentStreams.git',
-							'branch' => 'TriplePerformance');
+							'git' => '--branch Discourse https://github.com/neayi/mediawiki-extensions-CommentStreams.git',
+							'postinstall' => 'submodules',
+							'branch' => 'Discourse');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/InputBox',
-							'git' => '--branch REL1_34 https://github.com/neayi/mediawiki-extensions-InputBox.git',
-							'branch' => 'REL1_34');
-
-	$components[] = array(	'dest' => $wiki_extensions_dir . '/OpenGraph',
-							'git' => 'https://github.com/neayi/mediawiki-extensions-OpenGraph.git');
+							'git' => '--branch '.$neayi_wiki_version.' https://github.com/neayi/mediawiki-extensions-InputBox.git',
+							'branch' => $neayi_wiki_version);
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/NeayiInteractions',
 							'git' => 'https://github.com/neayi/mw-NeayiInteractions.git');
@@ -611,7 +636,7 @@ function updateComposer()
 	else
 		$cmd = "composer update --no-progress --no-interaction --no-dev";
 
-	echo "\nUpdating components with composer in $dir\n";
+	echo "\nUpdating components with composer in $wiki_install_dir\n";
 
 	changeDir($wiki_install_dir);
 	runCommand($cmd);
@@ -635,6 +660,45 @@ function installComposer($aComponent)
 		$cmd = "composer install --no-progress --no-interaction --no-dev";
 
 	changeDir($dir);
+	runCommand($cmd);
+}
+
+function initWikiSubModules($dir)
+{
+	changeDir($dir);
+
+	$cmd = 'git submodule init';
+	runCommand($cmd);
+
+	// Remove unwanted extensions:
+	$unwantedExtensions = array('extensions/CiteThisPage',
+								'extensions/CodeEditor',
+								'extensions/ConfirmEdit',
+								'extensions/Gadgets',
+								'extensions/ImageMap',
+								'extensions/InputBox',
+								'extensions/Interwiki',
+								'extensions/LocalisationUpdate',
+								'extensions/Nuke',
+								'extensions/OATHAuth',
+								'extensions/Poem',
+								'extensions/Renameuser',
+								'extensions/SecureLinkFixer',
+								'extensions/SpamBlacklist',
+								'extensions/SyntaxHighlight_GeSHi',
+								'extensions/TitleBlacklist',
+								'extensions/WikiEditor',
+								'extensions/VisualEditor',
+								'skins/MonoBook',
+								'skins/Timeless',
+								'skins/Vector');
+	foreach ($unwantedExtensions as $anUnwantedExtension)
+	{
+		$cmd = "git submodule deinit $anUnwantedExtension";
+		runCommand($cmd);
+	}
+
+	$cmd = 'git submodule update';
 	runCommand($cmd);
 }
 

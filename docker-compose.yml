@@ -50,7 +50,7 @@ services:
     labels:
       - 'traefik.enable=true'
       - 'traefik.port=80'
-      - 'traefik.frontend.rule=Host:wiki.dev.tripleperformance.fr'
+      - 'traefik.frontend.rule=Host:wiki.dev.tripleperformance.fr, 3perf.fr'
     networks:
       default:
         aliases:
@@ -75,7 +75,7 @@ services:
       - ./.cache/composer:/.composer
 
   insights:
-    image: nginx:1.15.8
+    image: nginx:1.22
     volumes:
       - ./insights:/var/www/html
       - ./insights/dockerfiles/php/cnpg.conf:/etc/nginx/conf.d/default.conf
@@ -89,7 +89,8 @@ services:
           - insights.dev.tripleperformance.fr
 
   db:
-    image: mysql:5.7
+    image: mysql:8.0.29
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     environment:
       - MYSQL_USERNAME=root
       - MYSQL_ROOT_PASSWORD=root
@@ -111,7 +112,7 @@ services:
     image: redis
 
   elasticsearch:
-    image: elasticsearch:6.8.6
+    image: elasticsearch:6.8.23
     environment:
       discovery.type: single-node
       xpack.security.enabled: "true"
@@ -124,6 +125,10 @@ services:
         hard: -1
     volumes:
       - data01:/usr/share/elasticsearch/data
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.port=9200'
+      - 'traefik.frontend.rule=Host:elasticsearch.dev.tripleperformance.fr'
 
   elasticvue:
     image: cars10/elasticvue
@@ -142,6 +147,20 @@ services:
       - 'traefik.enable=true'
       - 'traefik.port=8000'
       - 'traefik.frontend.rule=Host:parsoid.dev.tripleperformance.fr'
+
+  wordpress:
+    image: wordpress
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wordpressuser
+      WORDPRESS_DB_PASSWORD: examplepass
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - ./wordpress:/var/www/html
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.port=80'
+      - 'traefik.frontend.rule=Host:wordpress.dev.tripleperformance.fr'
 
 networks:
   default: ~

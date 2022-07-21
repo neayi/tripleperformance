@@ -35,7 +35,7 @@ services:
     labels:
       - 'traefik.enable=true'
       - 'traefik.port=80'
-      - 'traefik.frontend.rule=Host:wiki.tripleperformance.fr, tripleperformance.fr, pratiques.tripleperformance.fr, www.tripleperformance.fr'
+      - 'traefik.frontend.rule=Host:wiki.tripleperformance.fr, tripleperformance.fr, pratiques.tripleperformance.fr, www.tripleperformance.fr, 3perf.fr'
       - 'traefik.frontend.redirect.regex=^https?://(pratiques.)?tripleperformance.fr/(.*)'
       - 'traefik.frontend.redirect.replacement=https://wiki.tripleperformance.fr/$${2}'
       - 'traefik.frontend.redirect.permanent=true'
@@ -68,6 +68,9 @@ services:
     #  dockerfile: dockerfiles/php/Dockerfile
     #  target: prod_sources
     restart: always
+    networks:
+      - default
+      - traefik
     volumes:
       - ./.data/insights_prod_storage:/var/www/html/storage/app/public
     labels:
@@ -87,7 +90,8 @@ services:
       - 'traefik.frontend.rule=Host:insights.preprod.tripleperformance.fr'
 
   db:
-    image: mysql:5.7
+    image: mysql:8.0.29
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     restart: always
     env_file: .env
     volumes:
@@ -106,7 +110,7 @@ services:
     restart: always
 
   elasticsearch:
-    image: elasticsearch:6.8.6
+    image: elasticsearch:6.8.23
     restart: always
     environment:
       discovery.type: single-node

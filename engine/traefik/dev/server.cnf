@@ -20,3 +20,7 @@ DNS.2 = wiki.dev.tripleperformance.fr
 DNS.3 = insights.dev.tripleperformance.fr
 DNS.4 = forum.dev.tripleperformance.fr
 DNS.5 = adminer.dev.tripleperformance.fr
+DNS.6 = elasticvue.dev.tripleperformance.fr
+DNS.7 = elasticsearch.dev.tripleperformance.fr
+DNS.8 = phpmyadmin.dev.tripleperformance.fr
+DNS.9 = parsoid.dev.tripleperformance.fr

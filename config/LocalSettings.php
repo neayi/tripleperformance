@@ -208,9 +208,11 @@ wfLoadExtension( 'PDFEmbed' );
 # Add more configuration options below.
 
 // Semantic Mediawiki
+wfLoadExtension( 'SemanticMediaWiki' );
 enableSemantics( 'tripleperformance.fr' );
 $smwgConfigFileDir = $wgUploadDirectory;
 $smwgNamespacesWithSemanticLinks[NS_STRUCTURE] = true;
+$smwgDefaultStore = 'SMWSQLStore3'; // Normal value is $smwgDefaultStore = 'SMW\SQLStore\SQLStore'; but semantic drilldown doesn't know
 
 // https://github.com/SemanticMediaWiki/SemanticExtraSpecialProperties/blob/master/docs/configuration.md
 wfLoadExtension( 'SemanticExtraSpecialProperties' );
@@ -358,7 +360,7 @@ $egChameleonExternalStyleVariables = [
 ];
 
 // Database and cross referencing
-wfLoadExtension( 'DynamicPageList' );
+wfLoadExtension( 'DynamicPageList3' );
 
 // Scripting and parsing
 wfLoadExtension( 'Loops' );
