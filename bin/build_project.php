@@ -412,6 +412,7 @@ function getWikiComponents()
 							'git' => 'https://github.com/neayi/NeayiAuth.git',
 							'postinstall' => 'composer');
 
+	// TODO: Create a new repo and get rid of CommentStreams
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/CommentStreams',
 							'git' => '--branch Discourse https://github.com/neayi/mediawiki-extensions-CommentStreams.git',
 							'postinstall' => 'submodules',
@@ -421,8 +422,10 @@ function getWikiComponents()
 							'git' => '--branch '.$neayi_wiki_version.' https://github.com/neayi/mediawiki-extensions-InputBox.git',
 							'branch' => $neayi_wiki_version);
 
+	// TODO: Merge integration-of-discourse in master
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/NeayiInteractions',
-							'git' => 'https://github.com/neayi/mw-NeayiInteractions.git');
+							'git' => '--branch integration-of-discourse https://github.com/neayi/mw-NeayiInteractions.git',
+							'branch' => 'integration-of-discourse');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/NeayiNavbar',
 							'git' => 'https://github.com/neayi/mw-NeayiNavbar.git');
