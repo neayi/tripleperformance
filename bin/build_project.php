@@ -236,7 +236,7 @@ function getWiki()
 {
 	// Mediawiki
 	$wiki_install_dir = '/html';
-	$wiki_version = 'REL1_35';
+	$wiki_version = 'REL1_37';
 
 	return array(	'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki.git',
 					'dest' => $wiki_install_dir,
@@ -249,19 +249,19 @@ function getWikiComponents()
 	$wiki_install_dir = '/html';
 	$wiki_extensions_dir = '/html/extensions';
 	$wiki_skins_dir = '/html/skins';
-	$wiki_version = 'REL1_35'; // when migrating to 1_36, see page forms
+	$wiki_version = 'REL1_37'; // when migrating to 1_36, see page forms
 	$neayi_wiki_version = 'REL1_34'; // Since we have cloned a few repos, we have our changes in an old branch
-	$latest_wiki_version = 'REL1_35'; // For some extensions we are happy to just take the latest stable
-	$semanticdrilldown_wiki_version = 'REL1_36'; // For some extensions we are happy to just take the latest stable
+	$latest_wiki_version = 'REL1_37'; // For some extensions we are happy to just take the latest stable
+	$previous_wiki_version = 'REL1_36'; // For some extensions we are happy to just take the latest stable
 
 	$components = array();
 
 	// Composer components
-	$components[] = array(	'composer' => 'mediawiki/chameleon-skin "~3.4"' );
-	$components[] = array(	'composer' => 'mediawiki/semantic-media-wiki "~3.2"' );
+	$components[] = array(	'composer' => 'mediawiki/chameleon-skin "~4.1"' );
+	$components[] = array(	'composer' => 'mediawiki/semantic-media-wiki "~4.0.1"' );
 	$components[] = array(	'composer' => 'mediawiki/maps' );
 	$components[] = array(	'composer' => 'mediawiki/semantic-result-formats' );
-	$components[] = array(	'composer' => 'mediawiki/semantic-forms-select' ); // "~3.0"
+	$components[] = array(	'composer' => 'mediawiki/semantic-forms-select "~4.0.0-beta"' ); // "~3.0"
 	$components[] = array(	'composer' => 'mediawiki/semantic-scribunto' ); // "~2.1"
 	$components[] = array(	'composer' => 'mediawiki/semantic-extra-special-properties' ); // "~2.1"
 
@@ -281,9 +281,9 @@ function getWikiComponents()
 							'branch' => $wiki_version);
 
 	// https://www.mediawiki.org/wiki/Extension:DynamicPageList3
-	$components[] = array(	'dest' => $wiki_extensions_dir . '/DynamicPageList',
-							'git' => '--branch master https://gitlab.com/hydrawiki/extensions/DynamicPageList.git',
-							'tag' => "3.3.3");
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/DynamicPageList3',
+							'git' => '--branch '.$wiki_version.' https://github.com/Universal-Omega/DynamicPageList3.git',
+							'branch' => $wiki_version);
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Elastica',
 							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-Elastica.git',
@@ -351,16 +351,16 @@ function getWikiComponents()
 							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-UploadWizard.git',
 							'branch' => $wiki_version);
 
+	// Fork until the open bugs are merged - don't forget to target the right branch eventually. Today only the master branch works
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/SemanticDrilldown',
-							'git' => '--branch '.$semanticdrilldown_wiki_version.' https://github.com/wikimedia/mediawiki-extensions-SemanticDrilldown.git',
+							'git' => '--branch master https://github.com/neayi/mediawiki-extensions-SemanticDrilldown.git',
 							'branch' => 'master');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Realnames',
 							'git' => 'https://github.com/ofbeaton/mediawiki-realnames.git');
 
-	// NOTE: PageForms was only forked to backport two fixes from REL1_36. When upgrading to this release, we should stop using our fork.
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/PageForms',
-							'git' => '--branch '.$wiki_version.' https://github.com/neayi/mediawiki-extensions-PageForms.git',
+							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-PageForms.git',
 							'branch' => $wiki_version);
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/AdminLinks',
@@ -369,6 +369,10 @@ function getWikiComponents()
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/UrlShortener',
 							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-UrlShortener.git',
+							'branch' => $wiki_version);
+
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/ChangeAuthor',
+							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-ChangeAuthor.git',
 							'branch' => $wiki_version);
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/RottenLinks',
@@ -380,14 +384,18 @@ function getWikiComponents()
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/SlackNotifications',
 							'git' => 'https://github.com/kulttuuri/SlackNotifications.git');
 
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/OpenGraphMeta',
+							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-OpenGraphMeta.git',
+							'branch' => $wiki_version);
+
 	// Revert to bovender when our fixes are merged
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/LinkTitles',
 							'git' => 'https://github.com/neayi/LinkTitles.git');
 
 	// Neayi extensions and forks
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/HitCounters',
-							'git' => '--branch Neayi https://github.com/neayi/mediawiki-extensions-HitCounters.git',
-							'branch' => 'Neayi',
+							'git' => '--branch Neayi1_37 https://github.com/neayi/mediawiki-extensions-HitCounters.git',
+							'branch' => 'Neayi1_37',
 							'postinstall' => 'composer');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Link_Attributes',
@@ -400,28 +408,24 @@ function getWikiComponents()
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Carousel',
 							'git' => 'https://github.com/neayi/ext-carousel.git');
 
-	$components[] = array(	'dest' => $wiki_extensions_dir . '/ChangeAuthor',
-							'git' => '--branch '.$wiki_version.' https://github.com/neayi/mediawiki-extensions-ChangeAuthor.git',
-							'branch' => $wiki_version);
-
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/NeayiAuth',
 							'git' => 'https://github.com/neayi/NeayiAuth.git',
 							'postinstall' => 'composer');
 
+	// TODO: Create a new repo and get rid of CommentStreams
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/CommentStreams',
-							'git' => '--branch TriplePerformance https://github.com/neayi/mediawiki-extensions-CommentStreams.git',
-							'branch' => 'TriplePerformance');
+							'git' => '--branch Discourse https://github.com/neayi/mediawiki-extensions-CommentStreams.git',
+							'postinstall' => 'submodules',
+							'branch' => 'Discourse');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/InputBox',
 							'git' => '--branch '.$neayi_wiki_version.' https://github.com/neayi/mediawiki-extensions-InputBox.git',
 							'branch' => $neayi_wiki_version);
 
-	$components[] = array(	'dest' => $wiki_extensions_dir . '/OpenGraphMeta',
-							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-OpenGraphMeta.git',
-							'branch' => $wiki_version);
-
+	// TODO: Merge integration-of-discourse in master
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/NeayiInteractions',
-							'git' => 'https://github.com/neayi/mw-NeayiInteractions.git');
+							'git' => '--branch integration-of-discourse https://github.com/neayi/mw-NeayiInteractions.git',
+							'branch' => 'integration-of-discourse');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/NeayiNavbar',
 							'git' => 'https://github.com/neayi/mw-NeayiNavbar.git');
@@ -636,7 +640,7 @@ function updateComposer()
 	else
 		$cmd = "composer update --no-progress --no-interaction --no-dev";
 
-	echo "\nUpdating components with composer in $dir\n";
+	echo "\nUpdating components with composer in $wiki_install_dir\n";
 
 	changeDir($wiki_install_dir);
 	runCommand($cmd);

@@ -428,6 +428,9 @@ function getScriptPath($script)
         case 'mysqldump':
             return '/usr/bin/mysqldump';
 
+        case 'build_project.php':
+            return 'php /var/www/bin/build_project.php';
+
         default:
             throw new Exception("Unrecognized maintenance script: $script", 1);
     }

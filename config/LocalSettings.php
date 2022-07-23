@@ -208,9 +208,11 @@ wfLoadExtension( 'PDFEmbed' );
 # Add more configuration options below.
 
 // Semantic Mediawiki
+wfLoadExtension( 'SemanticMediaWiki' );
 enableSemantics( 'tripleperformance.fr' );
 $smwgConfigFileDir = $wgUploadDirectory;
 $smwgNamespacesWithSemanticLinks[NS_STRUCTURE] = true;
+$smwgDefaultStore = 'SMWSQLStore3'; // Normal value is $smwgDefaultStore = 'SMW\SQLStore\SQLStore'; but semantic drilldown doesn't know
 
 // https://github.com/SemanticMediaWiki/SemanticExtraSpecialProperties/blob/master/docs/configuration.md
 wfLoadExtension( 'SemanticExtraSpecialProperties' );
@@ -247,15 +249,21 @@ $wgAutoSitemap["exclude_namespaces"] = [NS_TALK,
                                         NS_TEMPLATE_TALK,
                                         NS_HELP,
                                         NS_HELP_TALK,
-                                        NS_CATEGORY_TALK,
-                                        SMW_NS_CONCEPT,
-                                        SMW_NS_CONCEPT_TALK,
-                                        SMW_NS_PROPERTY,
-                                        SMW_NS_PROPERTY_TALK,
-                                        SMW_NS_RULE,
-                                        SMW_NS_RULE_TALK,
-                                        SMW_NS_SCHEMA,
-                                        SMW_NS_SCHEMA_TALK];
+                                        NS_CATEGORY_TALK];
+
+// We declare the SMW namespaces directly because of this:
+// https://github.com/SemanticMediaWiki/SemanticMediaWiki/issues/5281
+$wgAutoSitemap["exclude_namespaces"][] = 102; // SMW_NS_PROPERTY;
+$wgAutoSitemap["exclude_namespaces"][] = 103; // SMW_NS_PROPERTY_TALK;
+$wgAutoSitemap["exclude_namespaces"][] = 108; // SMW_NS_CONCEPT;
+$wgAutoSitemap["exclude_namespaces"][] = 109; // SMW_NS_CONCEPT_TALK;
+$wgAutoSitemap["exclude_namespaces"][] = 114; // SMW_NS_RULE;
+$wgAutoSitemap["exclude_namespaces"][] = 115; // SMW_NS_RULE_TALK;
+$wgAutoSitemap["exclude_namespaces"][] = 112; // SMW_NS_SCHEMA;
+$wgAutoSitemap["exclude_namespaces"][] = 113; // SMW_NS_SCHEMA_TALK;
+
+$wgAutoSitemap["exclude_namespaces"][] = 844; // CommentStreams;
+$wgAutoSitemap["exclude_namespaces"][] = 845; // CommentStreams talk;
 
 // Add some color to the browser (in mobile mode)
 wfLoadExtension( 'HeadScript' );
@@ -358,7 +366,7 @@ $egChameleonExternalStyleVariables = [
 ];
 
 // Database and cross referencing
-wfLoadExtension( 'DynamicPageList' );
+wfLoadExtension( 'DynamicPageList3' );
 
 // Scripting and parsing
 wfLoadExtension( 'Loops' );
@@ -461,6 +469,12 @@ $wgCommentStreamsModeratorFastDelete = true;
 $wgCommentStreamsUserAvatarPropertyName = "A un avatar";
 $wgInsightsRootURL = getenv('INSIGHT_URL') . '/';
 $wgInsightsRootURLPHP= str_replace('https', 'http', getenv('INSIGHT_URL')) . '/';
+
+$wgInsightsRootAPIURL = getenv('INSIGHT_API_URL') . '/';
+$wgDiscourseAPIKey = getenv('DISCOURSE_API_KEY');
+$wgDiscourseHost = getenv('DISCOURSE_API_HOST');
+$wgDiscourseURL = getenv('DISCOURSE_ROOT_URL');
+$wgDiscourseDefaultCategoryId = getenv('DISCOURSE_DEFAULT_CATEGORY');
 
 wfLoadExtension( 'NeayiInteractions' );
 wfLoadExtension( 'NeayiNavbar' );
