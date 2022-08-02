@@ -43,12 +43,6 @@ services:
       default:
         aliases:
           - wiki.tripleperformance.fr
-      # Add the traefik network. This is so that discourse can access this container using the backend. We do
-      # that only on dev, because the host is not a real IP. On production we can use the public DNS resolution
-      # and go directly through the front end.
-      traefik:
-        aliases:
-          - wiki.tripleperformance.fr
 
   web_preprod:
     image: ghcr.io/neayi/tripleperformance/wiki:$WIKI_VERSION_PREPROD
@@ -62,12 +56,6 @@ services:
       - 'traefik.frontend.rule=Host:wiki.preprod.tripleperformance.fr'
     networks:
       default:
-        aliases:
-          - wiki.preprod.tripleperformance.fr
-      # Add the traefik network. This is so that discourse can access this container using the backend. We do
-      # that only on dev, because the host is not a real IP. On production we can use the public DNS resolution
-      # and go directly through the front end.
-      traefik:
         aliases:
           - wiki.preprod.tripleperformance.fr
 
