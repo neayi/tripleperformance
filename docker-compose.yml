@@ -162,6 +162,22 @@ services:
       - 'traefik.port=80'
       - 'traefik.frontend.rule=Host:wordpress.dev.tripleperformance.fr'
 
+  piwigo:
+    image: lscr.io/linuxserver/piwigo:latest
+    container_name: piwigo
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Paris
+    volumes:
+      - ./piwigo/config:/config
+      - ./piwigo/gallery:/gallery
+    restart: unless-stopped
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.port=80'
+      - 'traefik.frontend.rule=Host:galerie.dev.tripleperformance.fr'
+
 networks:
   default: ~
   traefik:

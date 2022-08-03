@@ -35,6 +35,10 @@ Copier les fichiers `.env` et `docker-compose.override.yml`, et éventuellement 
     rm -rf .cache/ssl && mkdir .cache/ssl
     docker run --rm -v $(pwd):/src alpine:3.9 sh -c "/src/engine/traefik/dev/generate-certs.sh && chown -R $(id -u):$(id -g) /src/.cache/ssl"
 
+Il est possible d'installer les certificats rapidement sous windows avec la commande PowerShell:
+
+    & '.\engine\traefik\dev\install certificates.ps1'
+
 Attention : après avoir créé les certificats, il faut absolument recréer le container de Traefik, qui monte ces certificats dans un volume :
 
     docker-compose up -d --force-recreate traefik
