@@ -640,6 +640,11 @@ $wgLinkTitlesSamenamespace = true;
 $wgLinkTitlesSkipTemplates = true;
 $wgLinkTitlesFirstOnly = true;
 
+// https://github.com/neayi/mw-Piwigo
+wfLoadExtension( 'Piwigo' );
+$wgPiwigoURL = 'https://galerie.dev.tripleperformance.fr';
+$wgPiwigoGalleryLayout = 'fluid'; // one of the four: fluid (default), grid, thumbnails, clean
+
 // Debug and error reporting :
 
 if ($debug) {
