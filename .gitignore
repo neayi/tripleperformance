@@ -20,3 +20,4 @@ backup/.mysql.cnf
 /discourse/.pgpass
 /backup/DBs/
 /wordpress/
+/piwigo/
