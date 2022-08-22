@@ -351,9 +351,9 @@ function getWikiComponents()
 							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-UploadWizard.git',
 							'branch' => $wiki_version);
 
-	// Fork until the open bugs are merged - don't forget to target the right branch eventually. Today only the master branch works
+	// Today only the master branch works - use the MW branch when master is merged
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/SemanticDrilldown',
-							'git' => '--branch master https://github.com/neayi/mediawiki-extensions-SemanticDrilldown.git',
+							'git' => '--branch master https://github.com/wikimedia/mediawiki-extensions-SemanticDrilldown.git',
 							'branch' => 'master');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Realnames',
@@ -388,9 +388,8 @@ function getWikiComponents()
 							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-OpenGraphMeta.git',
 							'branch' => $wiki_version);
 
-	// Revert to bovender when our fixes are merged
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/LinkTitles',
-							'git' => 'https://github.com/neayi/LinkTitles.git');
+							'git' => 'https://github.com/bovender/LinkTitles.git');
 
 	// Neayi extensions and forks
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/HitCounters',
