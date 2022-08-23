@@ -496,6 +496,9 @@ $wgOAuthRedirectUri = 'https://' . $domainName . "/index.php/Special:PluggableAu
 $wgPluggableAuth_EnableAutoLogin = false;
 $wgPluggableAuth_EnableLocalLogin = false;
 
+$wgPasswordAttemptThrottle = false;
+$wgAccountCreationThrottle = 0;
+
 $wgOAuthUri = getenv('INSIGHT_URL') . '/register?&';
 //$wgOAuthUri = getenv('INSIGHT_URL') . '/login?&';
 
