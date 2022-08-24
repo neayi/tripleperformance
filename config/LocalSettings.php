@@ -645,7 +645,7 @@ $wgLinkTitlesFirstOnly = true;
 
 // https://github.com/neayi/mw-Piwigo
 wfLoadExtension( 'Piwigo' );
-$wgPiwigoURL = 'https://galerie.dev.tripleperformance.fr';
+$wgPiwigoURL = 'https://' . str_replace('wiki', 'photos', $domainName);
 $wgPiwigoGalleryLayout = 'fluid'; // one of the four: fluid (default), grid, thumbnails, clean
 
 // Debug and error reporting :

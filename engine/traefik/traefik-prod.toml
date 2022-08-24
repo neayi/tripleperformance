@@ -39,4 +39,4 @@ onHostRule = true
 entryPoint = "http"
 [[acme.domains]]
 main = "tripleperformance.fr"
-sans = ["tripleperformance.fr", "www.tripleperformance.fr", "wiki.tripleperformance.fr", "phpmyadmin.tripleperformance.fr", "elasticsearch.tripleperformance.fr", "insights.tripleperformance.fr", "elasticvue.tripleperformance.fr", "traefik.tripleperformance.fr", "wiki.preprod.tripleperformance.fr", "parsoid.tripleperformance.fr", "insights.preprod.tripleperformance.fr", "forum.tripleperformance.fr", "forum-adminer.tripleperformance.fr", "3perf.fr"]
+sans = ["tripleperformance.fr", "www.tripleperformance.fr", "wiki.tripleperformance.fr", "phpmyadmin.tripleperformance.fr", "elasticsearch.tripleperformance.fr", "insights.tripleperformance.fr", "elasticvue.tripleperformance.fr", "traefik.tripleperformance.fr", "wiki.preprod.tripleperformance.fr", "parsoid.tripleperformance.fr", "insights.preprod.tripleperformance.fr", "forum.tripleperformance.fr", "forum-adminer.tripleperformance.fr", "3perf.fr", "photos.tripleperformance.fr"]
