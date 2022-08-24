@@ -151,6 +151,22 @@ services:
       - 'traefik.port=8000'
       - 'traefik.frontend.rule=Host:parsoid.tripleperformance.fr'
 
+  piwigo:
+    image: lscr.io/linuxserver/piwigo:latest
+    container_name: piwigo
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Paris
+    volumes:
+      - ./piwigo/config:/config
+      - ./piwigo/gallery:/gallery
+    restart: always
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.port=80'
+      - 'traefik.frontend.rule=Host:photos.tripleperformance.fr'
+
 networks:
   default: ~
   traefik:
