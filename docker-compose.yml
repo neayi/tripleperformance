@@ -176,7 +176,7 @@ services:
     labels:
       - 'traefik.enable=true'
       - 'traefik.port=80'
-      - 'traefik.frontend.rule=Host:galerie.dev.tripleperformance.fr'
+      - 'traefik.frontend.rule=Host:photos.dev.tripleperformance.fr'
 
 networks:
   default: ~
