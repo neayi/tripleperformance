@@ -433,8 +433,7 @@ function getWikiComponents()
 							'git' => 'https://github.com/neayi/mw-NeayiIntroJS.git');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Piwigo',
-							'git' => 'https://github.com/neayi/mw-Piwigo.git',
-							'postinstall' => 'composer');
+							'git' => 'https://github.com/neayi/mw-Piwigo.git');
 
 	return $components;
 }
