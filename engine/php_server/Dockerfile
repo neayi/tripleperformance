@@ -23,46 +23,42 @@ RUN apt-get update  \
 	libmagickwand-dev \
 	libonig-dev \
 	libxslt-dev --no-install-recommends \
-	ghostscript \
-	poppler-utils \
-    cron \
-    supervisor \
-    vim \
-    msmtp \
-	ssh \
-	&& rm -rf /var/lib/apt/lists/*
-
-# Install PHP extensions
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) gd \
-    && docker-php-ext-install pdo_mysql \
-    && docker-php-ext-install mysqli \
-    && docker-php-ext-install zip \
-    && docker-php-ext-install exif \
-    && docker-php-ext-install bz2 \
-    && docker-php-ext-install calendar \
-    && docker-php-ext-install bcmath \
-    && docker-php-ext-install gettext \
-    && docker-php-ext-install intl \
-    && docker-php-ext-install pdo \
-    && docker-php-ext-install iconv \
-    && docker-php-ext-install xmlrpc \
-    && docker-php-ext-install xsl \
-    && docker-php-source delete
-
-# Image magick
-RUN pecl install imagick \
-	&& docker-php-ext-enable imagick
-
-RUN pecl install mcrypt-1.0.3 \
-	&& docker-php-ext-enable mcrypt
-
-RUN pecl install -o -f redis \
-	&& rm -rf /tmp/pear \
-	&& docker-php-ext-enable redis
-
-RUN pecl install apcu \
-  && docker-php-ext-enable apcu
+      ghostscript \
+      poppler-utils \
+      cron \
+      supervisor \
+      vim \
+      msmtp \
+      ssh \
+	&& rm -rf /var/lib/apt/lists/*; \
+  docker-php-ext-configure gd --with-freetype --with-jpeg; \
+    docker-php-ext-install -j$(nproc) gd; \
+    docker-php-ext-install \
+      pdo_mysql \
+      mysqli \
+      zip \
+      exif \
+      bz2 \
+      calendar \
+      bcmath \
+      gettext \
+      intl \
+      pdo \
+      iconv \
+      xmlrpc \
+      xsl; \
+    docker-php-source delete; \
+    pecl install \
+      imagick \
+      mcrypt-1.0.3 \
+      apcu; \
+    docker-php-ext-enable \
+      imagick \
+      mcrypt \
+      apcu; \
+    pecl install -o -f redis \
+        && rm -rf /tmp/pear \
+	      && docker-php-ext-enable redis;
 
 RUN a2enmod rewrite headers deflate
 

@@ -21,3 +21,4 @@ backup/.mysql.cnf
 /backup/DBs/
 /wordpress/
 /piwigo/
+/sitemap.xml
