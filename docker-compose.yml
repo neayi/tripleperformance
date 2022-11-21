@@ -67,6 +67,8 @@ services:
       context: insights
       dockerfile: dockerfiles/php/Dockerfile
       target: base
+      args:
+        - DEBUG_TOOLS=true
     networks:
       - default
       - traefik

@@ -469,16 +469,23 @@ function getMysqlCommandLine($targetEnv, $script, $sqlBatchFile = '')
     else if (!empty($sqlBatchFile) && strpos($script, 'mysqldump') !== false)
         $sqlBatchFile = " > $sqlBatchFile";
 
+    if (strpos($sqlBatchFile, "wiki"))
+        $dbname = 'wiki';
+    else if (strpos($sqlBatchFile, "insights"))
+        $dbname = 'insights';
+    else
+        throw new Exception("Unrecognized DB name", 1);
+
     $volume = __DIR__ . '/backup:/backup';
     switch ($targetEnv) {
         case 'dev':
-            return "docker compose run --rm -v $volume db sh -c \"$script --defaults-extra-file=/backup/.mysql.cnf $extraParams -P 3306 -h db -u root wiki $sqlBatchFile\"";
+            return "docker compose run --rm -v $volume db sh -c \"$script --defaults-extra-file=/backup/.mysql.cnf $extraParams -P 3306 -h db -u root $dbname $sqlBatchFile\"";
 
         case 'preprod':
-            return "docker-compose -f docker-compose.prod.yml run --rm -v $volume db sh -c \"$script --defaults-extra-file=/backup/.mysql.cnf $extraParams -P 3306 -h db -u root wiki_preprod $sqlBatchFile\"";
+            return "docker-compose -f docker-compose.prod.yml run --rm -v $volume db sh -c \"$script --defaults-extra-file=/backup/.mysql.cnf $extraParams -P 3306 -h db -u root ".$dbname."_preprod $sqlBatchFile\"";
 
         case 'prod':
-            return "docker-compose -f docker-compose.prod.yml run --rm -v $volume db sh -c \"$script --defaults-extra-file=/backup/.mysql.cnf $extraParams -P 3306 -h db -u root wiki_prod $sqlBatchFile\"";
+            return "docker-compose -f docker-compose.prod.yml run --rm -v $volume db sh -c \"$script --defaults-extra-file=/backup/.mysql.cnf $extraParams -P 3306 -h db -u root ".$dbname."_prod $sqlBatchFile\"";
     }
 }
 
