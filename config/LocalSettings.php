@@ -607,7 +607,7 @@ wfLoadExtension( 'SemanticResultFormats' );
 wfLoadExtension( 'CategoryTree' );
 $wgCategoryTreeMaxDepth = 4;
 
-require_once "$IP/extensions/SemanticDrilldown/SemanticDrilldown.php";
+wfLoadExtension( 'SemanticDrilldown' );
 // Uncomment the two following in order to show tag clouds instead of simple links
 // $sdgFiltersSmallestFontSize=9;
 // $sdgFiltersLargestFontSize=25;
