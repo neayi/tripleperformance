@@ -179,6 +179,10 @@ services:
       - 'traefik.enable=true'
       - 'traefik.port=80'
       - 'traefik.frontend.rule=Host:photos.dev.tripleperformance.fr'
+    networks:
+      default:
+        aliases:
+          - photos.dev.tripleperformance.fr
 
 networks:
   default: ~
