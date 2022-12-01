@@ -57,7 +57,7 @@ try {
     }
     else if ($script == 'importDump.php')
     {
-        // docker-compose -f docker-compose.prod.yml run --rm -v ~/youtube:/out web_preprod php /var/www/html/maintenance/importDump.php /out/$file
+        // docker compose -f docker compose.prod.yml run --rm -v ~/youtube:/out web_preprod php /var/www/html/maintenance/importDump.php /out/$file
         while ($arg = array_shift($argv))
         {
             if (strpos($arg, '.xml') === false)
@@ -76,7 +76,7 @@ try {
     }
     else if ($script == 'importImages.php')
     {
-        // docker-compose -f docker-compose.prod.yml run --rm -v ~/geco/images:/out web_preprod php /var/www/html/maintenance/importImages.php /out/
+        // docker compose -f docker compose.prod.yml run --rm -v ~/geco/images:/out web_preprod php /var/www/html/maintenance/importImages.php /out/
         $folder = array_pop($argv);
         $volume = '-v '.$folder.':/out';
         while ($arg = array_shift($argv)) {
@@ -450,10 +450,10 @@ function getCommandLine($targetEnv, $script, $volume = '', $bUseWwwData = true)
             return 'docker compose run '.$user.' --rm '.$volume.' web sh -c "'.$script.'"';
 
         case 'preprod':
-            return 'docker-compose -f docker-compose.prod.yml run '.$user.' --rm '.$volume.' web_preprod sh -c "'.$script.'"';
+            return 'docker compose -f docker compose.prod.yml run '.$user.' --rm '.$volume.' web_preprod sh -c "'.$script.'"';
 
         case 'prod':
-            return 'docker-compose -f docker-compose.prod.yml run '.$user.' --rm '.$volume.' web sh -c "'.$script.'"';
+            return 'docker compose -f docker compose.prod.yml run '.$user.' --rm '.$volume.' web sh -c "'.$script.'"';
     }
 }
 
@@ -482,10 +482,10 @@ function getMysqlCommandLine($targetEnv, $script, $sqlBatchFile = '')
             return "docker compose run --rm -v $volume db sh -c \"$script --defaults-extra-file=/backup/.mysql.cnf $extraParams -P 3306 -h db -u root $dbname $sqlBatchFile\"";
 
         case 'preprod':
-            return "docker-compose -f docker-compose.prod.yml run --rm -v $volume db sh -c \"$script --defaults-extra-file=/backup/.mysql.cnf $extraParams -P 3306 -h db -u root ".$dbname."_preprod $sqlBatchFile\"";
+            return "docker compose -f docker compose.prod.yml run --rm -v $volume db sh -c \"$script --defaults-extra-file=/backup/.mysql.cnf $extraParams -P 3306 -h db -u root ".$dbname."_preprod $sqlBatchFile\"";
 
         case 'prod':
-            return "docker-compose -f docker-compose.prod.yml run --rm -v $volume db sh -c \"$script --defaults-extra-file=/backup/.mysql.cnf $extraParams -P 3306 -h db -u root ".$dbname."_prod $sqlBatchFile\"";
+            return "docker compose -f docker compose.prod.yml run --rm -v $volume db sh -c \"$script --defaults-extra-file=/backup/.mysql.cnf $extraParams -P 3306 -h db -u root ".$dbname."_prod $sqlBatchFile\"";
     }
 }
 

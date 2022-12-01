@@ -157,6 +157,7 @@ services:
       WORDPRESS_DB_USER: wordpressuser
       WORDPRESS_DB_PASSWORD: examplepass
       WORDPRESS_DB_NAME: wordpress
+    restart: unless-stopped
     volumes:
       - ./wordpress:/var/www/html
     labels:
