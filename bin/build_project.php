@@ -351,6 +351,16 @@ function getWikiComponents()
 							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-UploadWizard.git',
 							'branch' => $wiki_version);
 
+	// WikiSearch
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/WikiSearch',
+							'git' => '--branch Neayi https://github.com/neayi/WikiSearch.git',
+							'postinstall' => 'composer');
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/WikiSearchFront',
+							'git' => '--branch add-French-i18n https://github.com/neayi/WikiSearchFront.git');
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/WSSemanticParsedText',
+							'git' => 'https://bitbucket.org/wikibasesolutions/wssemanticparsedtext.git',
+							'postinstall' => 'composer');
+
 	// Today only the master branch works - use the MW branch when master is merged
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/SemanticDrilldown',
 							'git' => '--branch master https://github.com/wikimedia/mediawiki-extensions-SemanticDrilldown.git',

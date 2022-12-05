@@ -212,7 +212,18 @@ wfLoadExtension( 'SemanticMediaWiki' );
 enableSemantics( 'tripleperformance.fr' );
 $smwgConfigFileDir = $wgUploadDirectory;
 $smwgNamespacesWithSemanticLinks[NS_STRUCTURE] = true;
-$smwgDefaultStore = 'SMWSQLStore3'; // Normal value is $smwgDefaultStore = 'SMW\SQLStore\SQLStore'; but semantic drilldown doesn't know
+//$smwgDefaultStore = 'SMWSQLStore3'; // Normal value is $smwgDefaultStore = 'SMW\SQLStore\SQLStore'; but semantic drilldown doesn't know
+$smwgDefaultStore = 'SMWElasticStore';
+$elastic_parts = preg_split("/[:@]/", getenv('ELASTICSEARCH_SERVER'));
+$smwgElasticsearchEndpoints = [ [ 'host' => $elastic_parts[2],
+                                  'port' => 9200,
+                                  'scheme' => 'http',
+                                  'user' => $elastic_parts[0],
+                                  'pass' => $elastic_parts[1] ] ];
+unset($elastic_parts);
+$smwgElasticsearchConfig["indexer"]["raw.text"] = true;
+
+wfLoadExtension('WSSemanticParsedText');
 
 // https://github.com/SemanticMediaWiki/SemanticExtraSpecialProperties/blob/master/docs/configuration.md
 wfLoadExtension( 'SemanticExtraSpecialProperties' );
@@ -647,6 +658,13 @@ $wgLinkTitlesFirstOnly = true;
 wfLoadExtension( 'Piwigo' );
 $wgPiwigoURL = 'https://' . str_replace('wiki', 'photos', $domainName);
 $wgPiwigoGalleryLayout = 'fluid'; // one of the four: fluid (default), grid, thumbnails, clean
+
+// WikiSearch
+wfLoadExtension( 'WikiSearch' );
+$wgWikiSearchElasticSearchHosts	= [getenv('ELASTICSEARCH_SERVER')]; // ["localhost:9200"]	Sets the list of ElasticSearch hosts to use.
+$wgWikiSearchAPIRequiredRights = ["read", "wssearch-execute-api"];
+
+wfLoadExtension( 'WikiSearchFront' );
 
 // Debug and error reporting :
 
