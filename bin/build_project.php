@@ -356,7 +356,7 @@ function getWikiComponents()
 							'git' => '--branch Neayi https://github.com/neayi/WikiSearch.git',
 							'postinstall' => 'composer');
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/WikiSearchFront',
-							'git' => '--branch add-French-i18n https://github.com/neayi/WikiSearchFront.git');
+							'git' => '--branch New-option-allow-empty-queries https://github.com/neayi/WikiSearchFront.git');
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/WSSemanticParsedText',
 							'git' => 'https://bitbucket.org/wikibasesolutions/wssemanticparsedtext.git',
 							'postinstall' => 'composer');
