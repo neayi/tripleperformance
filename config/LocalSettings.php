@@ -232,6 +232,7 @@ $sespgEnabledPropertyList = [
     '_CUSER',
     '_EUSER',
     '_VIEWS',
+//    '_DESCRIPTION',
     '_PAGELGTH',
     '_NREV',
     '_PAGEIMG'

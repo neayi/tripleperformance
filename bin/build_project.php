@@ -358,7 +358,7 @@ function getWikiComponents()
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/WikiSearchFront',
 							'git' => '--branch New-option-allow-empty-queries https://github.com/neayi/WikiSearchFront.git');
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/WSSemanticParsedText',
-							'git' => 'https://bitbucket.org/wikibasesolutions/wssemanticparsedtext.git',
+							'git' => '--branch exclude-namespaces https://bitbucket.org/wikibasesolutions/wssemanticparsedtext.git',
 							'postinstall' => 'composer');
 
 	// Today only the master branch works - use the MW branch when master is merged
