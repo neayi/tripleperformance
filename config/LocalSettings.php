@@ -248,6 +248,7 @@ $wgAutoSitemap["freq"] = "weekly"; //default
 $wgAutoSitemap["priority"][NS_MAIN] = 1;
 $wgAutoSitemap["priority"][NS_CATEGORY] = 0.8;
 $wgAutoSitemap["server"] = 'https://' . $domainName;
+$wgAutoSitemap["exclude_pages"] = ["Rechercher des pratiques", "Rechercher des retours d'expérience"];
 
 // Exclude SMW namespaces: https://www.semantic-mediawiki.org/wiki/Help:Namespaces
 $wgAutoSitemap["exclude_namespaces"] = [NS_TALK,
@@ -663,6 +664,7 @@ $wgPiwigoGalleryLayout = 'fluid'; // one of the four: fluid (default), grid, thu
 wfLoadExtension( 'WikiSearch' );
 $wgWikiSearchElasticSearchHosts	= [getenv('ELASTICSEARCH_SERVER')]; // ["localhost:9200"]	Sets the list of ElasticSearch hosts to use.
 $wgWikiSearchAPIRequiredRights = ["read", "wssearch-execute-api"];
+// $wgWikiSearchSearchFieldOverride = 'Search';
 
 wfLoadExtension( 'WikiSearchFront' );
 
