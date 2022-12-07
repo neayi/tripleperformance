@@ -669,6 +669,9 @@ $wgWikiSearchAPIRequiredRights = ["read", "wssearch-execute-api"];
 
 wfLoadExtension( 'WikiSearchFront' );
 
+// https://github.com/neayi/mw-WikiSearchLink
+wfLoadExtension( 'WikiSearchLink' );
+
 // Debug and error reporting :
 
 if ($debug) {

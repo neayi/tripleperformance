@@ -1,5 +1,5 @@
 # Mediawiki runJobs cron:
-*/10 * * * * /usr/local/bin/php /var/www/html/maintenance/runJobs.php --quiet --maxjobs=200 --maxtime=300 --memory-limit=128M > /proc/1/fd/1 2>/proc/1/fd/2
+*/20 * * * * /usr/local/bin/php /var/www/html/maintenance/runJobs.php --quiet --maxjobs=200 --maxtime=300 --memory-limit=128M > /proc/1/fd/1 2>/proc/1/fd/2
 
 # Semantic mediawiki maintenance:
 15 5 * * * /usr/local/bin/php /var/www/html/extensions/SemanticMediaWiki/maintenance/rebuildData.php --quiet --shallow-update > /proc/1/fd/1 2>/proc/1/fd/2
