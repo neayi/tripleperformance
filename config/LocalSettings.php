@@ -212,7 +212,6 @@ wfLoadExtension( 'SemanticMediaWiki' );
 enableSemantics( 'tripleperformance.fr' );
 $smwgConfigFileDir = $wgUploadDirectory;
 $smwgNamespacesWithSemanticLinks[NS_STRUCTURE] = true;
-//$smwgDefaultStore = 'SMWSQLStore3'; // Normal value is $smwgDefaultStore = 'SMW\SQLStore\SQLStore'; but semantic drilldown doesn't know
 $smwgDefaultStore = 'SMWElasticStore';
 $elastic_parts = preg_split("/[:@]/", getenv('ELASTICSEARCH_SERVER'));
 $smwgElasticsearchEndpoints = [ [ 'host' => $elastic_parts[2],
@@ -619,12 +618,6 @@ wfLoadExtension( 'SemanticResultFormats' );
 
 wfLoadExtension( 'CategoryTree' );
 $wgCategoryTreeMaxDepth = 4;
-
-wfLoadExtension( 'SemanticDrilldown' );
-// Uncomment the two following in order to show tag clouds instead of simple links
-// $sdgFiltersSmallestFontSize=9;
-// $sdgFiltersLargestFontSize=25;
-$sdgHideCategoriesByDefault = true;
 
 $slackWebHook = getenv('SLACK_WEBHOOK');
 if (!empty($slackWebHook))

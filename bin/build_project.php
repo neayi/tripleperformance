@@ -361,11 +361,6 @@ function getWikiComponents()
 							'git' => '--branch exclude-namespaces https://bitbucket.org/wikibasesolutions/wssemanticparsedtext.git',
 							'postinstall' => 'composer');
 
-	// Today only the master branch works - use the MW branch when master is merged
-	$components[] = array(	'dest' => $wiki_extensions_dir . '/SemanticDrilldown',
-							'git' => '--branch master https://github.com/wikimedia/mediawiki-extensions-SemanticDrilldown.git',
-							'branch' => 'master');
-
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Realnames',
 							'git' => 'https://github.com/ofbeaton/mediawiki-realnames.git');
 
