@@ -353,13 +353,10 @@ function getWikiComponents()
 
 	// WikiSearch
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/WikiSearch',
-							'git' => '--branch Neayi https://github.com/neayi/WikiSearch.git',
+							'git' => 'https://github.com/Open-CSP/WikiSearch.git',
 							'postinstall' => 'composer');
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/WikiSearchFront',
 							'git' => '--branch New-option-allow-empty-queries https://github.com/neayi/WikiSearchFront.git');
-	$components[] = array(	'dest' => $wiki_extensions_dir . '/WSSemanticParsedText',
-							'git' => '--branch exclude-namespaces https://bitbucket.org/wikibasesolutions/wssemanticparsedtext.git',
-							'postinstall' => 'composer');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Realnames',
 							'git' => 'https://github.com/ofbeaton/mediawiki-realnames.git');
