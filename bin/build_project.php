@@ -356,7 +356,7 @@ function getWikiComponents()
 							'git' => 'https://github.com/Open-CSP/WikiSearch.git',
 							'postinstall' => 'composer');
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/WikiSearchFront',
-							'git' => '--branch New-option-allow-empty-queries https://github.com/neayi/WikiSearchFront.git');
+							'git' => '--branch Neayi https://github.com/neayi/WikiSearchFront.git');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Realnames',
 							'git' => 'https://github.com/ofbeaton/mediawiki-realnames.git');
