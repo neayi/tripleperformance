@@ -393,6 +393,13 @@ function getWikiComponents()
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/LinkTitles',
 							'git' => 'https://github.com/bovender/LinkTitles.git');
 
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/JsonConfig',
+							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-JsonConfig.git',
+							'branch' => $wiki_version);
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/Graph',
+							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-Graph.git',
+							'branch' => $wiki_version);
+
 	// Neayi extensions and forks
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/HitCounters',
 							'git' => '--branch Neayi1_37 https://github.com/neayi/mediawiki-extensions-HitCounters.git',
