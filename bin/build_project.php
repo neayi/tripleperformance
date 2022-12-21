@@ -399,6 +399,10 @@ function getWikiComponents()
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Graph',
 							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-Graph.git',
 							'branch' => $wiki_version);
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/TemplateStyles',
+							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-TemplateStyles.git',
+							'branch' => $wiki_version,
+							'postinstall' => 'composer');
 
 	// Neayi extensions and forks
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/HitCounters',
