@@ -674,4 +674,5 @@ if ($debug) {
     $wgShowExceptionDetails = true;
     $wgDebugToolbar = true;
     $wgResourceLoaderDebug = true;
+    $wgWikiSearchEnableDebugMode = true;
 }

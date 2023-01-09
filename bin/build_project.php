@@ -440,6 +440,10 @@ function getWikiComponents()
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/WikiSearchLink',
 							'git' => 'https://github.com/neayi/mw-WikiSearchLink.git');
 
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/red_button',
+							'git' => 'https://github.com/neayi/red_button.git',
+							'postinstall' => 'composer');
+
 	return $components;
 }
 
