@@ -41,7 +41,7 @@ Il est possible d'installer les certificats rapidement sous windows avec la comm
 
 Attention : après avoir créé les certificats, il faut absolument recréer le container de Traefik, qui monte ces certificats dans un volume :
 
-    docker-compose up -d --force-recreate traefik
+    docker compose up -d --force-recreate traefik
 
 ### Installation des certificats dans les navigateurs
 
@@ -63,20 +63,20 @@ reboot
 ```
 
 ### Lancement de docker
-* Dev, prod et preprod : `docker-compose up --build -d`
+* Dev, prod et preprod : `docker compose up --build -d`
 
 ### Création d'un mot de passe pour ElasticSearch
 * Voir https://www.elastic.co/fr/blog/getting-started-with-elasticsearch-security
 * En pratique :
 1. Ouvrir `.env` et récupérer le mot de passe utilisé pour ELASTICSEARCH_SERVER
-2. Se rendre dans le container : `docker-compose exec elasticsearch bash`
+2. Se rendre dans le container : `docker compose exec elasticsearch bash`
 3. Exécuter la commande : `bin/elasticsearch-setup-passwords interactive` et utiliser le mot de passe précédemment récupéré pour tous les users
 4. Utiliser l'identifiant `elastic` pour ElasticVue (voir plus loin).
 
 ### Exécution d'un bash
-* Web : `docker-compose exec web bash`
-* SQL : `docker-compose exec db bash`
-* Insights : `docker-compose run --rm --user="$UID:$GID" insights_php bash` (ou `docker-compose exec insights_php bash` en tant que root et si le service est up)
+* Web : `docker compose exec web bash`
+* SQL : `docker compose exec db bash`
+* Insights : `docker compose run --rm --user="$UID:$GID" insights_php bash` (ou `docker compose exec insights_php bash` en tant que root et si le service est up)
 
 ### Accès à phpMyAdmin
 * Dev : http://phpmyadmin.dev.tripleperformance.fr
@@ -115,7 +115,7 @@ Une fois le code extrait, il faut ajouter la base de données.
 
 Par défaut, la base créée sera `wiki`, mais il est possible d'importer aussi une base de prod en créant le fichier `bin/sql/wiki_prod.sql` avant de lancer le script.
 
-    docker-compose exec -w /var/sql db ./load_db.sh
+    docker compose exec -w /var/sql db ./load_db.sh
 
 ### Import d'une base existante
 
@@ -123,8 +123,8 @@ Par défaut, la base créée sera `wiki`, mais il est possible d'importer aussi 
 
 ### Installation de Insights
 
-    docker-compose run --rm --user="$UID:$GID" insights_php ./install.sh
-    docker-compose run --rm insights_php chmod -R o+w storage
+    docker compose run --rm --user="$UID:$GID" insights_php ./install.sh
+    docker compose run --rm insights_php chmod -R o+w storage
 
 ### Ajout des images dans le wiki
 Il faut aussi ajouter des images pour compléter la configuration. Ces images ne sont pas versionnées, voir avec un membre de l'équipe pour les récupérer d'une autre install.
@@ -132,14 +132,14 @@ Il faut aussi ajouter des images pour compléter la configuration. Ces images ne
 ### Indexation du wiki dans elasticSearch
 Dans cette opération, on indexe les pages du wiki dans elasticSearch à partir de la DB :
 
-    docker-compose exec web php bin/build_project.php --initElasticSearch
+    docker compose exec web php bin/build_project.php --initElasticSearch
 
 On peut vérifier la bonne indexation en allant sur http://elasticvue.dev.tripleperformance.fr/ ou en pratiquant une recherche dans le wiki.
 
 ### Mise à jour du code
 Quand on met à jour tripleperformance, il faut ensuite mettre à jour le code de chaque instance :
 
-    docker-compose exec web php bin/build_project.php --update
+    docker compose exec web php bin/build_project.php --update
 
 On ira ensuite mettre à jour spécifiquement le wiki :
 
@@ -178,14 +178,14 @@ Modifier les fichiers .env, et en particulier vérifier la version des images à
 Configurer les fichiers .env, puis :
 
     docker login -u bertrand.gorge@neayi.com -p $PAT docker.pkg.github.com
-    docker-compose -f docker-compose.prod.yml up -d
+    docker compose -f docker-compose.prod.yml up -d
 
 Avec `$PAT` un [Personal Access Token](https://github.com/settings/tokens) ayant les droits de lecture sur les packages github.
 
 
 Lancer la migration d'Insights :
 
-    docker-compose -f docker-compose.prod.yml exec --user="www-data:www-data" insights php artisan migrate
+    docker compose -f docker-compose.prod.yml exec --user="www-data:www-data" insights php artisan migrate
 
 
 # Tâches de maintenance diverses
@@ -193,22 +193,22 @@ Lancer la migration d'Insights :
 
 Pour lancer runJobs.php
 
-    docker-compose -f docker-compose.prod.yml run --rm web sh -c "php /var/www/html/maintenance/runJobs.php"
+    docker compose -f docker-compose.prod.yml run --rm web sh -c "php /var/www/html/maintenance/runJobs.php"
 
 
 Pour importer des images ou un fichier xml :
 
-    docker-compose -f docker-compose.prod.yml run --rm -v ~/wiki_builder/out/departements:/out web php /var/www/html/maintenance/importImages.php --user="ImportsTriplePerformance" /out/
+    docker compose -f docker-compose.prod.yml run --rm -v ~/wiki_builder/out/departements:/out web php /var/www/html/maintenance/importImages.php --user="ImportsTriplePerformance" /out/
 
-    docker-compose -f docker-compose.prod.yml run --rm -v ~/wiki_builder/out/departements:/out web php /var/www/html/maintenance/importDump.php --user="ImportsTriplePerformance" /out/wiki_departements.xml
+    docker compose -f docker-compose.prod.yml run --rm -v ~/wiki_builder/out/departements:/out web php /var/www/html/maintenance/importDump.php --user="ImportsTriplePerformance" /out/wiki_departements.xml
 
-    docker-compose -f docker-compose.prod.yml run --rm web sh -c "php /var/www/html/maintenance/rebuildrecentchanges.php && php /var/www/html/maintenance/initSiteStats.php && php /var/www/html/maintenance/runJobs.php"
+    docker compose -f docker-compose.prod.yml run --rm web sh -c "php /var/www/html/maintenance/rebuildrecentchanges.php && php /var/www/html/maintenance/initSiteStats.php && php /var/www/html/maintenance/runJobs.php"
 
 
 ## Mysql
 Pour importer une DB, utiliser la commande :
 
-    docker-compose -f docker-compose.prod.yml exec -T db mysql -u root --password=xxxxxx wiki < bin/sql/wiki.sql
+    docker compose -f docker-compose.prod.yml exec -T db mysql -u root --password=xxxxxx wiki < bin/sql/wiki.sql
 
 
 # TODO

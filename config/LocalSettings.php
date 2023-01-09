@@ -663,6 +663,11 @@ wfLoadExtension( 'WikiSearchFront' );
 // https://github.com/neayi/mw-WikiSearchLink
 wfLoadExtension( 'WikiSearchLink' );
 
+// https://www.mediawiki.org/wiki/Extension:Graph
+wfLoadExtension( 'TemplateStyles' );
+wfLoadExtension( 'JsonConfig' );
+wfLoadExtension( 'Graph' );
+
 // Debug and error reporting :
 
 if ($debug) {
