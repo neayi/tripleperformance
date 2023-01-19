@@ -221,6 +221,7 @@ $smwgElasticsearchEndpoints = [ [ 'host' => $elastic_parts[2],
                                   'pass' => $elastic_parts[1] ] ];
 unset($elastic_parts);
 $smwgElasticsearchConfig["indexer"]["raw.text"] = true;
+$smwgPageSpecialProperties[] = '_DTITLE';
 
 // https://github.com/SemanticMediaWiki/SemanticExtraSpecialProperties/blob/master/docs/configuration.md
 wfLoadExtension( 'SemanticExtraSpecialProperties' );
