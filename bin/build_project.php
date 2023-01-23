@@ -258,7 +258,7 @@ function getWikiComponents()
 
 	// Composer components
 	$components[] = array(	'composer' => 'mediawiki/chameleon-skin "~4.1"' );
-	$components[] = array(	'composer' => 'mediawiki/semantic-media-wiki "~4.0.1"' );
+	$components[] = array(	'composer' => 'mediawiki/semantic-media-wiki "~4.1.0"' );
 	$components[] = array(	'composer' => 'mediawiki/maps' );
 	$components[] = array(	'composer' => 'mediawiki/semantic-result-formats' );
 	$components[] = array(	'composer' => 'mediawiki/semantic-forms-select "~4.0.0-beta"' ); // "~3.0"
