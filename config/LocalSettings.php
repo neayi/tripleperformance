@@ -222,8 +222,7 @@ $smwgElasticsearchEndpoints = [ [ 'host' => $elastic_parts[2],
 unset($elastic_parts);
 $smwgElasticsearchConfig["indexer"]["raw.text"] = true;
 
-include_once('/var/www/html/extensions/SemanticMediawiki/src/Query/ResultPrinter.php');
-SMWResultPrinter::$maxRecursionDepth = 4;
+//SMWResultPrinter::$maxRecursionDepth = 4;
 
 // https://github.com/SemanticMediaWiki/SemanticExtraSpecialProperties/blob/master/docs/configuration.md
 wfLoadExtension( 'SemanticExtraSpecialProperties' );
