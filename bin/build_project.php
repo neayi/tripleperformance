@@ -381,7 +381,7 @@ function getWikiComponents()
 							'git' => 'https://github.com/miraheze/RottenLinks.git');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/PDFEmbed',
-							'git' => '--branch fix-bug-14 https://github.com/neayi/PDFEmbed.git');
+							'git' => 'https://github.com/WolfgangFahl/PDFEmbed.git');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/SlackNotifications',
 							'git' => 'https://github.com/kulttuuri/SlackNotifications.git');
