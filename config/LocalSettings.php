@@ -18,13 +18,15 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 
 // =================================================================
 
-$env = getenv('ENV') ?: 'prod'; // dev, prod, preprod
-$debug = false === getenv('DEBUG') ? 'dev' === $env : 'true' === strtolower((string) getenv('DEBUG')); // true, false
-$domainName = getenv('DOMAIN_NAME') ?: 'wiki.tripleperformance.fr'; // pratiques.dev.tripleperformance.fr, wiki.preprod.tripleperformance.fr
+$env = getenv('ENV', true) ?: 'prod'; // dev, prod, preprod
+$debug = false === getenv('DEBUG', true) ? 'dev' === $env : 'true' === strtolower((string) getenv('DEBUG', true)); // true, false
+$domainName = getDomainName($env);
 $useHttps = false;
 $domainUrl = ($useHttps ? 'https' : 'http') . '://' . $domainName;
 $emailSender = 'no-reply@tripleperformance.com';
 $parsoidDomain = $env; // dev, prod, preprod
+
+$wiki_language_prefix = strtoupper(getWikiLanguage());
 
 // =================================================================
 
@@ -78,28 +80,76 @@ $wgEmailAuthentication = true;
 $wgDBtype = "mysql";
 
 ## Database settings
-$wgDBserver = getenv('MYSQL_HOST');
-$wgDBname = getenv('MYSQL_DB');
-$wgDBuser = getenv('MYSQL_USER');
-$wgDBpassword = getenv('MYSQL_PASSWORD');
+$wgDBserver = getenv('MYSQL_HOST', true);
+$wgDBname = getenv($wiki_language_prefix . '_MYSQL_DB', true);
+$wgDBuser = getenv('MYSQL_USER', true);
+$wgDBpassword = getenv('MYSQL_PASSWORD', true);
+
+$wiki_language = getWikiLanguage();
+
+function getWikiLanguage()
+{
+    $forcedWikiLanguage = getenv('WIKI_LANGUAGE', true);
+
+    if (empty($forcedWikiLanguage))
+        $hostparts = explode('.', $_SERVER['HTTP_HOST']);
+    else
+        $hostparts = [ $forcedWikiLanguage ];
+
+    foreach ($hostparts as $chunk)
+    {
+        switch ($chunk) {
+            case 'de':
+            case 'en':
+            case 'es':
+            case 'fr':
+            case 'it':
+            case 'nl':
+            case 'pl':
+                return $chunk;
+        }
+    }
+
+    return 'fr';
+}
+
+function getDomainName($env)
+{
+    $language = getWikiLanguage();
+
+    switch ($env) {
+        case 'dev':
+            return "$language.dev.tripleperformance.ag";
+        case 'preprod':
+            return "$language.preprod.tripleperformance.ag";
+        case 'prod':
+            if ($language === 'fr')
+                return "wiki.tripleperformance.fr";
+
+            return "$language.tripleperformance.ag";
+
+        default:
+            throw new Exception("Unrecognized environment", 1);
+    }
+}
 
 # MySQL specific settings
-$wgDBprefix = getenv('MYSQL_DB_PREFIX');
+$wgDBprefix = '';
 
 // @see https://www.mediawiki.org/wiki/Manual:$wgSecretKey
-$wgSecretKey = getenv('SECRET_KEY');
+$wgSecretKey = getenv($wiki_language_prefix . 'SECRET_KEY', true);
 
 # Site upgrade key. Must be set to a string (default provided) to turn on the
 # web installer while LocalSettings.php is in place
 // @see https://www.mediawiki.org/wiki/Manual:$wgUpgradeKey
-$wgUpgradeKey = getenv('UPGRADE_KEY');
+$wgUpgradeKey = getenv($wiki_language_prefix . 'UPGRADE_KEY', true);
 
 
 // To configure ElasticSearch passwords, see:
 // @see https://www.elastic.co/fr/blog/getting-started-with-elasticsearch-security
 // @see https://discuss.elastic.co/t/setting-xpack-security-enabled-true/182791/7
 // ./bin/elasticsearch-setup-passwords auto -u "http://localhost:9200"
-$wgCirrusSearchServers = array_filter([ getenv('ELASTICSEARCH_SERVER') ]);
+$wgCirrusSearchServers = array_filter([ getenv('ELASTICSEARCH_SERVER', true) ]);
 
 # MySQL table options to use during installation or update
 $wgDBTableOptions = "ENGINE=InnoDB, DEFAULT CHARSET=binary";
@@ -120,6 +170,9 @@ $wgAllowExternalImages = true;
 
 // Maximum amount of virtual memory available to shell processes under Linux, in KiB.
 $wgMaxShellMemory = 614400;
+
+// Disable runing jobs as part of the apache request, they will be run with runJobs.php and cron
+$wgJobRunRate = 0;
 
 // Allow PDF
 $wgFileExtensions[] = 'pdf';
@@ -155,7 +208,7 @@ $wgShellLocale = "C.UTF-8";
 $wgCacheDirectory = "{$wgUploadDirectory}/temp/wiki";
 
 # Site language code, should be one of the list in ./languages/data/Names.php
-$wgLanguageCode = "fr";
+$wgLanguageCode = $wiki_language;
 
 # Changing this will log out all existing sessions.
 $wgAuthenticationTokenVersion = "1";
@@ -209,11 +262,11 @@ wfLoadExtension( 'PDFEmbed' );
 
 // Semantic Mediawiki
 wfLoadExtension( 'SemanticMediaWiki' );
-enableSemantics( 'tripleperformance.fr' );
+enableSemantics( $domainName );
 $smwgConfigFileDir = $wgUploadDirectory;
 $smwgNamespacesWithSemanticLinks[NS_STRUCTURE] = true;
 $smwgDefaultStore = 'SMWElasticStore';
-$elastic_parts = preg_split("/[:@]/", getenv('ELASTICSEARCH_SERVER'));
+$elastic_parts = preg_split("/[:@]/", getenv('ELASTICSEARCH_SERVER', true));
 $smwgElasticsearchEndpoints = [ [ 'host' => $elastic_parts[2],
                                   'port' => 9200,
                                   'scheme' => 'http',
@@ -358,7 +411,7 @@ wfLoadExtension( 'Bootstrap' );
 wfLoadSkin( 'chameleon' );
 $wgDefaultSkin='chameleon';
 
-$egChameleonLayoutFile = dirname(MW_CONFIG_FILE) . '/skins/skin-neayi/layoutNeayi.xml';
+$egChameleonLayoutFile = dirname(MW_CONFIG_FILE) . '/skins/skin-neayi/layout.'.$wiki_language.'.xml';
 $egChameleonExternalStyleModules = array(
     dirname(MW_CONFIG_FILE) . '/skins/skin-neayi/chameleon-tripleperformance-variables.scss' => 'afterVariables',
     dirname(MW_CONFIG_FILE) . '/skins/skin-neayi/chameleon-neayi.scss' => 'afterMain'
@@ -468,29 +521,18 @@ $wgGroupPermissions['bureaucrat']['changeauthor'] = true; // Only bureaucrats ca
 // References and citations
 wfLoadExtension( 'Cite' );
 
-// https://www.mediawiki.org/wiki/Extension:CommentStreams
-wfLoadExtension( 'CommentStreams' );
-$wgAllowDisplayTitle = true;
-$wgRestrictDisplayTitle = false;
-$wgCommentStreamsEnableVoting = true;
-$wgCommentStreamsEnableWatchlist = false;
-$wgDefaultUserOptions["echo-subscriptions-email-commentstreams-notification-category"] = true; // enable email notifications
-$wgDefaultUserOptions["echo-subscriptions-web-commentstreams-notification-category"] = true; // enable web notifications
-$wgGroupPermissions['csmoderator']['cs-moderator-edit'] = true;
-$wgCommentStreamsModeratorFastDelete = true;
-$wgCommentStreamsUserAvatarPropertyName = "A un avatar";
-$wgInsightsRootURL = getenv('INSIGHT_URL') . '/';
-$wgInsightsRootURLPHP= str_replace('https', 'http', getenv('INSIGHT_URL')) . '/';
-
-$wgInsightsRootAPIURL = getenv('INSIGHT_API_URL') . '/';
-$wgDiscourseAPIKey = getenv('DISCOURSE_API_KEY');
-$wgDiscourseHost = getenv('DISCOURSE_API_HOST');
-$wgDiscourseURL = getenv('DISCOURSE_ROOT_URL');
-$wgDiscourseDefaultCategoryId = getenv('DISCOURSE_DEFAULT_CATEGORY');
+// Neayi Extensions
+wfLoadExtension( 'DiscourseIntegration' );
+$wgInsightsRootAPIURL = getenv('INSIGHT_API_URL', true) . '/';
+$wgDiscourseAPIKey = getenv($wiki_language_prefix . 'DISCOURSE_API_KEY', true);
+$wgDiscourseHost = getenv($wiki_language_prefix . 'DISCOURSE_API_HOST', true);
+$wgDiscourseURL = getenv($wiki_language_prefix . 'DISCOURSE_ROOT_URL', true);
+$wgDiscourseDefaultCategoryId = getenv($wiki_language_prefix . 'DISCOURSE_DEFAULT_CATEGORY', true);
 
 wfLoadExtension( 'NeayiInteractions' );
 wfLoadExtension( 'NeayiNavbar' );
 wfLoadExtension( 'NeayiIntroJS' );
+$wgInsightsRootURL = getenv('INSIGHT_URL', true) . '/';
 
 // Echo
 wfLoadExtension( 'Echo' );
@@ -511,8 +553,7 @@ $wgPluggableAuth_EnableLocalLogin = false;
 $wgPasswordAttemptThrottle = false;
 $wgAccountCreationThrottle = 0;
 
-$wgOAuthUri = getenv('INSIGHT_URL') . '/register?&';
-//$wgOAuthUri = getenv('INSIGHT_URL') . '/login?&';
+$wgOAuthUri = getenv('INSIGHT_URL', true) . '/register?&';
 
 if ($env == 'preprod')
     $wgOAuthUserApiByToken = 'http://insights_preprod/api/user?&';
@@ -521,7 +562,7 @@ else
 
 $wgGroupPermissions['*']['autocreateaccount'] = true;
 $wgUseCombinedLoginLink = true;
-$wgAvatarsBaseUri = getenv('INSIGHT_URL') . '/storage/users/';
+$wgAvatarsBaseUri = getenv('INSIGHT_URL', true) . '/storage/users/';
 
 // Realnames
 wfLoadExtension( 'Realnames' );
@@ -581,7 +622,11 @@ $wgUploadWizardConfig = array(
     'uwLanguages' => array(
         'fr' => 'Français',
         'en' => 'English',
-        'de' => 'Deutsch'
+        'de' => 'Deutsch',
+        'pl' => 'Polski',
+        'nl' => 'Nederlands',
+        'it' => 'Italiano',
+        'es' => 'Español'
         ), // Selectable languages for file descriptions - defaults to 'en'
     'tutorial' => array(
             'skip' => true
@@ -619,7 +664,7 @@ wfLoadExtension( 'SemanticResultFormats' );
 wfLoadExtension( 'CategoryTree' );
 $wgCategoryTreeMaxDepth = 4;
 
-$slackWebHook = getenv('SLACK_WEBHOOK');
+$slackWebHook = getenv('SLACK_WEBHOOK', true);
 if (!empty($slackWebHook))
 {
     // https://github.com/kulttuuri/SlackNotifications
@@ -656,7 +701,7 @@ $wgPiwigoGalleryLayout = 'fluid'; // one of the four: fluid (default), grid, thu
 
 // WikiSearch
 wfLoadExtension( 'WikiSearch' );
-$wgWikiSearchElasticSearchHosts	= [getenv('ELASTICSEARCH_SERVER')]; // ["localhost:9200"]	Sets the list of ElasticSearch hosts to use.
+$wgWikiSearchElasticSearchHosts	= [getenv('ELASTICSEARCH_SERVER', true)]; // ["localhost:9200"]	Sets the list of ElasticSearch hosts to use.
 $wgWikiSearchAPIRequiredRights = ["read", "wssearch-execute-api"];
 // $wgWikiSearchSearchFieldOverride = 'Search';
 

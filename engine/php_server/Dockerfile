@@ -63,7 +63,7 @@ RUN apt-get update  \
 RUN a2enmod rewrite headers deflate
 
 RUN test -z "$DEBUG_TOOLS" || ( \
-        pecl install xdebug \
+        pecl install xdebug-3.1.6 \
             && docker-php-ext-enable xdebug \
             && echo "xdebug.discover_client_host=on" >> /usr/local/etc/php/conf.d/xdebug.ini \
             && echo "xdebug.mode=debug" >> /usr/local/etc/php/conf.d/xdebug.ini \
@@ -96,20 +96,6 @@ FROM base AS prod
 # Setup msmtp with sendgrid
 COPY engine/php_server/msmtp/msmtprc /etc/msmtprc
 RUN chmod 600 /etc/msmtprc && chown www-data /etc/msmtprc
-
-# Add the cron jobs:
-COPY engine/php_server/cron/jobs-cron /etc/cron.d/jobs-cron
-RUN chmod 0644 /etc/cron.d/jobs-cron
-RUN crontab /etc/cron.d/jobs-cron
-
-# supervisord config file
-RUN mkdir -p /etc/supervisor/conf.d/
-COPY engine/php_server/supervisord/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-
-# Entrypoint & cmd script
-COPY engine/php_server/bin/start.sh /bin/start.sh
-
-CMD /bin/start.sh
 
 # ================================================
 

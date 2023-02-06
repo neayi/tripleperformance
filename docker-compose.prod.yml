@@ -35,7 +35,7 @@ services:
     labels:
       - 'traefik.enable=true'
       - 'traefik.port=80'
-      - 'traefik.frontend.rule=Host:wiki.tripleperformance.fr, tripleperformance.fr, pratiques.tripleperformance.fr, www.tripleperformance.fr, 3perf.fr'
+      - 'traefik.frontend.rule=Host:wiki.tripleperformance.fr, tripleperformance.fr, pratiques.tripleperformance.fr, www.tripleperformance.fr, 3perf.fr, de.tripleperformance.ag, en.tripleperformance.ag, es.tripleperformance.ag, fr.tripleperformance.ag, it.tripleperformance.ag, nl.tripleperformance.ag, pl.tripleperformance.ag'
       - 'traefik.frontend.redirect.regex=^https?://(pratiques.)?tripleperformance.fr/(.*)'
       - 'traefik.frontend.redirect.replacement=https://wiki.tripleperformance.fr/$${2}'
       - 'traefik.frontend.redirect.permanent=true'
@@ -43,6 +43,13 @@ services:
       default:
         aliases:
           - wiki.tripleperformance.fr
+          - de.tripleperformance.ag
+          - en.tripleperformance.ag
+          - es.tripleperformance.ag
+          - fr.tripleperformance.ag
+          - it.tripleperformance.ag
+          - nl.tripleperformance.ag
+          - pl.tripleperformance.ag
 
   web_preprod:
     image: ghcr.io/neayi/tripleperformance/wiki:$WIKI_VERSION_PREPROD
@@ -53,11 +60,22 @@ services:
     labels:
       - 'traefik.enable=true'
       - 'traefik.port=80'
-      - 'traefik.frontend.rule=Host:wiki.preprod.tripleperformance.fr'
+      - 'traefik.frontend.rule=Host:wiki.preprod.tripleperformance.fr, de.preprod.tripleperformance.ag, en.preprod.tripleperformance.ag, es.preprod.tripleperformance.ag, fr.preprod.tripleperformance.ag, it.preprod.tripleperformance.ag, nl.preprod.tripleperformance.ag, pl.preprod.tripleperformance.ag'
     networks:
       default:
         aliases:
           - wiki.preprod.tripleperformance.fr
+          - de.preprod.tripleperformance.ag
+          - en.preprod.tripleperformance.ag
+          - es.preprod.tripleperformance.ag
+          - fr.preprod.tripleperformance.ag
+          - it.preprod.tripleperformance.ag
+          - nl.preprod.tripleperformance.ag
+          - pl.preprod.tripleperformance.ag
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
 
   insights:
     image: ghcr.io/neayi/insights/insights:$INSIGHTS_VERSION_PROD

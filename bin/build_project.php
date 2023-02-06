@@ -23,10 +23,6 @@ try {
 			status_wiki_env();
 			break;
 
-		case '--initElasticSearch':
-			initElasticSearch();
-			break;
-
 		default:
 			echoUsageAndExit();
 	}
@@ -74,9 +70,6 @@ function create_wiki_env()
 	$tempImageDir = $wikiImagesDir . '/temp';
 	if (!is_dir($tempImageDir))
 		mkdir($tempImageDir);
-
-	createElasticSearchScript();
-	createBluebeesRedirect();
 
 	setOwner();
 
@@ -127,9 +120,6 @@ function update_wiki_env()
 	// Upgrade the wiki
 	upgradeWiki();
 
-	createElasticSearchScript();
-	createBluebeesRedirect();
-
 	setOwner();
 
 	$env = getenv('ENV');
@@ -174,50 +164,6 @@ function upgradeWiki()
 	runCommand($cmd);
 }
 
-/**
- * Create a small bash script to reset the ElasticSearch index
- */
-function createElasticSearchScript()
-{
-	$scriptPath =   root_web . '/html/maintenance/setupElasticSearch.sh';
-
-	$lines = array();
-	$lines[] = "export MW_INSTALL_PATH=" . root_web . "/html/\n";
-	$lines[] = "php " . root_web . "/html/extensions/CirrusSearch/maintenance/UpdateSearchIndexConfig.php\n";
-	$lines[] = "php " . root_web . "/html/extensions/CirrusSearch/maintenance/ForceSearchIndex.php --skipLinks --indexOnSkip\n";
-	$lines[] = "php " . root_web . "/html/extensions/CirrusSearch/maintenance/ForceSearchIndex.php --skipParse\n";
-	$lines[] = "\n";
-
-	file_put_contents($scriptPath, $lines);
-	chmod($scriptPath, 0755);  // notation octale : valeur du mode correcte
-}
-
-/**
- * Create a small redirect to BlueBees
- */
-function createBluebeesRedirect()
-{
-	$scriptPath =   root_web . '/html/crowdfunding-2022.php';
-
-	$lines = array();
-	$lines[] = "<?php\n";
-	$lines[] = "header('location: https://bluebees.fr/fr/project/1022');\n";
-
-	file_put_contents($scriptPath, $lines);
-}
-
-/**
- * Launch the elasticSearch setup scripts
- */
-function initElasticSearch()
-{
-	$maintenance_dir = getInstallDir() . '/maintenance';
-	changeDir($maintenance_dir);
-
-	$cmd = './setupElasticSearch.sh';
-	runCommand($cmd);
-}
-
 function getInstallDir()
 {
 	return root_web . '/html';
@@ -257,7 +203,7 @@ function getWikiComponents()
 	$components = array();
 
 	// Composer components
-	$components[] = array(	'composer' => 'mediawiki/chameleon-skin "~4.1"' );
+	$components[] = array(	'composer' => 'mediawiki/chameleon-skin "~4.2.1"' );
 	$components[] = array(	'composer' => 'mediawiki/semantic-media-wiki "~4.1.0"' );
 	$components[] = array(	'composer' => 'mediawiki/maps' );
 	$components[] = array(	'composer' => 'mediawiki/semantic-result-formats' );
@@ -425,10 +371,10 @@ function getWikiComponents()
 							'postinstall' => 'composer');
 
 	// TODO: Create a new repo and get rid of CommentStreams
-	$components[] = array(	'dest' => $wiki_extensions_dir . '/CommentStreams',
-							'git' => '--branch Discourse https://github.com/neayi/mediawiki-extensions-CommentStreams.git',
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/DiscourseIntegration',
+							'git' => '--branch main https://github.com/neayi/mw-DiscourseIntegration.git',
 							'postinstall' => 'submodules',
-							'branch' => 'Discourse');
+							'branch' => 'main');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/InputBox',
 							'git' => '--branch '.$neayi_wiki_version.' https://github.com/neayi/mediawiki-extensions-InputBox.git',
@@ -757,7 +703,7 @@ function changeDir($newWorkingDir)
 
 function echoUsageAndExit()
 {
-	echo "Usage: build_project.php [--update] [--create_env] [--status] [--initElasticSearch]\n";
+	echo "Usage: build_project.php [--update] [--create_env] [--status]\n";
 	exit(0);
 }
 
