@@ -573,7 +573,7 @@ function getCommandLine($targetEnv, $targetLanguage, $script, $volume = '', $bUs
 {
     $runOptions = "--rm $volume ";
     if ($bUseWwwData)
-        $runOptions .= ' --user="www-data:www-data" ';
+        $runOptions .= ' --user=www-data:www-data ';
 
     $runOptions .= " --env MW_INSTALL_PATH=/var/www/html --env WIKI_LANGUAGE=$targetLanguage ";
 

@@ -602,7 +602,7 @@ function updateComposer()
 	if ($env == 'dev')
 		$cmd = "composer update --no-progress --no-interaction";
 	else
-		$cmd = "composer update --no-progress --no-interaction --no-dev";
+		$cmd = "composer update --no-progress --no-interaction --no-dev --optimize-autoloader";
 
 	echo "\nUpdating components with composer in $wiki_install_dir\n";
 
@@ -625,7 +625,7 @@ function installComposer($aComponent)
 	if ($env == 'dev')
 		$cmd = "composer install --no-progress --no-interaction";
 	else
-		$cmd = "composer install --no-progress --no-interaction --no-dev";
+		$cmd = "composer install --no-progress --no-interaction --no-dev --optimize-autoloader";
 
 	changeDir($dir);
 	runCommand($cmd);

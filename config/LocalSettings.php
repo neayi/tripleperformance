@@ -144,7 +144,6 @@ $wgSecretKey = getenv($wiki_language_prefix . 'SECRET_KEY', true);
 // @see https://www.mediawiki.org/wiki/Manual:$wgUpgradeKey
 $wgUpgradeKey = getenv($wiki_language_prefix . 'UPGRADE_KEY', true);
 
-
 // To configure ElasticSearch passwords, see:
 // @see https://www.elastic.co/fr/blog/getting-started-with-elasticsearch-security
 // @see https://discuss.elastic.co/t/setting-xpack-security-enabled-true/182791/7
@@ -177,7 +176,45 @@ $wgJobRunRate = 0;
 // Allow PDF
 $wgFileExtensions[] = 'pdf';
 
-$wgUploadDirectory = "{$IP}/images";
+if ($wiki_language == 'fr')
+    $wgUploadDirectory = "{$IP}/images";
+else
+{
+    $wgUploadDirectory = "{$IP}/images_$wiki_language";
+
+    // Allow getting images from other languages wiki:
+    $wgForeignFileRepos[] = [
+        'class' => ForeignDBRepo::class,
+        'name' => '3perf_fr',
+        'url' => 'https://wiki.tripleperformance.fr/images/',
+        'scriptDirUrl' => 'https://wiki.tripleperformance.fr/',
+        // 'apibase' => 'https://wiki.tripleperformance.fr/api.php', // For ForeignAPIRepo only
+        'hashLevels' => 2,
+        'fetchDescription' => true,
+        'descriptionCacheExpiry' => 43200,
+        'apiThumbCacheExpiry' => 86400,
+
+
+        'directory' => "{$IP}/images",     //   A path to MediaWiki's media directory local to the server, such as /var/www/wiki/images.
+        'dbType' => $wgDBtype, //        equivalent to the corresponding member of $wgDBservers
+        'dbServer' => $wgDBserver,
+        'dbUser' => $wgDBuser,
+        'dbPassword' => $wgDBpassword,
+        'dbName' => getenv('FR_MYSQL_DB', true),
+        'dbFlags' => ( $wgDebugDumpSql ? DBO_DEBUG : 0 ) | DBO_DEFAULT,
+        'tablePrefix' => $wgDBprefix,
+        'hasSharedCache' => true, //         True if the wiki's shared cache is accessible via the local $wgMemc
+
+
+        'thumbScriptUrl' => $wgSharedThumbnailScriptPath,
+        'transformVia404' => !$wgGenerateThumbnailOnParse,
+
+        'hasSharedCache' => $wgCacheSharedUploads,
+        'descBaseUrl' => $wgRepositoryBaseUrl,
+        'fetchDescription' => $wgFetchCommonsDescriptions
+    ];
+}
+
 $wgTmpDirectory = "{$wgUploadDirectory}/temp";
 $wgImageMagickTempDir = "{$wgUploadDirectory}/temp";
 $wgAttemptFailureEpoch = 30;
@@ -727,4 +764,5 @@ if ($debug) {
     $wgDebugToolbar = true;
     $wgResourceLoaderDebug = true;
     $wgWikiSearchEnableDebugMode = true;
+    $wgJobRunRate = 1;
 }
