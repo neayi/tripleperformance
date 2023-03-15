@@ -175,12 +175,11 @@ $wgJobRunRate = 0;
 
 // Allow PDF
 $wgFileExtensions[] = 'pdf';
+$wgUploadDirectory = "{$IP}/images/$wiki_language";
 
-if ($wiki_language == 'fr')
-    $wgUploadDirectory = "{$IP}/images";
-else
+if ($wiki_language != 'fr')
 {
-    $wgUploadDirectory = "{$IP}/images_$wiki_language";
+
 
     // Allow getting images from other languages wiki:
     $wgForeignFileRepos[] = [
