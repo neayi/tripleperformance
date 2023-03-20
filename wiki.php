@@ -43,6 +43,11 @@ try {
     }
 
     $scriptPath = getScriptPath($script);
+    $targetLanguages = array();
+    if ($targetLanguage == 'all-languages')
+        $targetLanguages = getAllLanguages();
+    else
+        $targetLanguages[] = $targetLanguage;
 
     $commandLines = array();
 
@@ -84,43 +89,37 @@ try {
 
             $volume = '-v '.dirname($arg).':/out';
             $fullScript = $scriptPath . ' /out/' . basename($arg);
-
-            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, $fullScript, $volume, false);
+            foreach ($targetLanguages as $targetLanguage)
+                $commandLines[] = getCommandLine($targetEnv, $targetLanguage, $fullScript, $volume, false);
         }
 
         // You might want to run rebuildrecentchanges.php to regenerate RecentChanges,
         // and initSiteStats.php to update page and revision counts
-        $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildrecentchanges.php'), '', false);
-        $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('initSiteStats.php'), '', false);
+        foreach ($targetLanguages as $targetLanguage)
+        {
+            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildrecentchanges.php'), '', false);
+            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('initSiteStats.php'), '', false);
+        }
     }
     else if ($script == 'initElasticSearch.php')
     {
-        $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('UpdateSearchIndexConfig.php') . ' --startOver', '', false);
-        $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('ForceSearchIndex.php') . ' --skipLinks --indexOnSkip', '', false);
-        $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('ForceSearchIndex.php') . ' --skipParse', '', false);
-        $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('runJobs.php'), '', false);
-        $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildElasticIndex.php'), '', false);
-        $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('runJobs.php'), '', false);
+        foreach ($targetLanguages as $targetLanguage)
+        {
+            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('UpdateSearchIndexConfig.php') . ' --startOver', '', false);
+            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('ForceSearchIndex.php') . ' --skipLinks --indexOnSkip', '', false);
+            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('ForceSearchIndex.php') . ' --skipParse', '', false);
+            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('runJobs.php'), '', false);
+            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildElasticIndex.php'), '', false);
+            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('runJobs.php'), '', false);
+        }
     }
     else if ($script == 'frequent_jobs')
     {
-        $targetLanguages = array();
-        if ($targetLanguage == 'all-languages')
-            $targetLanguages = getAllLanguages();
-        else
-            $targetLanguages[] = $targetLanguage;
-
         foreach ($targetLanguages as $targetLanguage)
             $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('runJobs.php') . ' --maxjobs=200 --maxtime=300 --memory-limit=128M', '', false);
     }
     else if ($script == 'daily_jobs')
     {
-        $targetLanguages = array();
-        if ($targetLanguage == 'all-languages')
-            $targetLanguages = getAllLanguages();
-        else
-            $targetLanguages[] = $targetLanguage;
-
         foreach ($targetLanguages as $targetLanguage)
         {
             $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildData.php') . ' --quiet --shallow-update', '', false);
@@ -131,12 +130,6 @@ try {
     }
     else if ($script == 'weekly_jobs')
     {
-        $targetLanguages = array();
-        if ($targetLanguage == 'all-languages')
-            $targetLanguages = getAllLanguages();
-        else
-            $targetLanguages[] = $targetLanguage;
-
         foreach ($targetLanguages as $targetLanguage)
         {
             $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildData.php') . ' --quiet -d 100', '', false);
@@ -145,12 +138,6 @@ try {
     }
     else if ($script == 'monthly_jobs')
     {
-        $targetLanguages = array();
-        if ($targetLanguage == 'all-languages')
-            $targetLanguages = getAllLanguages();
-        else
-            $targetLanguages[] = $targetLanguage;
-
         foreach ($targetLanguages as $targetLanguage)
         {
             $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('removeDuplicateEntities.php') . ' --quiet', '', false);
@@ -167,7 +154,8 @@ try {
 
         $fullScript = $scriptPath . ' /out/';
 
-        $commandLines[] = getCommandLine($targetEnv, $targetLanguage, $fullScript, $volume, false);
+        foreach ($targetLanguages as $targetLanguage)
+            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, $fullScript, $volume, false);
     }
     else
     {
@@ -176,10 +164,13 @@ try {
             $scriptPath .= ' ' . $arg;
         }
 
-        if ($script == 'update.php')
-            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, $scriptPath, '', false);
-        else
-            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, $scriptPath);
+        foreach ($targetLanguages as $targetLanguage)
+        {
+            if ($script == 'update.php')
+                $commandLines[] = getCommandLine($targetEnv, $targetLanguage, $scriptPath . ' --quick', '', false);
+            else
+                $commandLines[] = getCommandLine($targetEnv, $targetLanguage, $scriptPath);
+        }
     }
 
     foreach ($commandLines as $commandLine)
