@@ -179,8 +179,6 @@ $wgUploadDirectory = "{$IP}/images/$wiki_language";
 
 if ($wiki_language != 'fr')
 {
-
-
     // Allow getting images from other languages wiki:
     $wgForeignFileRepos[] = [
         'class' => ForeignDBRepo::class,
@@ -674,6 +672,23 @@ $wgUploadWizardConfig = array(
 
 // https://www.mediawiki.org/wiki/Extension:VEForAll
 wfLoadExtension( 'VEForAll' );
+
+// Translation
+wfLoadExtension( 'ContentTranslation' );
+
+$wgContentTranslationVueDashboard=true;
+$wgContentTranslationSiteTemplates = [
+	"view" => "//$1.dev.tripleperformance.ag/wiki/$2",
+	"action"=> "//$1.dev.tripleperformance.ag/index.php?title=$2",
+	"api"=> "https://$1.dev.tripleperformance.ag/api.php",
+	// Use the CXSERVER_PORT here
+	"cx"=> "https://cxserver.dev.tripleperformance.ag/v1",
+	"restbase"=> "https://$1.dev.tripleperformance.ag/rest.php/v1"
+];
+$ContentTranslationAsBetaFeature=false;
+$RecommendToolAPIURL=null;
+
+wfLoadExtension( 'UniversalLanguageSelector' );
 
 // Disambiguator
 wfLoadExtension( 'Disambiguator' );

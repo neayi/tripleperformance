@@ -163,6 +163,24 @@ services:
       - 'traefik.port=8000'
       - 'traefik.frontend.rule=Host:parsoid.dev.tripleperformance.fr'
 
+  cxserver:
+    build:
+        context: cxserver
+    volumes:
+      # map local to remote folder, exclude node_modules
+      - ./cxserver:/opt/cxserver
+      - /opt/cxserver/node_modules
+    command: npm start
+    ports:
+      - "${CXSERVER_PORT:-8090}:8080"
+    links:
+      - web:wiki.dev.tripleperformance.fr
+      - web:fr.dev.tripleperformance.ag
+      - web:en.dev.tripleperformance.ag
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.frontend.rule=Host:cxserver.dev.tripleperformance.ag'
+
   wordpress:
     image: wordpress
     environment:
