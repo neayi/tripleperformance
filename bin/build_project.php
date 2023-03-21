@@ -351,14 +351,15 @@ function getWikiComponents()
 							'postinstall' => 'composer');
 
 	// Translation
-	$components[] = array(	'dest' => $wiki_extensions_dir . '/UniversalLanguageSelector',
-							'git' => '--branch '.$wiki_version.' https://gerrit.wikimedia.org/r/mediawiki/extensions/UniversalLanguageSelector.git',
-							'branch' => $wiki_version,
-							'postinstall' => 'composer');
-	$components[] = array(	'dest' => $wiki_extensions_dir . '/Translate',
-							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-Translate.git',
-							'branch' => $wiki_version,
-							'postinstall' => 'composer');
+	// $components[] = array(	'dest' => $wiki_extensions_dir . '/UniversalLanguageSelector',
+	// 						'git' => '--branch '.$wiki_version.' https://gerrit.wikimedia.org/r/mediawiki/extensions/UniversalLanguageSelector.git',
+	// 						'branch' => $wiki_version,
+	// 						'postinstall' => 'composer');
+	// $components[] = array(	'dest' => $wiki_extensions_dir . '/Translate',
+	// 						'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-Translate.git',
+	// 						'branch' => $wiki_version,
+	// 						'postinstall' => 'composer');
+
 	// Neayi extensions and forks
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/HitCounters',
 							'git' => '--branch Neayi1_37 https://github.com/neayi/mediawiki-extensions-HitCounters.git',

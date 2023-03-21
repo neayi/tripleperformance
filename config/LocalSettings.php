@@ -681,17 +681,17 @@ wfLoadExtension( 'Disambiguator' );
 wfLoadExtension( 'AdminLinks' );
 
 // Translation
-wfLoadExtension( 'UniversalLanguageSelector' );
+// wfLoadExtension( 'UniversalLanguageSelector' );
 
-wfLoadExtension( 'Translate' );
-$wgGroupPermissions['user']['translate'] = true;
-$wgGroupPermissions['user']['translate-messagereview'] = true;
-$wgGroupPermissions['sysop']['pagetranslation'] = true;
-$wgTranslateTranslationServices['TTMServer'] = array(
-    'type' => 'ttmserver',
-    'class' => 'ElasticSearchTTMServer',
-    'cutoff' => 0.75
-);
+// wfLoadExtension( 'Translate' );
+// $wgGroupPermissions['user']['translate'] = true;
+// $wgGroupPermissions['user']['translate-messagereview'] = true;
+// $wgGroupPermissions['sysop']['pagetranslation'] = true;
+// $wgTranslateTranslationServices['TTMServer'] = array(
+//     'type' => 'ttmserver',
+//     'class' => 'ElasticSearchTTMServer',
+//     'cutoff' => 0.75
+// );
 
 // Hit counter
 wfLoadExtension( 'HitCounters' );
