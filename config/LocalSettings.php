@@ -185,7 +185,7 @@ if ($wiki_language != 'fr')
     $wgForeignFileRepos[] = [
         'class' => ForeignDBRepo::class,
         'name' => '3perf_fr',
-        'url' => 'https://wiki.tripleperformance.fr/images/',
+        'url' => 'https://wiki.tripleperformance.fr/images',
         'scriptDirUrl' => 'https://wiki.tripleperformance.fr/',
         // 'apibase' => 'https://wiki.tripleperformance.fr/api.php', // For ForeignAPIRepo only
         'hashLevels' => 2,
@@ -193,8 +193,7 @@ if ($wiki_language != 'fr')
         'descriptionCacheExpiry' => 43200,
         'apiThumbCacheExpiry' => 86400,
 
-
-        'directory' => "{$IP}/images",     //   A path to MediaWiki's media directory local to the server, such as /var/www/wiki/images.
+        'directory' => "{$IP}/images/fr",     //   A path to MediaWiki's media directory local to the server, such as /var/www/wiki/images.
         'dbType' => $wgDBtype, //        equivalent to the corresponding member of $wgDBservers
         'dbServer' => $wgDBserver,
         'dbUser' => $wgDBuser,
@@ -203,7 +202,6 @@ if ($wiki_language != 'fr')
         'dbFlags' => ( $wgDebugDumpSql ? DBO_DEBUG : 0 ) | DBO_DEFAULT,
         'tablePrefix' => $wgDBprefix,
         'hasSharedCache' => true, //         True if the wiki's shared cache is accessible via the local $wgMemc
-
 
         'thumbScriptUrl' => $wgSharedThumbnailScriptPath,
         'transformVia404' => !$wgGenerateThumbnailOnParse,
