@@ -179,8 +179,6 @@ $wgUploadDirectory = "{$IP}/images/$wiki_language";
 
 if ($wiki_language != 'fr')
 {
-
-
     // Allow getting images from other languages wiki:
     $wgForeignFileRepos[] = [
         'class' => ForeignDBRepo::class,
@@ -717,8 +715,8 @@ if (!empty($slackWebHook))
     wfLoadExtension( 'SlackNotifications' );
     $wgSlackIncomingWebhookUrl = $slackWebHook;
     $wgSlackFromName = "Triple Performance";
-    $wgSlackNotificationWikiUrl = "https://wiki.tripleperformance.fr/";
-    $wgSlackNotificationWikiUrlEnding = "index.php?title=";
+    $wgSlackNotificationWikiUrl = $wgServer . "/";
+    $wgSlackNotificationWikiUrlEnding = "wiki/";
     $wgSlackIncludePageUrls = true;
     $wgSlackIncludeUserUrls = false;
     $wgSlackIgnoreMinorEdits = true;
