@@ -137,12 +137,12 @@ function getDomainName($env)
 $wgDBprefix = '';
 
 // @see https://www.mediawiki.org/wiki/Manual:$wgSecretKey
-$wgSecretKey = getenv($wiki_language_prefix . 'SECRET_KEY', true);
+$wgSecretKey = getenv($wiki_language_prefix . '_SECRET_KEY', true);
 
 # Site upgrade key. Must be set to a string (default provided) to turn on the
 # web installer while LocalSettings.php is in place
 // @see https://www.mediawiki.org/wiki/Manual:$wgUpgradeKey
-$wgUpgradeKey = getenv($wiki_language_prefix . 'UPGRADE_KEY', true);
+$wgUpgradeKey = getenv($wiki_language_prefix . '_UPGRADE_KEY', true);
 
 // To configure ElasticSearch passwords, see:
 // @see https://www.elastic.co/fr/blog/getting-started-with-elasticsearch-security
@@ -556,10 +556,10 @@ wfLoadExtension( 'Cite' );
 // Neayi Extensions
 wfLoadExtension( 'DiscourseIntegration' );
 $wgInsightsRootAPIURL = getenv('INSIGHT_API_URL', true) . '/';
-$wgDiscourseAPIKey = getenv($wiki_language_prefix . 'DISCOURSE_API_KEY', true);
-$wgDiscourseHost = getenv($wiki_language_prefix . 'DISCOURSE_API_HOST', true);
-$wgDiscourseURL = getenv($wiki_language_prefix . 'DISCOURSE_ROOT_URL', true);
-$wgDiscourseDefaultCategoryId = getenv($wiki_language_prefix . 'DISCOURSE_DEFAULT_CATEGORY', true);
+$wgDiscourseAPIKey = getenv($wiki_language_prefix . '_DISCOURSE_API_KEY', true);
+$wgDiscourseHost = getenv($wiki_language_prefix . '_DISCOURSE_API_HOST', true);
+$wgDiscourseURL = getenv($wiki_language_prefix . '_DISCOURSE_ROOT_URL', true);
+$wgDiscourseDefaultCategoryId = getenv($wiki_language_prefix . '_DISCOURSE_DEFAULT_CATEGORY', true);
 
 wfLoadExtension( 'NeayiInteractions' );
 wfLoadExtension( 'NeayiNavbar' );
