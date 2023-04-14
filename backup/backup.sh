@@ -13,6 +13,9 @@ docker exec tripleperformance_prod-db-1 rm /etc/mysql/conf.d/mysqlpassword.cnf
 rsync -va $DIR/DBs/*-$(date +%Y%m%d).sql.gz neayi.com:~/backup
 rsync -va $DIR/../.data/images neayi.com:~/backup
 rsync -va $DIR/../.data/insights_prod_storage neayi.com:~/backup
-rsync -va /var/www/discourse/shared/standalone/backups/default neayi.com:~/discourse_backup
+rsync -va /var/www/discourse/shared/standalone/backups neayi.com:~/discourse_backup/
+rsync -va /var/www/discourse/containers neayi.com:~/discourse_backup/
+scp $DIR/.env $DIR/.env.preprod neayi.com:~/backup/
+scp $DIR/insights/.env neayi.com:~/backup/.env.insights
 
 find $DIR/DBs -name "*.gz" -type f -mtime +10 -exec rm -f {} \;
