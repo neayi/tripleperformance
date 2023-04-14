@@ -11,19 +11,43 @@ if (empty($argv))
 
 try {
 
-    $targetEnv = array_shift($argv);
-    if (isTargetEnv($targetEnv))
+    $targetEnv = '';
+    $targetLanguage = 'fr';
+    $script = '';
+
+    $argsCopy = $argv;
+
+    foreach ($argsCopy as $argument)
     {
-        $script = array_shift($argv);
-        $targetEnv = getTargetEnv($targetEnv);
-    }
-    else
-    {
-        $script = $targetEnv;
-        $targetEnv = getTargetEnv();
+        if (isTargetEnv($argument))
+        {
+            $targetEnv = getTargetEnv($argument);
+            array_shift($argv);
+            continue;
+        }
+
+        if (isLanguage($argument))
+        {
+            $targetLanguage = getLanguage($argument);
+            array_shift($argv);
+            continue;
+        }
+
+        if (empty($targetEnv))
+            $targetEnv = getTargetEnv();
+
+        $script = $argument;
+        array_shift($argv);
+
+        break;
     }
 
     $scriptPath = getScriptPath($script);
+    $targetLanguages = array();
+    if ($targetLanguage == 'all-languages')
+        $targetLanguages = getAllLanguages();
+    else
+        $targetLanguages[] = $targetLanguage;
 
     $commandLines = array();
 
@@ -36,10 +60,10 @@ try {
 
         if(empty($sqlFile)) {
             // No file specified, open a mysql shell
-            $commandLines[] = getMysqlCommandLine($targetEnv, $scriptPath);
+            $commandLines[] = getMysqlCommandLine($targetEnv, $targetLanguage, $scriptPath);
         } elseif (strpos($sqlFile, '.sql') !== false) {
             // A file is specified, import it
-            $commandLines[] = getMysqlCommandLine($targetEnv, $scriptPath, $sqlFile);
+            $commandLines[] = getMysqlCommandLine($targetEnv, $targetLanguage, $scriptPath, $sqlFile);
         } else {
             throw new Exception("please import a SQL file. Got $sqlFile", 1);
         }
@@ -53,7 +77,7 @@ try {
         if (strpos($sqlFile, '.sql') === false)
             throw new Exception("please export a SQL file. Got $sqlFile", 1);
 
-        $commandLines[] = getMysqlCommandLine($targetEnv, $scriptPath, $sqlFile);
+        $commandLines[] = getMysqlCommandLine($targetEnv, $targetLanguage, $scriptPath, $sqlFile);
     }
     else if ($script == 'importDump.php')
     {
@@ -65,14 +89,59 @@ try {
 
             $volume = '-v '.dirname($arg).':/out';
             $fullScript = $scriptPath . ' /out/' . basename($arg);
-
-            $commandLines[] = getCommandLine($targetEnv, $fullScript, $volume, false);
+            foreach ($targetLanguages as $targetLanguage)
+                $commandLines[] = getCommandLine($targetEnv, $targetLanguage, $fullScript, $volume, false);
         }
 
         // You might want to run rebuildrecentchanges.php to regenerate RecentChanges,
         // and initSiteStats.php to update page and revision counts
-        $commandLines[] = getCommandLine($targetEnv, getScriptPath('rebuildrecentchanges.php'), '', false);
-        $commandLines[] = getCommandLine($targetEnv, getScriptPath('initSiteStats.php'), '', false);
+        foreach ($targetLanguages as $targetLanguage)
+        {
+            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildrecentchanges.php'), '', false);
+            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('initSiteStats.php'), '', false);
+        }
+    }
+    else if ($script == 'initElasticSearch.php')
+    {
+        foreach ($targetLanguages as $targetLanguage)
+        {
+            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('UpdateSearchIndexConfig.php') . ' --startOver', '', false);
+            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('ForceSearchIndex.php') . ' --skipLinks --indexOnSkip', '', false);
+            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('ForceSearchIndex.php') . ' --skipParse', '', false);
+            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('runJobs.php'), '', false);
+            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildElasticIndex.php'), '', false);
+            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('runJobs.php'), '', false);
+        }
+    }
+    else if ($script == 'frequent_jobs')
+    {
+        foreach ($targetLanguages as $targetLanguage)
+            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('runJobs.php') . ' --maxjobs=200 --maxtime=300 --memory-limit=128M', '', false);
+    }
+    else if ($script == 'daily_jobs')
+    {
+        foreach ($targetLanguages as $targetLanguage)
+        {
+            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildData.php') . ' --quiet --shallow-update', '', false);
+            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('disposeOutdatedEntities.php') . ' --quiet', '', false);
+            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildPropertyStatistics.php') . '--quiet', '', false);
+            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildConceptCache.php') . ' --quiet --update --create', '', false);
+        }
+    }
+    else if ($script == 'weekly_jobs')
+    {
+        foreach ($targetLanguages as $targetLanguage)
+        {
+            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildData.php') . ' --quiet -d 100', '', false);
+            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('setupStore.php') . ' --quiet --skip-import', '', false);
+        }
+    }
+    else if ($script == 'monthly_jobs')
+    {
+        foreach ($targetLanguages as $targetLanguage)
+        {
+            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('removeDuplicateEntities.php') . ' --quiet', '', false);
+        }
     }
     else if ($script == 'importImages.php')
     {
@@ -85,7 +154,8 @@ try {
 
         $fullScript = $scriptPath . ' /out/';
 
-        $commandLines[] = getCommandLine($targetEnv, $fullScript, $volume, false);
+        foreach ($targetLanguages as $targetLanguage)
+            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, $fullScript, $volume, false);
     }
     else
     {
@@ -94,10 +164,13 @@ try {
             $scriptPath .= ' ' . $arg;
         }
 
-        if ($script == 'update.php')
-            $commandLines[] = getCommandLine($targetEnv, $scriptPath, '', false);
-        else
-            $commandLines[] = getCommandLine($targetEnv, $scriptPath);
+        foreach ($targetLanguages as $targetLanguage)
+        {
+            if ($script == 'update.php')
+                $commandLines[] = getCommandLine($targetEnv, $targetLanguage, $scriptPath . ' --quick', '', false);
+            else
+                $commandLines[] = getCommandLine($targetEnv, $targetLanguage, $scriptPath);
+        }
     }
 
     foreach ($commandLines as $commandLine)
@@ -122,7 +195,7 @@ exit(0); // Success.
 
 function echoUsageAndExit()
 {
-	echo "Usage: wiki.php [--dev] [--prod] [--preprod] maintenanceScript\n";
+	echo "Usage: wiki.php [--all-languages] [--fr] [--dev] [--prod] [--preprod] maintenanceScript\n";
 	exit(0);
 }
 
@@ -164,6 +237,46 @@ function getTargetEnv($env = '')
         default:
             throw new Exception(".env not configured. Aborting", 1);
     }
+}
+
+function isLanguage($env)
+{
+    switch ($env) {
+        case '--de':
+        case '--en':
+        case '--es':
+        case '--fr':
+        case '--it':
+        case '--nl':
+        case '--pl':
+        case '--all-languages':
+            return true;
+    }
+
+    return false;
+}
+
+function getLanguage($env)
+{
+    switch ($env) {
+        case '--de':
+        case '--en':
+        case '--es':
+        case '--fr':
+        case '--it':
+        case '--nl':
+        case '--pl':
+        case '--all-languages':
+            return trim($env, '-');
+    }
+
+    throw new Exception("Unknown language", 1);
+}
+
+function getAllLanguages()
+{
+    return ['fr',
+            'en'];
 }
 
 function getScriptPath($script)
@@ -431,6 +544,14 @@ function getScriptPath($script)
         case 'build_project.php':
             return 'php /var/www/bin/build_project.php';
 
+        // Pseudo scripts
+        case 'initElasticSearch.php':
+        case 'frequent_jobs':
+        case 'daily_jobs':
+        case 'weekly_jobs':
+        case 'monthly_jobs':
+            return $script;
+
         default:
             throw new Exception("Unrecognized maintenance script: $script", 1);
     }
@@ -439,25 +560,27 @@ function getScriptPath($script)
 /**
  * $volume -v ~/youtube:/out (in that case make sure the files you import are in /out)
  */
-function getCommandLine($targetEnv, $script, $volume = '', $bUseWwwData = true)
+function getCommandLine($targetEnv, $targetLanguage, $script, $volume = '', $bUseWwwData = true)
 {
-    $user = '';
+    $runOptions = "--rm $volume ";
     if ($bUseWwwData)
-        $user = '--user="www-data:www-data"';
+        $runOptions .= ' --user=www-data:www-data ';
+
+    $runOptions .= " --env MW_INSTALL_PATH=/var/www/html --env WIKI_LANGUAGE=$targetLanguage ";
 
     switch ($targetEnv) {
         case 'dev':
-            return 'docker compose run '.$user.' --rm '.$volume.' web sh -c "'.$script.'"';
+            return 'docker compose -f docker-compose.yml -f docker-compose.workers.yml run '. $runOptions.' web sh -c "'.$script.'"';
 
         case 'preprod':
-            return 'docker compose -f docker-compose.prod.yml run '.$user.' --rm '.$volume.' web_preprod sh -c "'.$script.'"';
+            return 'docker compose -f docker-compose.prod.yml -f docker-compose.workers.yml run '.$runOptions.' web_preprod sh -c "'.$script.'"';
 
         case 'prod':
-            return 'docker compose -f docker-compose.prod.yml run '.$user.' --rm '.$volume.' web sh -c "'.$script.'"';
+            return 'docker compose -f docker-compose.prod.yml -f docker-compose.workers.yml  run '.$runOptions.' web sh -c "'.$script.'"';
     }
 }
 
-function getMysqlCommandLine($targetEnv, $script, $sqlBatchFile = '')
+function getMysqlCommandLine($targetEnv, $targetLanguage, $script, $sqlBatchFile = '')
 {
     $extraParams = '--silent';
 
@@ -470,7 +593,21 @@ function getMysqlCommandLine($targetEnv, $script, $sqlBatchFile = '')
         $sqlBatchFile = " > $sqlBatchFile";
 
     if (strpos($sqlBatchFile, "wiki"))
-        $dbname = 'wiki';
+    {
+        switch ($targetLanguage)
+        {
+            case 'de':
+            case 'en':
+            case 'es':
+            case 'it':
+            case 'nl':
+            case 'pl':
+                $dbname = "wiki_$targetLanguage";
+
+            case 'fr':
+                $dbname = 'wiki';
+        }
+    }
     else if (strpos($sqlBatchFile, "insights"))
         $dbname = 'insights';
     else

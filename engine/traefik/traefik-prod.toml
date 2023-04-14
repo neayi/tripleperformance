@@ -9,17 +9,17 @@ dashboard = true
 debug = true
 
 [entryPoints]
-  [entryPoints.dashboard]
-  address = ":9000"
-    [entryPoints.dashboard.auth.basic]
-    users = ["neayi:$apr1$uLdBpQUA$cI8PON.uMbsbUSk27A57b1"]
-  [entryPoints.http]
-  address = ":80"
-    [entryPoints.http.redirect]
-    entryPoint = "https"
-  [entryPoints.https]
-  address = ":443"
-    [entryPoints.https.tls]
+[entryPoints.dashboard]
+address = ":9000"
+[entryPoints.dashboard.auth.basic]
+users = ["neayi:$apr1$uLdBpQUA$cI8PON.uMbsbUSk27A57b1"]
+[entryPoints.http]
+address = ":80"
+[entryPoints.http.redirect]
+entryPoint = "https"
+[entryPoints.https]
+address = ":443"
+[entryPoints.https.tls]
 
 [retry]
 
@@ -39,4 +39,41 @@ onHostRule = true
 entryPoint = "http"
 [[acme.domains]]
 main = "tripleperformance.fr"
-sans = ["tripleperformance.fr", "www.tripleperformance.fr", "wiki.tripleperformance.fr", "phpmyadmin.tripleperformance.fr", "elasticsearch.tripleperformance.fr", "insights.tripleperformance.fr", "elasticvue.tripleperformance.fr", "traefik.tripleperformance.fr", "wiki.preprod.tripleperformance.fr", "parsoid.tripleperformance.fr", "insights.preprod.tripleperformance.fr", "forum.tripleperformance.fr", "forum-adminer.tripleperformance.fr", "3perf.fr", "photos.tripleperformance.fr"]
+sans = [
+  "tripleperformance.fr",
+  "www.tripleperformance.fr",
+  "wiki.tripleperformance.fr",
+  "phpmyadmin.tripleperformance.fr",
+  "elasticsearch.tripleperformance.fr",
+  "insights.tripleperformance.fr",
+  "elasticvue.tripleperformance.fr",
+  "traefik.tripleperformance.fr",
+  "wiki.preprod.tripleperformance.fr",
+  "parsoid.tripleperformance.fr",
+  "insights.preprod.tripleperformance.fr",
+  "forum.tripleperformance.fr",
+  "forum-adminer.tripleperformance.fr",
+  "3perf.fr",
+  "photos.tripleperformance.fr",
+  "de.tripleperformance.ag",
+  "en.tripleperformance.ag",
+  "es.tripleperformance.ag",
+  "fr.tripleperformance.ag",
+  "it.tripleperformance.ag",
+  "nl.tripleperformance.ag",
+  "pl.tripleperformance.ag",
+  "de.preprod.tripleperformance.ag",
+  "en.preprod.tripleperformance.ag",
+  "es.preprod.tripleperformance.ag",
+  "fr.preprod.tripleperformance.ag",
+  "it.preprod.tripleperformance.ag",
+  "nl.preprod.tripleperformance.ag",
+  "pl.preprod.tripleperformance.ag",
+  "de.forum.tripleperformance.ag",
+  "en.forum.tripleperformance.ag",
+  "es.forum.tripleperformance.ag",
+  "fr.forum.tripleperformance.ag",
+  "it.forum.tripleperformance.ag",
+  "nl.forum.tripleperformance.ag",
+  "pl.forum.tripleperformance.ag",
+]
