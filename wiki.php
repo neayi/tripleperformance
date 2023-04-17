@@ -132,7 +132,19 @@ try {
     {
         foreach ($targetLanguages as $targetLanguage)
         {
-            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildData.php') . ' --quiet -d 100', '', false);
+            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildData.php') . ' -p --quiet -d 50', '', false);
+
+            $size = 5000;
+            $startId = 0;
+            while ($startId < 101000)
+            {
+                $endId = $startId + $size;
+//                $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildData.php') . "  -s $startId -e $endId --quiet -d 50", '', false);
+                $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildData.php') . "  --startidfile=/var/www/html/images/'.$targetLanguage.'/rebuildDataIndex.txt -n $size --quiet -d 50", '', false);
+                $startId = $endId + 1;
+            }
+
+
             $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('setupStore.php') . ' --quiet --skip-import', '', false);
         }
     }

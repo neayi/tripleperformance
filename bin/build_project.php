@@ -713,7 +713,7 @@ function changeDir($newWorkingDir)
 
 function echoUsageAndExit()
 {
-	echo "Usage: build_project.php [--update] [--create_env] [--status]\n";
+	echo "Usage: build_project.php [--update] [--create-env] [--status]\n";
 	exit(0);
 }
 

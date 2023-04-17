@@ -176,6 +176,7 @@ $wgJobRunRate = 0;
 // Allow PDF
 $wgFileExtensions[] = 'pdf';
 $wgUploadDirectory = "{$IP}/images/$wiki_language";
+$wgUploadPath = "{$wgScriptPath}/images/$wiki_language";
 
 if ($wiki_language != 'fr')
 {
@@ -715,7 +716,7 @@ if (!empty($slackWebHook))
     wfLoadExtension( 'SlackNotifications' );
     $wgSlackIncomingWebhookUrl = $slackWebHook;
     $wgSlackFromName = "Triple Performance";
-    $wgSlackNotificationWikiUrl = $wgServer . "/";
+    $wgSlackNotificationWikiUrl = 'https:' . $wgServer . "/";
     $wgSlackNotificationWikiUrlEnding = "index.php?title=";
     $wgSlackIncludePageUrls = true;
     $wgSlackIncludeUserUrls = false;
