@@ -241,8 +241,9 @@ function getWikiComponents()
 							'postinstall' => 'composer',
 							'branch' => $wiki_version);
 
+	// Note : v3.2.5 is the last that is compatible with MW1_37 - switch to master or to a later branch when upgrading MW
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/EmbedVideo',
-							'git' => 'https://gitlab.com/hydrawiki/extensions/EmbedVideo.git');
+							'git' => '--branch v3.2.5 https://github.com/StarCitizenWiki/mediawiki-extensions-EmbedVideo.git');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/RelatedArticles',
 							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-RelatedArticles.git',

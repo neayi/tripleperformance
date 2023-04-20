@@ -116,7 +116,7 @@ try {
     else if ($script == 'frequent_jobs')
     {
         foreach ($targetLanguages as $targetLanguage)
-            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('runJobs.php') . ' --maxjobs=200 --maxtime=300 --memory-limit=128M', '', false);
+            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('runJobs.php') . ' --maxjobs=1000 --maxtime=300 --memory-limit=128M', '', false);
     }
     else if ($script == 'daily_jobs')
     {

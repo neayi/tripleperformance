@@ -507,6 +507,8 @@ $wgCirrusSearchCompletionSuggesterUseDefaultSort = true;
 
 // More parser functions
 wfLoadExtension( 'EmbedVideo' );
+$wgEmbedVideoDefaultWidth = 640;
+$wgEmbedVideoRequireConsent = false;
 
 // Related Articles (shows related articles at the bottom of the page)
 wfLoadExtension( 'RelatedArticles' );
