@@ -116,23 +116,25 @@ try {
     else if ($script == 'frequent_jobs')
     {
         foreach ($targetLanguages as $targetLanguage)
-            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('runJobs.php') . ' --maxjobs=1000 --maxtime=300 --memory-limit=128M', '', false);
+            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('runJobs.php') . ' --maxtime=1000 --memory-limit=256M', '', false, true);
     }
     else if ($script == 'daily_jobs')
     {
         foreach ($targetLanguages as $targetLanguage)
         {
-            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildData.php') . ' --quiet --shallow-update', '', false);
-            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('disposeOutdatedEntities.php') . ' --quiet', '', false);
-            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildPropertyStatistics.php') . '--quiet', '', false);
-            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildConceptCache.php') . ' --quiet --update --create', '', false);
+            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildData.php') . ' --quiet --shallow-update', '', false, true);
+            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('disposeOutdatedEntities.php') . ' --quiet', '', false, true);
+            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildPropertyStatistics.php') . '--quiet', '', false, true);
+            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildConceptCache.php') . ' --quiet --update --create', '', false, true);
         }
     }
     else if ($script == 'weekly_jobs')
     {
         foreach ($targetLanguages as $targetLanguage)
         {
-            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildData.php') . ' -p --quiet -d 50', '', false);
+            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildElasticIndex.php'), '', false, true);
+
+            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildData.php') . ' -p --quiet -d 50', '', false, true);
 
             $size = 5000;
             $startId = 0;
@@ -140,12 +142,12 @@ try {
             {
                 $endId = $startId + $size;
 //                $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildData.php') . "  -s $startId -e $endId --quiet -d 50", '', false);
-                $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildData.php') . "  --startidfile=/var/www/html/images/'.$targetLanguage.'/rebuildDataIndex.txt -n $size --quiet -d 50", '', false);
+                $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildData.php') . "  --startidfile=/var/www/html/images/'.$targetLanguage.'/rebuildDataIndex.txt -n $size --quiet -d 50", '', false, true);
                 $startId = $endId + 1;
             }
 
 
-            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('setupStore.php') . ' --quiet --skip-import', '', false);
+            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('setupStore.php') . ' --quiet --skip-import', '', false, true);
         }
     }
     else if ($script == 'monthly_jobs')
@@ -572,11 +574,14 @@ function getScriptPath($script)
 /**
  * $volume -v ~/youtube:/out (in that case make sure the files you import are in /out)
  */
-function getCommandLine($targetEnv, $targetLanguage, $script, $volume = '', $bUseWwwData = true)
+function getCommandLine($targetEnv, $targetLanguage, $script, $volume = '', $bUseWwwData = true, $bCronMode = false)
 {
     $runOptions = "--rm $volume ";
     if ($bUseWwwData)
         $runOptions .= ' --user=www-data:www-data ';
+
+    if ($bCronMode)
+        $runOptions .= ' --no-TTY ';
 
     $runOptions .= " --env MW_INSTALL_PATH=/var/www/html --env WIKI_LANGUAGE=$targetLanguage ";
 
