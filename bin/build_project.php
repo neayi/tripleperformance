@@ -361,6 +361,10 @@ function getWikiComponents()
 	// 						'branch' => $wiki_version,
 	// 						'postinstall' => 'composer');
 
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/NativeSvgHandler',
+							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-NativeSvgHandler.git',
+							'branch' => $wiki_version);
+
 	// Neayi extensions and forks
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/HitCounters',
 							'git' => '--branch Neayi1_37 https://github.com/neayi/mediawiki-extensions-HitCounters.git',

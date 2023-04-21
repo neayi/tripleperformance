@@ -11,6 +11,7 @@ RUN apt-get update  \
 	dnsutils \
 	unzip \
 	graphicsmagick-imagemagick-compat \
+  gsfonts \
 	libfreetype6-dev \
 	libjpeg62-turbo-dev \
 	libmcrypt-dev \

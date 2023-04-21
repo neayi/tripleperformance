@@ -533,6 +533,7 @@ wfLoadExtension( 'Description2' );
 $wgEnableMetaDescriptionFunctions = true;
 
 wfLoadExtension( 'OpenGraphMeta' );
+wfLoadExtension( 'NativeSvgHandler' );
 
 wfLoadExtension( 'UrlShortener' );
 $wgUrlShortenerTemplate = '/r/$1';
