@@ -585,15 +585,17 @@ function getCommandLine($targetEnv, $targetLanguage, $script, $volume = '', $bUs
 
     $runOptions .= " --env MW_INSTALL_PATH=/var/www/html --env WIKI_LANGUAGE=$targetLanguage ";
 
+    $dir = __DIR__ . '/';
+
     switch ($targetEnv) {
         case 'dev':
-            return 'docker compose -f docker-compose.yml -f docker-compose.workers.yml run '. $runOptions.' web sh -c "'.$script.'"';
+            return 'docker compose -f '.$dir.'docker-compose.yml -f '.$dir.'docker-compose.workers.yml run '. $runOptions.' web sh -c "'.$script.'"';
 
         case 'preprod':
-            return 'docker compose -f docker-compose.prod.yml -f docker-compose.workers.yml run '.$runOptions.' web_preprod sh -c "'.$script.'"';
+            return 'docker compose -f '.$dir.'docker-compose.prod.yml -f '.$dir.'docker-compose.workers.yml run '.$runOptions.' web_preprod sh -c "'.$script.'"';
 
         case 'prod':
-            return 'docker compose -f docker-compose.prod.yml -f docker-compose.workers.yml  run '.$runOptions.' web sh -c "'.$script.'"';
+            return 'docker compose -f '.$dir.'docker-compose.prod.yml -f '.$dir.'docker-compose.workers.yml  run '.$runOptions.' web sh -c "'.$script.'"';
     }
 }
 
@@ -608,6 +610,8 @@ function getMysqlCommandLine($targetEnv, $targetLanguage, $script, $sqlBatchFile
         $sqlBatchFile = " < $sqlBatchFile";
     else if (!empty($sqlBatchFile) && strpos($script, 'mysqldump') !== false)
         $sqlBatchFile = " > $sqlBatchFile";
+
+    $dir = __DIR__ . '/';
 
     if (strpos($sqlBatchFile, "wiki"))
     {
@@ -636,10 +640,10 @@ function getMysqlCommandLine($targetEnv, $targetLanguage, $script, $sqlBatchFile
             return "docker compose run --rm -v $volume db sh -c \"$script --defaults-extra-file=/backup/.mysql.cnf $extraParams -P 3306 -h db -u root $dbname $sqlBatchFile\"";
 
         case 'preprod':
-            return "docker compose -f docker-compose.prod.yml run --rm -v $volume db sh -c \"$script --defaults-extra-file=/backup/.mysql.cnf $extraParams -P 3306 -h db -u root ".$dbname."_preprod $sqlBatchFile\"";
+            return "docker compose -f '.$dir.'docker-compose.prod.yml run --rm -v $volume db sh -c \"$script --defaults-extra-file=/backup/.mysql.cnf $extraParams -P 3306 -h db -u root ".$dbname."_preprod $sqlBatchFile\"";
 
         case 'prod':
-            return "docker compose -f docker-compose.prod.yml run --rm -v $volume db sh -c \"$script --defaults-extra-file=/backup/.mysql.cnf $extraParams -P 3306 -h db -u root ".$dbname."_prod $sqlBatchFile\"";
+            return "docker compose -f '.$dir.'docker-compose.prod.yml run --rm -v $volume db sh -c \"$script --defaults-extra-file=/backup/.mysql.cnf $extraParams -P 3306 -h db -u root ".$dbname."_prod $sqlBatchFile\"";
     }
 }
 
