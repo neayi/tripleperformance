@@ -759,9 +759,12 @@ wfLoadExtension( 'WikiSearchFront' );
 wfLoadExtension( 'WikiSearchLink' );
 
 // https://www.mediawiki.org/wiki/Extension:Graph
-wfLoadExtension( 'TemplateStyles' );
-wfLoadExtension( 'JsonConfig' );
-wfLoadExtension( 'Graph' );
+// wfLoadExtension( 'TemplateStyles' );
+// wfLoadExtension( 'JsonConfig' );
+// wfLoadExtension( 'Graph' );
+
+
+wfLoadExtension( 'ECharts' );
 
 // Debug and error reporting :
 
