@@ -15,6 +15,9 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./engine/traefik/dev/traefik.toml:/etc/traefik/traefik.toml
       - ./.cache/ssl:/etc/ssl:ro
+    profiles:
+      - min
+      - all
 
   web:
     build:
@@ -74,6 +77,9 @@ services:
           - it.dev.tripleperformance.ag
           - nl.dev.tripleperformance.ag
           - pl.dev.tripleperformance.ag
+    profiles:
+      - min
+      - all
 
   insights_php:
     build:
@@ -88,6 +94,9 @@ services:
     volumes:
       - ./insights:/var/www/html
       - ./.cache/composer:/.composer
+    profiles:
+      - min
+      - all
 
   insights:
     image: nginx:1.22
@@ -102,6 +111,9 @@ services:
       default:
         aliases:
           - insights.dev.tripleperformance.fr
+    profiles:
+      - min
+      - all
 
   db:
     image: mysql:5.7
@@ -115,6 +127,9 @@ services:
     volumes:
       - data-mysql:/var/lib/mysql
       - ./bin/sql:/var/sql
+    profiles:
+      - min
+      - all
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -125,6 +140,9 @@ services:
 
   redis:
     image: redis
+    profiles:
+      - min
+      - all
 
   elasticsearch:
     image: elasticsearch:6.8.23
@@ -144,6 +162,9 @@ services:
       - 'traefik.enable=true'
       - 'traefik.port=9200'
       - 'traefik.frontend.rule=Host:elasticsearch.dev.tripleperformance.fr'
+    profiles:
+      - min
+      - all
 
   elasticvue:
     image: cars10/elasticvue
@@ -151,6 +172,8 @@ services:
       - 'traefik.enable=true'
       - 'traefik.port=8080'
       - 'traefik.frontend.rule=Host:elasticvue.dev.tripleperformance.fr'
+    profiles:
+      - all
 
   parsoid:
     image: thenets/parsoid:0.11
@@ -162,6 +185,8 @@ services:
       - 'traefik.enable=true'
       - 'traefik.port=8000'
       - 'traefik.frontend.rule=Host:parsoid.dev.tripleperformance.fr'
+    profiles:
+      - all
 
   wordpress:
     image: wordpress
@@ -177,6 +202,8 @@ services:
       - 'traefik.enable=true'
       - 'traefik.port=80'
       - 'traefik.frontend.rule=Host:wordpress.dev.tripleperformance.fr'
+    profiles:
+      - wordpress
 
   piwigo:
     image: lscr.io/linuxserver/piwigo:latest
@@ -197,6 +224,8 @@ services:
       default:
         aliases:
           - photos.dev.tripleperformance.fr
+    profiles:
+      - piwigo
 
 networks:
   default: ~
