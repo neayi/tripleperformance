@@ -475,7 +475,7 @@ function checkout_project($aComponent, $bForceRemoveFolder = false)
 			throw new \RuntimeException('The dest dir already exists: '. root_web . $aComponent['dest']);
     }
 
-	$cmd = 'git clone -q ' . $aComponent['git'] . ' ' . root_web . $aComponent['dest'];
+	$cmd = 'git clone --depth 1 -q ' . $aComponent['git'] . ' ' . root_web . $aComponent['dest'];
 	runCommand($cmd);
 
 	if (!empty($aComponent['tag']))
