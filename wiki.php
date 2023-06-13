@@ -624,6 +624,7 @@ function getMysqlCommandLine($targetEnv, $targetLanguage, $script, $sqlBatchFile
             case 'nl':
             case 'pl':
                 $dbname = "wiki_$targetLanguage";
+                break;
 
             case 'fr':
                 $dbname = 'wiki';
