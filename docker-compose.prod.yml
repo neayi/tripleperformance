@@ -160,7 +160,29 @@ services:
     restart: always
     environment:
       PARSOID_DOMAIN_prod: http://wiki.tripleperformance.fr/api.php
+      PARSOID_DOMAIN_FR_prod: http://fr.tripleperformance.ag/api.php
+      PARSOID_DOMAIN_ES_prod: http://es.tripleperformance.ag/api.php
+      PARSOID_DOMAIN_FI_prod: http://fi.tripleperformance.ag/api.php
+      PARSOID_DOMAIN_PT_prod: http://pt.tripleperformance.ag/api.php
+      PARSOID_DOMAIN_IT_prod: http://it.tripleperformance.ag/api.php
+      PARSOID_DOMAIN_GR_prod: http://gr.tripleperformance.ag/api.php
+      PARSOID_DOMAIN_HU_prod: http://hu.tripleperformance.ag/api.php
+      PARSOID_DOMAIN_DE_prod: http://de.tripleperformance.ag/api.php
+      PARSOID_DOMAIN_EN_prod: http://en.tripleperformance.ag/api.php
+      PARSOID_DOMAIN_PO_prod: http://po.tripleperformance.ag/api.php
+      PARSOID_DOMAIN_NL_prod: http://nl.tripleperformance.ag/api.php
       PARSOID_DOMAIN_preprod: http://wiki.preprod.tripleperformance.fr/api.php
+      PARSOID_DOMAIN_FR_preprod: http://fr.preprod.tripleperformance.ag/api.php
+      PARSOID_DOMAIN_ES_preprod: http://es.preprod.tripleperformance.ag/api.php
+      PARSOID_DOMAIN_FI_preprod: http://fi.preprod.tripleperformance.ag/api.php
+      PARSOID_DOMAIN_PT_preprod: http://pt.preprod.tripleperformance.ag/api.php
+      PARSOID_DOMAIN_IT_preprod: http://it.preprod.tripleperformance.ag/api.php
+      PARSOID_DOMAIN_GR_preprod: http://gr.preprod.tripleperformance.ag/api.php
+      PARSOID_DOMAIN_HU_preprod: http://hu.preprod.tripleperformance.ag/api.php
+      PARSOID_DOMAIN_DE_preprod: http://de.preprod.tripleperformance.ag/api.php
+      PARSOID_DOMAIN_EN_preprod: http://en.preprod.tripleperformance.ag/api.php
+      PARSOID_DOMAIN_PO_preprod: http://po.preprod.tripleperformance.ag/api.php
+      PARSOID_DOMAIN_NL_preprod: http://nl.preprod.tripleperformance.ag/api.php
     links:
       - web:wiki.tripleperformance.fr
       - web_preprod:wiki.preprod.tripleperformance.fr

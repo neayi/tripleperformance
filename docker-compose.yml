@@ -179,6 +179,17 @@ services:
     image: thenets/parsoid:0.11
     environment:
       PARSOID_DOMAIN_dev: http://wiki.dev.tripleperformance.fr/api.php
+      PARSOID_DOMAIN_FR_dev: http://fr.dev.tripleperformance.ag/api.php
+      PARSOID_DOMAIN_ES_dev: http://es.dev.tripleperformance.ag/api.php
+      PARSOID_DOMAIN_FI_dev: http://fi.dev.tripleperformance.ag/api.php
+      PARSOID_DOMAIN_PT_dev: http://pt.dev.tripleperformance.ag/api.php
+      PARSOID_DOMAIN_IT_dev: http://it.dev.tripleperformance.ag/api.php
+      PARSOID_DOMAIN_GR_dev: http://gr.dev.tripleperformance.ag/api.php
+      PARSOID_DOMAIN_HU_dev: http://hu.dev.tripleperformance.ag/api.php
+      PARSOID_DOMAIN_DE_dev: http://de.dev.tripleperformance.ag/api.php
+      PARSOID_DOMAIN_EN_dev: http://en.dev.tripleperformance.ag/api.php
+      PARSOID_DOMAIN_PO_dev: http://po.dev.tripleperformance.ag/api.php
+      PARSOID_DOMAIN_NL_dev: http://nl.dev.tripleperformance.ag/api.php
     links:
       - web:wiki.dev.tripleperformance.fr
     labels:

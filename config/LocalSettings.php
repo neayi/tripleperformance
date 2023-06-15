@@ -24,9 +24,9 @@ $domainName = getDomainName($env);
 $useHttps = false;
 $domainUrl = ($useHttps ? 'https' : 'http') . '://' . $domainName;
 $emailSender = 'no-reply@tripleperformance.com';
-$parsoidDomain = $env; // dev, prod, preprod
 
 $wiki_language_prefix = strtoupper(getWikiLanguage());
+$parsoidDomain = $wiki_language_prefix . '_' . $env; // dev, prod, preprod
 
 // =================================================================
 
