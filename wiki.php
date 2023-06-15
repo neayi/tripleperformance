@@ -161,7 +161,7 @@ try {
     {
         // docker compose -f docker-compose.prod.yml run --rm -v ~/geco/images:/out web_preprod php /var/www/html/maintenance/importImages.php /out/
         $folder = array_pop($argv);
-        $volume = '-v '.$folder.':/out';
+        $volume = '-v "'.$folder.'":/out';
         while ($arg = array_shift($argv)) {
             $scriptPath .= ' ' . $arg;
         }
