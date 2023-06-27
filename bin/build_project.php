@@ -257,9 +257,6 @@ function getWikiComponents()
 							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-Description2.git',
 							'branch' => $wiki_version);
 
-	$components[] = array(	'dest' => $wiki_extensions_dir . '/AutoSitemap',
-							'git' => 'https://github.com/dolfinus/AutoSitemap.git');
-
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Loops',
 							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-Loops.git',
 							'branch' => $wiki_version);

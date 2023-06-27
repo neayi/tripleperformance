@@ -126,7 +126,10 @@ try {
             $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('disposeOutdatedEntities.php') . ' --quiet', '', false, true);
             $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildPropertyStatistics.php') . '--quiet', '', false, true);
             $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildConceptCache.php') . ' --quiet --update --create', '', false, true);
+
+            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('generateSitemap.php') . ' --memory-limit=50M --fspath=html/images/'.$targetLanguage.'/sitemap/ --identifier='.$targetLanguage.' --urlpath=/images/'.$targetLanguage.'/sitemap/ --compress=no --skip-redirects', '', false, true);
         }
+        $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('buildSitemap.php'), '', false, true);
     }
     else if ($script == 'weekly_jobs')
     {
@@ -539,7 +542,8 @@ function getScriptPath($script)
             return "php /var/www/html/extensions/SemanticMediaWiki/maintenance/$script";
 
         case 'removeSpamAccounts.php' :
-	    // NeayiAuth
+        case 'buildSitemap.php':
+	        // NeayiAuth
             return "php /var/www/html/extensions/NeayiAuth/maintenance/$script";
 
         case 'runSyncWithMailchimp.php' :

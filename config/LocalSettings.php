@@ -326,42 +326,29 @@ $sespgUseFixedTables = true;
 $sespgExcludeBotEdits = true;
 
 // SEO and Sitemap
-// https://www.mediawiki.org/wiki/Extension:AutoSitemap
-wfLoadExtension( 'AutoSitemap' );
-$wgAutoSitemap["notify"] = [];
+$wgSitemapNamespaces = [
+    0, // main
+    2, // users
+    4, // Triple Performance
+    6, // Files and images
+    // 8, // Mediawiki
+    // 10, // Templates
+    12, // Help
+    14, // Categories
+    // 102, // Attributes
+    // 106, // Forms
+    // 108, // Concepts
+    // 112, // Schemas
+    // 828, // Modules
+    // 844, // Special
+    3000 // Structures
+];
 
-$wgAutoSitemap["freq"] = "weekly"; //default
-$wgAutoSitemap["priority"][NS_MAIN] = 1;
-$wgAutoSitemap["priority"][NS_CATEGORY] = 0.8;
-$wgAutoSitemap["server"] = 'https://' . $domainName;
-// $wgAutoSitemap["exclude_pages"] = ["Rechercher des pratiques", "Rechercher des retours d'expérience"]; // breaks the wiki
-
-// Exclude SMW namespaces: https://www.semantic-mediawiki.org/wiki/Help:Namespaces
-$wgAutoSitemap["exclude_namespaces"] = [NS_TALK,
-                                        NS_USER,
-                                        NS_USER_TALK,
-                                        NS_PROJECT_TALK,
-                                        NS_MEDIAWIKI,
-                                        NS_MEDIAWIKI_TALK,
-                                        NS_TEMPLATE,
-                                        NS_TEMPLATE_TALK,
-                                        NS_HELP,
-                                        NS_HELP_TALK,
-                                        NS_CATEGORY_TALK];
-
-// We declare the SMW namespaces directly because of this:
-// https://github.com/SemanticMediaWiki/SemanticMediaWiki/issues/5281
-$wgAutoSitemap["exclude_namespaces"][] = 102; // SMW_NS_PROPERTY;
-$wgAutoSitemap["exclude_namespaces"][] = 103; // SMW_NS_PROPERTY_TALK;
-$wgAutoSitemap["exclude_namespaces"][] = 108; // SMW_NS_CONCEPT;
-$wgAutoSitemap["exclude_namespaces"][] = 109; // SMW_NS_CONCEPT_TALK;
-$wgAutoSitemap["exclude_namespaces"][] = 114; // SMW_NS_RULE;
-$wgAutoSitemap["exclude_namespaces"][] = 115; // SMW_NS_RULE_TALK;
-$wgAutoSitemap["exclude_namespaces"][] = 112; // SMW_NS_SCHEMA;
-$wgAutoSitemap["exclude_namespaces"][] = 113; // SMW_NS_SCHEMA_TALK;
-
-$wgAutoSitemap["exclude_namespaces"][] = 844; // CommentStreams;
-$wgAutoSitemap["exclude_namespaces"][] = 845; // CommentStreams talk;
+$wgSitemapNamespacesPriorities = [
+    2 => '0.9',
+    6 => '0.9',
+    14 => '0.9'
+];
 
 // Add some color to the browser (in mobile mode)
 wfLoadExtension( 'HeadScript' );
@@ -383,9 +370,6 @@ if('prod' === $env) {
     $wgGroupPermissions['sysop']['gtag-exempt'] = true;
     $wgGroupPermissions['bot']['gtag-exempt'] = true;
     $wgGroupPermissions['bureaucrat']['gtag-exempt'] = true;
-
-    // Only notify on production servers
-    $wgAutoSitemap["notify"][] = "https://www.google.com/webmasters/sitemaps/ping?sitemap=$domainUrl/sitemap.xml";
 
     $wgHeadScriptCode .= <<<'START_END_MARKER'
     <!-- Facebook Pixel Code -->
