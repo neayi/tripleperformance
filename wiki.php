@@ -113,6 +113,10 @@ try {
             $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('runJobs.php'), '', false);
         }
     }
+    else if ($script == 'buildSitemap.php')
+    {
+        $commandLines[] = getExecCommandLine($targetEnv, getScriptPath('buildSitemap.php'), true);
+    }
     else if ($script == 'frequent_jobs')
     {
         foreach ($targetLanguages as $targetLanguage)
@@ -128,7 +132,8 @@ try {
             $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildPropertyStatistics.php') . ' --quiet', '', false, true);
             $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildConceptCache.php') . ' --quiet --update --create', '', false, true);
         }
-        $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('buildSitemap.php'), '', false, true);
+
+        $commandLines[] = getExecCommandLine($targetEnv, getScriptPath('buildSitemap.php'), true);
     }
     else if ($script == 'weekly_jobs')
     {
@@ -599,6 +604,29 @@ function getCommandLine($targetEnv, $targetLanguage, $script, $volume = '', $bUs
 
         case 'prod':
             return 'docker compose -f '.$dir.'docker-compose.prod.yml -f '.$dir.'docker-compose.workers.yml  run '.$runOptions.' web sh -c "'.$script.'"';
+    }
+}
+
+/**
+ * Note: When we execute a command on the container, there's no possibility to specify which language to operate
+ */
+function getExecCommandLine($targetEnv, $script, $bCronMode = false)
+{
+    $runOptions = '';
+    if ($bCronMode)
+        $runOptions .= ' --no-TTY ';
+
+    $dir = __DIR__ . '/';
+
+    switch ($targetEnv) {
+        case 'dev':
+            return 'docker compose -f '.$dir.'docker-compose.yml -f '.$dir.'docker-compose.workers.yml exec '. $runOptions.' web sh -c "'.$script.'"';
+
+        case 'preprod':
+            return 'docker compose -f '.$dir.'docker-compose.prod.yml -f '.$dir.'docker-compose.workers.yml exec '.$runOptions.' web_preprod sh -c "'.$script.'"';
+
+        case 'prod':
+            return 'docker compose -f '.$dir.'docker-compose.prod.yml -f '.$dir.'docker-compose.workers.yml  exec '.$runOptions.' web sh -c "'.$script.'"';
     }
 }
 
