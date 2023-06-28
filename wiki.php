@@ -115,7 +115,7 @@ try {
     }
     else if ($script == 'buildSitemap.php')
     {
-        $commandLines[] = getExecCommandLine($targetEnv, getScriptPath('buildSitemap.php'), true);
+        $commandLines[] = getExecCommandLine($targetEnv, getScriptPath('buildSitemap.php'));
     }
     else if ($script == 'frequent_jobs')
     {
