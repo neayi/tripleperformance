@@ -47,7 +47,7 @@ $wgScriptExtension = ".php";
 $wgArticlePath = "/wiki/$1";
 $wgUsePathInfo = true;
 $wgForceHTTPS = $useHttps;
-$wgCanonicalServer = $domainUrl;
+$wgCanonicalServer = 'https://' . $domainName;
 
 ## The protocol and server name to use in fully-qualified URLs
 $wgServer = '//' . $domainName;
@@ -119,8 +119,15 @@ function getDomainName($env)
 
     switch ($env) {
         case 'dev':
+            if ($language === 'fr')
+                return "wiki.dev.tripleperformance.fr";
+
             return "$language.dev.tripleperformance.ag";
+
         case 'preprod':
+            if ($language === 'fr')
+                return "wiki.preprod.tripleperformance.fr";
+
             return "$language.preprod.tripleperformance.ag";
         case 'prod':
             if ($language === 'fr')
