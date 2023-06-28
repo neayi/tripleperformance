@@ -117,6 +117,20 @@ try {
     {
         $commandLines[] = getExecCommandLine($targetEnv, getScriptPath('buildSitemap.php'));
     }
+    else if ($script == 'generateSitemap.php')
+    {
+        foreach ($targetLanguages as $targetLanguage)
+        {
+            if ($targetLanguage == 'fr')
+                $hostname = "https://wiki.tripleperformance.fr";
+            else
+                $hostname = "https://'.$targetLanguage.'.tripleperformance.ag";
+
+            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('generateSitemap.php') . ' --memory-limit=50M --fspath=html/images/'.$targetLanguage.'/sitemap/ --identifier='.$targetLanguage.' --urlpath=/images/'.$targetLanguage.'/sitemap/ --server='.$hostname.' --compress=no --skip-redirects', '', true, true);
+        }
+
+        $commandLines[] = getExecCommandLine($targetEnv, getScriptPath('buildSitemap.php'), true);
+    }
     else if ($script == 'frequent_jobs')
     {
         foreach ($targetLanguages as $targetLanguage)
@@ -126,7 +140,12 @@ try {
     {
         foreach ($targetLanguages as $targetLanguage)
         {
-            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('generateSitemap.php') . ' --memory-limit=50M --fspath=html/images/'.$targetLanguage.'/sitemap/ --identifier='.$targetLanguage.' --urlpath=/images/'.$targetLanguage.'/sitemap/ --compress=no --skip-redirects', '', false, true);
+            if ($targetLanguage == 'fr')
+                $hostname = "https://wiki.tripleperformance.fr";
+            else
+                $hostname = "https://'.$targetLanguage.'.tripleperformance.ag";
+
+            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('generateSitemap.php') . ' --memory-limit=50M --fspath=html/images/'.$targetLanguage.'/sitemap/ --identifier='.$targetLanguage.' --urlpath=/images/'.$targetLanguage.'/sitemap/ --server='.$hostname.' --compress=no --skip-redirects', '', true, true);
             $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildData.php') . ' --quiet --shallow-update', '', false, true);
             $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('disposeOutdatedEntities.php') . ' --quiet', '', false, true);
             $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildPropertyStatistics.php') . ' --quiet', '', false, true);
