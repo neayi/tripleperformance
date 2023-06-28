@@ -122,12 +122,11 @@ try {
     {
         foreach ($targetLanguages as $targetLanguage)
         {
+            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('generateSitemap.php') . ' --memory-limit=50M --fspath=html/images/'.$targetLanguage.'/sitemap/ --identifier='.$targetLanguage.' --urlpath=/images/'.$targetLanguage.'/sitemap/ --compress=no --skip-redirects', '', false, true);
             $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildData.php') . ' --quiet --shallow-update', '', false, true);
             $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('disposeOutdatedEntities.php') . ' --quiet', '', false, true);
-            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildPropertyStatistics.php') . '--quiet', '', false, true);
+            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildPropertyStatistics.php') . ' --quiet', '', false, true);
             $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildConceptCache.php') . ' --quiet --update --create', '', false, true);
-
-            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('generateSitemap.php') . ' --memory-limit=50M --fspath=html/images/'.$targetLanguage.'/sitemap/ --identifier='.$targetLanguage.' --urlpath=/images/'.$targetLanguage.'/sitemap/ --compress=no --skip-redirects', '', false, true);
         }
         $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('buildSitemap.php'), '', false, true);
     }
