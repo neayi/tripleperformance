@@ -530,7 +530,8 @@ wfLoadExtension( 'UrlShortener' );
 $wgUrlShortenerTemplate = '/r/$1';
 $wgUrlShortenerServer = "3perf.fr";
 $wgUrlShortenerAllowedDomains = array(
-	'(.*\.)?tripleperformance\.fr'
+	'(.*\.)?tripleperformance\.fr',
+    '(.*\.)?tripleperformance\.ag'
 );
 
 // Popups (shows a preview of the page on hover)
