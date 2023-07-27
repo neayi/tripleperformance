@@ -596,6 +596,9 @@ $wgAvatarsBaseUri = getenv('INSIGHT_URL', true) . '/storage/users/';
 wfLoadExtension( 'Realnames' );
 $wgRealnamesLinkStyle = 'replace';
 
+// HidePrefix
+require_once( "$IP/extensions/HidePrefix/HidePrefix.php" );
+
 // Delete several pages in one shot
 wfLoadExtension( 'DeleteBatch' );
 $wgGroupPermissions['sysop']['deletebatch'] = true;
