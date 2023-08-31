@@ -52,11 +52,13 @@ RUN apt-get update  \
     pecl install \
       imagick \
       mcrypt-1.0.3 \
-      apcu; \
+      apcu \
+      igbinary; \
     docker-php-ext-enable \
       imagick \
       mcrypt \
-      apcu; \
+      apcu \
+      igbinary; \
     pecl install -o -f redis \
         && rm -rf /tmp/pear \
 	      && docker-php-ext-enable redis;

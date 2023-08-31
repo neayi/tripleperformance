@@ -161,8 +161,17 @@ $wgCirrusSearchServers = array_filter([ getenv('ELASTICSEARCH_SERVER', true) ]);
 $wgDBTableOptions = "ENGINE=InnoDB, DEFAULT CHARSET=binary";
 
 ## Shared memory settings
-$wgMainCacheType = CACHE_NONE;
-$wgMemCachedServers = [];
+// Store cache objects in Redis
+$wgObjectCaches['redis'] = [
+    'class' => 'RedisBagOStuff',
+    'servers' => [
+            'redis:6379'
+    ],
+    'persistent' => true,
+ ];
+ $wgMainCacheType = 'redis';
+ $wgMemCachedServers = [];
+ $wgSessionCacheType = 'redis';
 
 ## To enable image uploads, make sure the 'images' directory
 ## is writable, then set this to true:
@@ -474,17 +483,6 @@ wfLoadExtension( 'CirrusSearch' );
 // $wgDisableSearchUpdate = true; // set this to stop cirrus from indexing pages
 // $wgCirrusSearchServers = [ 'elasticsearch' ];
 $wgSearchType = 'CirrusSearch';
-
-// Store cache objects in Redis
-$wgObjectCaches['redis'] = [
-   'class' => 'RedisBagOStuff',
-   'servers' => [
-           'redis:6379'
-   ],
-   'persistent' => true,
-];
-$wgMainCacheType = 'redis';
-$wgSessionCacheType = 'redis';
 $wgCirrusSearchUseCompletionSuggester = 'yes';
 $wgCirrusSearchCompletionSettings = 'fuzzy-subphrases';
 $wgCirrusSearchPhraseSuggestProfiles = 'default';
