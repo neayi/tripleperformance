@@ -4,6 +4,27 @@ Disallow: /            # disallow this directory
 User-agent: MJ12bot
 Disallow: /
 
+User-agent: mauibot
+Disallow: /
+
+User-agent: blexbot
+Disallow: /
+
+User-agent: seo spider
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: YandexBot
+Disallow: /
+
+User-agent: baiduspider
+Disallow: /
+
 User-agent: *
 Disallow: /index.php?
 Crawl-delay: 5
