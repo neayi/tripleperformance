@@ -45,7 +45,8 @@ function create_wiki_env()
 	$wiki = getWiki();
     checkout_project($wiki);
 
-    linkWikiSettings();
+	linkWikiSettings('LocalSettings.php');
+	linkWikiSettings('robots.txt');
 
 	$wiki_install_dir = getInstallDir();
 
@@ -104,7 +105,8 @@ function update_wiki_env()
 
 	// pull_project($wiki);
 
-	linkWikiSettings();
+	linkWikiSettings('LocalSettings.php');
+	linkWikiSettings('robots.txt');
 
 	$components = getWikiComponents();
 	foreach ($components as $aComponent)
@@ -422,10 +424,10 @@ function getWikiComponents()
 	return $components;
 }
 
-function linkWikiSettings()
+function linkWikiSettings($file)
 {
-	$src = root_web . '/config/LocalSettings.php';
-	$dst = root_web . '/html/LocalSettings.php';
+	$src = root_web . '/config/' . $file;
+	$dst = root_web . '/html/' . $file;
 
 	if (!file_exists($src))
 	{
