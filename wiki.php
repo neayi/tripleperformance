@@ -566,6 +566,10 @@ function getScriptPath($script)
             // RottenLinks
             return "php /var/www/html/extensions/RottenLinks/maintenance/$script";
 
+        case 'linktitles-cli.php' :
+            // linktitles
+            return "php /var/www/html/extensions/LinkTitles/$script";
+
         case 'mysql':
             return '/usr/bin/mysql';
 
