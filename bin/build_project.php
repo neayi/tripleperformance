@@ -341,7 +341,8 @@ function getWikiComponents()
 							'branch' => $wiki_version);
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/LinkTitles',
-							'git' => 'https://github.com/bovender/LinkTitles.git');
+							'git' => '--branch fix-68 https://github.com/neayi/LinkTitles.git',
+							'branch' => 'fix-68');
 
 	// $components[] = array(	'dest' => $wiki_extensions_dir . '/JsonConfig',
 	// 						'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-JsonConfig.git',
