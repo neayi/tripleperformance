@@ -15,6 +15,7 @@ rsync -va $DIR/../.data/images neayi.com:~/backup
 rsync -va $DIR/../.data/insights_prod_storage neayi.com:~/backup
 rsync -va /var/www/discourse/shared/standalone/backups neayi.com:~/discourse_backup/
 rsync -va /var/www/discourse/containers neayi.com:~/discourse_backup/
+rsync -va /var/www/tripleperformance_docker/piwigo/config/www/_data/i/upload neayi.com:~/piwigo_backup/
 scp $DIR/.env $DIR/.env.preprod neayi.com:~/backup/
 scp $DIR/insights/.env neayi.com:~/backup/.env.insights
 
