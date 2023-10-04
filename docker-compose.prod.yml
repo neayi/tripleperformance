@@ -148,7 +148,6 @@ services:
       PARSOID_DOMAIN_NL_preprod: http://nl.preprod.tripleperformance.ag/api.php
     links:
       - web:wiki.tripleperformance.fr
-      - web_preprod:wiki.preprod.tripleperformance.fr
     labels:
       - 'traefik.enable=true'
       - 'traefik.port=8000'

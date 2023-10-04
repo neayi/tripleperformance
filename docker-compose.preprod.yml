@@ -38,3 +38,9 @@ services:
       - 'traefik.enable=true'
       - 'traefik.port=80'
       - 'traefik.frontend.rule=Host:insights.preprod.tripleperformance.fr'
+
+  parsoid:
+    links:
+      - web:wiki.tripleperformance.fr
+      - web_preprod:wiki.preprod.tripleperformance.fr
+
