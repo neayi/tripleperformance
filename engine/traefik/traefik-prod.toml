@@ -49,7 +49,6 @@ sans = [
   "elasticvue.tripleperformance.fr",
   "traefik.tripleperformance.fr",
   "wiki.preprod.tripleperformance.fr",
-  "parsoid.tripleperformance.fr",
   "insights.preprod.tripleperformance.fr",
   "forum.tripleperformance.fr",
   "forum-adminer.tripleperformance.fr",

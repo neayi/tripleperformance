@@ -26,7 +26,6 @@ $domainUrl = ($useHttps ? 'https' : 'http') . '://' . $domainName;
 $emailSender = 'no-reply@tripleperformance.com';
 
 $wiki_language_prefix = strtoupper(getWikiLanguage());
-$parsoidDomain = $wiki_language_prefix . '_' . $env; // dev, prod, preprod
 
 // =================================================================
 
@@ -601,6 +600,8 @@ require_once( "$IP/extensions/HidePrefix/HidePrefix.php" );
 wfLoadExtension( 'DeleteBatch' );
 $wgGroupPermissions['sysop']['deletebatch'] = true;
 
+wfLoadExtension( 'Parsoid', "$IP/vendor/wikimedia/parsoid/extension.json" );
+
 // VisualEditor
 wfLoadExtension( 'VisualEditor' );
 $wgVisualEditorTabMessages['editsource'] = null;
@@ -614,11 +615,7 @@ $wgDefaultUserOptions['visualeditor-newwikitext'] = 1;
 $wgHiddenPrefs[] = 'visualeditor-newwikitext';
 
 $wgVirtualRestConfig['modules']['parsoid'] = array(
-    // URL to the Parsoid instance
-    // Use port 8142 if you use the Debian package
-    'url' => 'http://parsoid:8000',
-    // Parsoid "domain", see below (optional)
-    'domain' => $parsoidDomain,
+    'url' => 'http://' . $domainName . '/rest.php'
 );
 
 // Page forms and template data
