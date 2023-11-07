@@ -533,6 +533,9 @@ function pull_project($aComponent)
 	}
 	else
 	{
+		$cmd = 'git config --global --add safe.directory ' . root_web . $aComponent['dest'];
+		runCommand($cmd);
+
 		$cmd = 'git pull -q';
 		runCommand($cmd);
 	}
@@ -572,6 +575,9 @@ function pull_project($aComponent)
 function switchToBranch($aComponent)
 {
 	changeDir(root_web . $aComponent['dest']);
+
+	$cmd = 'git config --global --add safe.directory ' . root_web . $aComponent['dest'];
+	runCommand($cmd);
 
 	$cmd = 'git checkout -q ' . $aComponent['branch'];
 	runCommand($cmd);
@@ -757,6 +763,9 @@ function setDevSSHRemote($aComponent)
 	changeDir(root_web . $aComponent['dest']);
 
 	$git = preg_replace('@^.*https://github.com/neayi@', 'git@github.com:neayi', $aComponent['git']);
+
+	$cmd = 'git config --global --add safe.directory ' . root_web . $aComponent['dest'];
+	runCommand($cmd);
 
 	$cmd = 'git remote set-url origin ' . $git;
 	runCommand($cmd);
