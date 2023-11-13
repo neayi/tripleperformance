@@ -304,6 +304,7 @@ wfLoadExtension( 'Link_Attributes' );
 # PDFHandler in order to build thumbnails for PDFs
 wfLoadExtension( 'PdfHandler' );
 wfLoadExtension( 'PDFEmbed' );
+$wgGroupPermissions['*']['embed_pdf'] = true;
 
 # End of automatically generated settings.
 # Add more configuration options below.
