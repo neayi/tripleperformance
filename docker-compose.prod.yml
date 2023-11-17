@@ -149,3 +149,7 @@ networks:
   default: ~
   traefik:
     name: tripleperformance_traefik
+
+volumes:
+  portainer_data:
+    driver: local
