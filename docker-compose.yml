@@ -214,18 +214,6 @@ services:
     profiles:
       - piwigo
 
-  portainer:
-    image: portainer/portainer-ce
-    container_name: portainer
-    restart: unless-stopped
-    labels:
-      - 'traefik.enable=true'
-      - 'traefik.port=9000'
-      - 'traefik.frontend.rule=Host:portainer.dev.tripleperformance.fr'
-    volumes:
-      - portainer_data:/data
-      - /var/run/docker.sock:/var/run/docker.sock
-
 networks:
   default: ~
   traefik:
@@ -235,6 +223,4 @@ volumes:
   data-mysql:
     driver: local
   data01:
-    driver: local
-  portainer_data:
     driver: local
