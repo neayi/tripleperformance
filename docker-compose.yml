@@ -194,7 +194,6 @@ services:
 
   piwigo:
     image: lscr.io/linuxserver/piwigo:latest
-    container_name: piwigo
     environment:
       - PUID=1000
       - PGID=1000
