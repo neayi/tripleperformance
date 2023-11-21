@@ -279,8 +279,13 @@ define("NS_STRUCTURE_TALK", 3001); // This MUST be the following odd integer.
 // Add namespaces.
 $wgExtraNamespaces[NS_STRUCTURE] = "Structure";
 $wgExtraNamespaces[NS_STRUCTURE_TALK] = "Structure_talk"; // Note underscores in the namespace name.
+
+// Those namespace are seen as content for extensions
 $wgContentNamespaces[] = NS_STRUCTURE;
 $wgContentNamespaces[] = NS_CATEGORY;
+$wgContentNamespaces[] = NS_PROJECT;
+$wgContentNamespaces[] = NS_HELP;
+
 $wgNamespacesToBeSearchedDefault[NS_STRUCTURE] = true;
 $wgNamespacesToBeSearchedDefault[NS_CATEGORY] = true;
 
