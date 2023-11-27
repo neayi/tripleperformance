@@ -1,29 +1,30 @@
-FROM php:7.4-apache AS base
+FROM php:8.2-apache AS base
 
 ARG DEBUG_TOOLS
 
 RUN apt-get update  \
   && apt-get remove -y exim \
   && apt-get install -y --no-install-recommends \
-	libpng-dev \
-	aptitude \
-	git \
-	dnsutils \
-	unzip \
-	graphicsmagick-imagemagick-compat \
-  gsfonts \
-	libfreetype6-dev \
-	libjpeg62-turbo-dev \
-	libmcrypt-dev \
-	libbz2-dev \
-	libgmp-dev \
-	libzip-dev \
-	libc-client-dev \
-	libkrb5-dev \
-	libpspell-dev \
-	libmagickwand-dev \
-	libonig-dev \
-	libxslt-dev --no-install-recommends \
+    libpng-dev \
+    aptitude \
+    git \
+    dnsutils \
+    unzip \
+    graphicsmagick-imagemagick-compat \
+    gsfonts \
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
+    libmcrypt-dev \
+    libbz2-dev \
+    libgmp-dev \
+    libicu-dev \
+    libzip-dev \
+    libc-client-dev \
+    libkrb5-dev \
+    libpspell-dev \
+    libmagickwand-dev \
+    libonig-dev \
+    libxslt-dev --no-install-recommends \
       ghostscript \
       poppler-utils \
       cron \
@@ -31,42 +32,39 @@ RUN apt-get update  \
       vim \
       msmtp \
       ssh \
-	&& rm -rf /var/lib/apt/lists/*; \
-  docker-php-ext-configure gd --with-freetype --with-jpeg; \
-    docker-php-ext-install -j$(nproc) gd; \
-    docker-php-ext-install \
-      pdo_mysql \
-      mysqli \
-      zip \
-      exif \
-      bz2 \
-      calendar \
-      bcmath \
-      gettext \
-      intl \
-      pdo \
-      iconv \
-      xmlrpc \
-      xsl; \
-    docker-php-source delete; \
-    pecl install \
-      imagick \
-      mcrypt-1.0.3 \
-      apcu \
-      igbinary; \
-    docker-php-ext-enable \
-      imagick \
-      mcrypt \
-      apcu \
-      igbinary; \
-    pecl install -o -f redis \
-        && rm -rf /tmp/pear \
-	      && docker-php-ext-enable redis;
+	&& rm -rf /var/lib/apt/lists/* \
+  && docker-php-ext-configure gd --with-freetype --with-jpeg \
+  && docker-php-ext-install -j$(nproc) gd \
+  && docker-php-ext-install \
+    pdo_mysql \
+    mysqli \
+    zip \
+    exif \
+    bz2 \
+    calendar \
+    bcmath \
+    gettext \
+    intl \
+    pdo \
+    iconv \
+    xsl \
+  && docker-php-source delete \
+  && pecl install \
+    imagick \
+    apcu \
+    igbinary \
+  && docker-php-ext-enable \
+    imagick \
+    apcu \
+    igbinary \
+  && pecl install --configureoptions 'enable-redis-igbinary="yes" enable-redis-lzf="no" enable-redis-zstd="no" enable-redis-msgpack="no" enable-redis-lz4="no" with-liblz4="no"' -o -f redis \
+  && rm -rf /tmp/pear \
+  && docker-php-ext-enable redis;
 
 RUN a2enmod rewrite headers deflate
 
 RUN test -z "$DEBUG_TOOLS" || ( \
-        pecl install xdebug-3.1.6 \
+        pecl install xdebug-3.2.2 \
             && docker-php-ext-enable xdebug \
             && echo "xdebug.discover_client_host=on" >> /usr/local/etc/php/conf.d/xdebug.ini \
             && echo "xdebug.mode=debug" >> /usr/local/etc/php/conf.d/xdebug.ini \
