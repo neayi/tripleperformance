@@ -152,8 +152,6 @@ services:
       - 'traefik.enable=true'
       - 'traefik.port=80'
       - 'traefik.frontend.rule=Host:matomo.tripleperformance.fr'
-    env_file:
-      - ./db.env
     depends_on:
       - db
     restart: always
