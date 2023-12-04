@@ -144,6 +144,20 @@ services:
       - 'traefik.port=80'
       - 'traefik.frontend.rule=Host:photos.tripleperformance.fr'
 
+  matomo:
+    image: matomo
+    environment:
+      - MATOMO_DATABASE_HOST=db
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.port=80'
+      - 'traefik.frontend.rule=Host:matomo.tripleperformance.fr'
+    env_file:
+      - ./db.env
+    depends_on:
+      - db
+    restart: always
+
 networks:
   default: ~
   traefik:
