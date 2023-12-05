@@ -390,7 +390,17 @@ if('prod' === $env) {
     $wgGroupPermissions['bot']['gtag-exempt'] = true;
     $wgGroupPermissions['bureaucrat']['gtag-exempt'] = true;
 
-    $wgHeadScriptCode .= <<<'START_END_MARKER'
+    switch (getWikiLanguage()) {
+        case 'en':
+            $matomoSiteId = 2;
+            break;
+        case 'fr':
+        default:
+            $matomoSiteId = 1;
+            break;
+    }
+
+    $wgHeadScriptCode .= <<<START_END_MARKER
     <!-- Matomo -->
     <script>
     var _paq = window._paq = window._paq || [];
@@ -400,7 +410,7 @@ if('prod' === $env) {
     (function() {
         var u="//matomo.tripleperformance.fr/";
         _paq.push(['setTrackerUrl', u+'matomo.php']);
-        _paq.push(['setSiteId', '1']);
+        _paq.push(['setSiteId', '$matomoSiteId']);
         var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
         g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
     })();
