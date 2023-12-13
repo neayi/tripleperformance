@@ -657,7 +657,8 @@ function initWikiSubModules($dir)
 	runCommand($cmd);
 
 	// Remove unwanted extensions:
-	$unwantedExtensions = array('extensions/CiteThisPage',
+	$unwantedExtensions = array('extensions/AbuseFilter',
+								'extensions/CiteThisPage',
 								'extensions/CodeEditor',
 								'extensions/ConfirmEdit',
 								'extensions/Gadgets',
@@ -666,6 +667,7 @@ function initWikiSubModules($dir)
 								'extensions/Interwiki',
 								'extensions/Nuke',
 								'extensions/OATHAuth',
+								'extensions/Math',
 								'extensions/Poem',
 								'extensions/Renameuser',
 								'extensions/SecureLinkFixer',
@@ -674,6 +676,7 @@ function initWikiSubModules($dir)
 								'extensions/TitleBlacklist',
 								'extensions/WikiEditor',
 								'extensions/VisualEditor',
+								'skins/MinervaNeue',
 								'skins/MonoBook',
 								'skins/Timeless',
 								'skins/Vector');
