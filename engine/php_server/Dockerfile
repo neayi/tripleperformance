@@ -75,7 +75,7 @@ RUN test -z "$DEBUG_TOOLS" || ( \
             && echo "error_log = /dev/stderr" >> /usr/local/etc/php/conf.d/error_log.ini \
     )
 
-RUN curl -sS https://getcomposer.org/installer | php -- --1 --install-dir=/usr/local/bin --filename=composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 COPY engine/php_server/apache/000-default.conf /etc/apache2/sites-enabled/000-default.conf
 COPY engine/php_server/apache/apache.prod.conf /etc/apache2/conf-available/z-app.conf
