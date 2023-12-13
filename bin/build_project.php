@@ -213,10 +213,6 @@ function getWikiComponents()
 	$components[] = array(	'composer' => 'mediawiki/semantic-scribunto' ); // "~2.1"
 	$components[] = array(	'composer' => 'mediawiki/semantic-extra-special-properties' ); // "~2.1"
 
-	// Force Elastic Search to be on 6.7 in order to be compatible with Elastica. SMW tends to get the
-	// latest 6.8.x version which fails to work. REMOVE THIS WHEN SemanticMediawiki will be on version 4
-	// $components[] = array(	'composer' => 'elasticsearch/elasticsearch:6.7.*' );
-
 	// Regular Mediawiki extensions
 
 	// https://www.mediawiki.org/wiki/Extension:GTag
@@ -231,16 +227,6 @@ function getWikiComponents()
 	// https://www.mediawiki.org/wiki/Extension:DynamicPageList3
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/DynamicPageList3',
 							'git' => '--branch '.$wiki_version.' https://github.com/Universal-Omega/DynamicPageList3.git',
-							'branch' => $wiki_version);
-
-	$components[] = array(	'dest' => $wiki_extensions_dir . '/Elastica',
-							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-Elastica.git',
-							'postinstall' => 'composer',
-							'branch' => $wiki_version);
-
-	$components[] = array(	'dest' => $wiki_extensions_dir . '/CirrusSearch',
-							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-CirrusSearch.git',
-							'postinstall' => 'composer',
 							'branch' => $wiki_version);
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/EmbedVideo',
@@ -307,12 +293,14 @@ function getWikiComponents()
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/WikiSearchFront',
 							'git' => '--branch Neayi https://github.com/neayi/WikiSearchFront.git');
 
+
+	// Extensions maintained by Yaron Koren which should work better on the master branch:
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/PageForms',
+							'git' => 'https://github.com/wikimedia/mediawiki-extensions-PageForms.git');
+
+	// Other extensions
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Realnames',
 							'git' => 'https://github.com/ofbeaton/mediawiki-realnames.git');
-
-	$components[] = array(	'dest' => $wiki_extensions_dir . '/PageForms',
-							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-PageForms.git',
-							'branch' => $wiki_version);
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/AdminLinks',
 							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-AdminLinks.git',
@@ -385,7 +373,7 @@ function getWikiComponents()
 							'git' => 'https://github.com/neayi/ext-carousel.git');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/NeayiAuth',
-							'git' => 'https://github.com/neayi/NeayiAuth.git',
+							'git' => '--branch '.$wiki_version.' https://github.com/neayi/NeayiAuth.git',
 							'postinstall' => 'composer');
 
 	// TODO: Create a new repo and get rid of CommentStreams

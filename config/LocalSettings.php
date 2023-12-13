@@ -390,7 +390,31 @@ if('prod' === $env) {
     $wgGroupPermissions['bot']['gtag-exempt'] = true;
     $wgGroupPermissions['bureaucrat']['gtag-exempt'] = true;
 
-    $wgHeadScriptCode .= <<<'START_END_MARKER'
+    switch (getWikiLanguage()) {
+        case 'en':
+            $matomoSiteId = 2;
+            break;
+        case 'fr':
+        default:
+            $matomoSiteId = 1;
+            break;
+    }
+
+    $wgHeadScriptCode .= <<<START_END_MARKER
+    <!-- Matomo -->
+    <script>
+    var _paq = window._paq = window._paq || [];
+    /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+    (function() {
+        var u="//matomo.tripleperformance.fr/";
+        _paq.push(['setTrackerUrl', u+'matomo.php']);
+        _paq.push(['setSiteId', '$matomoSiteId']);
+        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+        g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+    })();
+    </script>
     <!-- Facebook Pixel Code -->
     <script>
       !function(f,b,e,v,n,t,s)
@@ -480,23 +504,6 @@ wfLoadExtension( 'SemanticScribunto' );
 // Neayi's extensions
 wfLoadExtension( 'Carousel' );
 
-// CirrusSearch
-wfLoadExtension( 'Elastica' );
-wfLoadExtension( 'CirrusSearch' );
-// $wgDisableSearchUpdate = true; // set this to stop cirrus from indexing pages
-// $wgCirrusSearchServers = [ 'elasticsearch' ];
-$wgSearchType = 'CirrusSearch';
-$wgCirrusSearchUseCompletionSuggester = 'yes';
-$wgCirrusSearchCompletionSettings = 'fuzzy-subphrases';
-$wgCirrusSearchPhraseSuggestProfiles = 'default';
-$wgCirrusSearchCompletionSuggesterSubphrases = [
-   'build' => true,
-   'use' => true,
-   'type' => 'anywords',
-   'limit' => 10,
-];
-$wgCirrusSearchCompletionSuggesterUseDefaultSort = true;
-
 // More parser functions
 wfLoadExtension( 'EmbedVideo' );
 $wgEmbedVideoDefaultWidth = 640;
@@ -578,6 +585,10 @@ wfLoadExtension( 'NeayiAuth' );
 $wgOAuthRedirectUri = 'https://' . $domainName . "/index.php/Special:PluggableAuthLogin";
 $wgPluggableAuth_EnableAutoLogin = false;
 $wgPluggableAuth_EnableLocalLogin = false;
+
+$wgPluggableAuth_Config['Log in using Triple Performance'] = [
+	'plugin' => 'NeayiAuth'
+];
 
 $wgPasswordAttemptThrottle = [];
 $wgAccountCreationThrottle = 0;
