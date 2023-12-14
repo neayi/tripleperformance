@@ -220,7 +220,7 @@ function getWikiComponents()
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/GTag',
 							'git' => 'https://github.com/SkizNet/mediawiki-GTag.git');
 
-	https://www.mediawiki.org/wiki/Extension:HeadScript
+	// https://www.mediawiki.org/wiki/Extension:HeadScript
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/HeadScript',
 							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-HeadScript.git',
 							'branch' => $wiki_version);
