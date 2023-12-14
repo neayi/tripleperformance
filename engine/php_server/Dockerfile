@@ -76,7 +76,6 @@ RUN test -z "$DEBUG_TOOLS" || ( \
     )
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-ENV COMPOSER_ALLOW_SUPERUSER=1
 
 COPY engine/php_server/apache/000-default.conf /etc/apache2/sites-enabled/000-default.conf
 COPY engine/php_server/apache/apache.prod.conf /etc/apache2/conf-available/z-app.conf

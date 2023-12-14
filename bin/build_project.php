@@ -51,7 +51,6 @@ function create_wiki_env()
 	$wiki_install_dir = getInstallDir();
 
 	initWikiSubModules($wiki_install_dir);
-	setComposerPluginConfig();
 
 	$components = getWikiComponents();
 	foreach ($components as $aComponent)
@@ -593,16 +592,6 @@ function git_status_project($aComponent)
 	runCommand($cmd);
 
 	$cmd = 'git status';
-	runCommand($cmd);
-}
-
-function setComposerPluginConfig()
-{
-	$wiki_install_dir = getInstallDir();
-
-	$cmd = "COMPOSER=composer.local.json composer config --no-plugins allow-plugins.wikimedia/composer-merge-plugin true";
-
-	changeDir($wiki_install_dir);
 	runCommand($cmd);
 }
 
