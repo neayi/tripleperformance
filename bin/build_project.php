@@ -184,7 +184,7 @@ function getWiki()
 {
 	// Mediawiki
 	$wiki_install_dir = '/html';
-	$wiki_version = 'REL1_37';
+	$wiki_version = 'REL1_39';
 
 	return array(	'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki.git',
 					'dest' => $wiki_install_dir,
@@ -197,25 +197,21 @@ function getWikiComponents()
 	$wiki_install_dir = '/html';
 	$wiki_extensions_dir = '/html/extensions';
 	$wiki_skins_dir = '/html/skins';
-	$wiki_version = 'REL1_37'; // when migrating to 1_36, see page forms
+	$wiki_version = 'REL1_39'; // when migrating to 1_36, see page forms
 	$neayi_wiki_version = 'REL1_34'; // Since we have cloned a few repos, we have our changes in an old branch
-	$latest_wiki_version = 'REL1_37'; // For some extensions we are happy to just take the latest stable
-	$previous_wiki_version = 'REL1_36'; // For some extensions we are happy to just take the latest stable
+	$latest_wiki_version = 'REL1_39'; // For some extensions we are happy to just take the latest stable
+	$previous_wiki_version = 'REL1_39'; // For some extensions we are happy to just take the latest stable
 
 	$components = array();
 
 	// Composer components
-	$components[] = array(	'composer' => 'mediawiki/chameleon-skin "~4.2.1"' );
-	$components[] = array(	'composer' => 'mediawiki/semantic-media-wiki "~4.1.0"' );
+	$components[] = array(	'composer' => 'mediawiki/chameleon-skin "~4.3"' );
+	$components[] = array(	'composer' => 'mediawiki/semantic-media-wiki "~4.1.2"' );
 	$components[] = array(	'composer' => 'mediawiki/maps' );
 	$components[] = array(	'composer' => 'mediawiki/semantic-result-formats' );
 	$components[] = array(	'composer' => 'mediawiki/semantic-forms-select "~4.0.0-beta"' ); // "~3.0"
 	$components[] = array(	'composer' => 'mediawiki/semantic-scribunto' ); // "~2.1"
 	$components[] = array(	'composer' => 'mediawiki/semantic-extra-special-properties' ); // "~2.1"
-
-	// Force Elastic Search to be on 6.7 in order to be compatible with Elastica. SMW tends to get the
-	// latest 6.8.x version which fails to work. REMOVE THIS WHEN SemanticMediawiki will be on version 4
-	$components[] = array(	'composer' => 'elasticsearch/elasticsearch:6.7.*' );
 
 	// Regular Mediawiki extensions
 
@@ -223,7 +219,7 @@ function getWikiComponents()
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/GTag',
 							'git' => 'https://github.com/SkizNet/mediawiki-GTag.git');
 
-	https://www.mediawiki.org/wiki/Extension:HeadScript
+	// https://www.mediawiki.org/wiki/Extension:HeadScript
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/HeadScript',
 							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-HeadScript.git',
 							'branch' => $wiki_version);
@@ -233,19 +229,8 @@ function getWikiComponents()
 							'git' => '--branch '.$wiki_version.' https://github.com/Universal-Omega/DynamicPageList3.git',
 							'branch' => $wiki_version);
 
-	$components[] = array(	'dest' => $wiki_extensions_dir . '/Elastica',
-							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-Elastica.git',
-							'postinstall' => 'composer',
-							'branch' => $wiki_version);
-
-	$components[] = array(	'dest' => $wiki_extensions_dir . '/CirrusSearch',
-							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-CirrusSearch.git',
-							'postinstall' => 'composer',
-							'branch' => $wiki_version);
-
-	// Note : v3.2.5 is the last that is compatible with MW1_37 - switch to master or to a later branch when upgrading MW
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/EmbedVideo',
-							'git' => '--branch v3.2.5 https://github.com/StarCitizenWiki/mediawiki-extensions-EmbedVideo.git');
+							'git' => 'https://github.com/StarCitizenWiki/mediawiki-extensions-EmbedVideo.git');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/RelatedArticles',
 							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-RelatedArticles.git',
@@ -308,12 +293,14 @@ function getWikiComponents()
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/WikiSearchFront',
 							'git' => '--branch Neayi https://github.com/neayi/WikiSearchFront.git');
 
+
+	// Extensions maintained by Yaron Koren which should work better on the master branch:
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/PageForms',
+							'git' => 'https://github.com/wikimedia/mediawiki-extensions-PageForms.git');
+
+	// Other extensions
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Realnames',
 							'git' => 'https://github.com/ofbeaton/mediawiki-realnames.git');
-
-	$components[] = array(	'dest' => $wiki_extensions_dir . '/PageForms',
-							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-PageForms.git',
-							'branch' => $wiki_version);
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/AdminLinks',
 							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-AdminLinks.git',
@@ -386,7 +373,7 @@ function getWikiComponents()
 							'git' => 'https://github.com/neayi/ext-carousel.git');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/NeayiAuth',
-							'git' => 'https://github.com/neayi/NeayiAuth.git',
+							'git' => '--branch '.$wiki_version.' https://github.com/neayi/NeayiAuth.git',
 							'postinstall' => 'composer');
 
 	// TODO: Create a new repo and get rid of CommentStreams
@@ -670,16 +657,17 @@ function initWikiSubModules($dir)
 	runCommand($cmd);
 
 	// Remove unwanted extensions:
-	$unwantedExtensions = array('extensions/CiteThisPage',
+	$unwantedExtensions = array('extensions/AbuseFilter',
+								'extensions/CiteThisPage',
 								'extensions/CodeEditor',
 								'extensions/ConfirmEdit',
 								'extensions/Gadgets',
 								'extensions/ImageMap',
 								'extensions/InputBox',
 								'extensions/Interwiki',
-								'extensions/LocalisationUpdate',
 								'extensions/Nuke',
 								'extensions/OATHAuth',
+								'extensions/Math',
 								'extensions/Poem',
 								'extensions/Renameuser',
 								'extensions/SecureLinkFixer',
@@ -688,6 +676,7 @@ function initWikiSubModules($dir)
 								'extensions/TitleBlacklist',
 								'extensions/WikiEditor',
 								'extensions/VisualEditor',
+								'skins/MinervaNeue',
 								'skins/MonoBook',
 								'skins/Timeless',
 								'skins/Vector');

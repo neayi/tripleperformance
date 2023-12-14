@@ -101,18 +101,6 @@ try {
             $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('initSiteStats.php'), '', false);
         }
     }
-    else if ($script == 'initElasticSearch.php')
-    {
-        foreach ($targetLanguages as $targetLanguage)
-        {
-            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('UpdateSearchIndexConfig.php') . ' --startOver', '', false);
-            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('ForceSearchIndex.php') . ' --skipLinks --indexOnSkip', '', false);
-            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('ForceSearchIndex.php') . ' --skipParse', '', false);
-            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('runJobs.php'), '', false);
-            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildElasticIndex.php'), '', false);
-            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('runJobs.php'), '', false);
-        }
-    }
     else if ($script == 'buildSitemap.php')
     {
         $commandLines[] = getExecCommandLine($targetEnv, getScriptPath('buildSitemap.php'));
@@ -513,27 +501,6 @@ function getScriptPath($script)
             // Regular MW scripts:
             return "php /var/www/html/maintenance/$script";
 
-        case 'setupElasticSearch.sh' :
-            return "/var/www/html/maintenance/$script";
-
-        case 'CheckIndexes.php' :
-        case 'CirrusNeedsToBeBuilt.php' :
-        case 'CopySearchIndex.php' :
-        case 'DumpIndex.php' :
-        case 'ForceSearchIndex.php' :
-        case 'FreezeWritesToCluster.php' :
-        case 'IndexNamespaces.php' :
-        case 'Metastore.php' :
-        case 'RunSearch.php' :
-        case 'Saneitize.php' :
-        case 'SaneitizeJobs.php' :
-        case 'UpdateDYMIndexTemplates.php' :
-        case 'UpdateOneSearchIndexConfig.php' :
-        case 'UpdateSearchIndexConfig.php' :
-        case 'UpdateSuggesterIndex.php' :
-        case 'elasticsearch-scripts' :
-            return "php /var/www/html/extensions/CirrusSearch/maintenance/$script";
-
         case 'disposeOutdatedEntities.php' :
         case 'dumpRDF.php' :
         case 'populateHashField.php' :
@@ -580,7 +547,6 @@ function getScriptPath($script)
             return 'php /var/www/bin/build_project.php';
 
         // Pseudo scripts
-        case 'initElasticSearch.php':
         case 'frequent_jobs':
         case 'daily_jobs':
         case 'weekly_jobs':
@@ -613,7 +579,7 @@ function getCommandLine($targetEnv, $targetLanguage, $script, $volume = '', $bUs
             return 'docker compose -f '.$dir.'docker-compose.yml -f '.$dir.'docker-compose.workers.yml run '. $runOptions.' web sh -c "'.$script.'"';
 
         case 'preprod':
-            return 'docker compose -f '.$dir.'docker-compose.prod.yml -f '.$dir.'docker-compose.workers.yml run '.$runOptions.' web_preprod sh -c "'.$script.'"';
+            return 'docker compose -f '.$dir.'docker-compose.prod.yml -f '.$dir.'docker-compose.preprod.yml -f '.$dir.'docker-compose.workers.yml run '.$runOptions.' web_preprod sh -c "'.$script.'"';
 
         case 'prod':
             return 'docker compose -f '.$dir.'docker-compose.prod.yml -f '.$dir.'docker-compose.workers.yml  run '.$runOptions.' web sh -c "'.$script.'"';
@@ -636,7 +602,7 @@ function getExecCommandLine($targetEnv, $script, $bCronMode = false)
             return 'docker compose -f '.$dir.'docker-compose.yml -f '.$dir.'docker-compose.workers.yml exec '. $runOptions.' web sh -c "'.$script.'"';
 
         case 'preprod':
-            return 'docker compose -f '.$dir.'docker-compose.prod.yml -f '.$dir.'docker-compose.workers.yml exec '.$runOptions.' web_preprod sh -c "'.$script.'"';
+            return 'docker compose -f '.$dir.'docker-compose.prod.yml -f '.$dir.'docker-compose.preprod.yml -f '.$dir.'docker-compose.workers.yml exec '.$runOptions.' web_preprod sh -c "'.$script.'"';
 
         case 'prod':
             return 'docker compose -f '.$dir.'docker-compose.prod.yml -f '.$dir.'docker-compose.workers.yml  exec '.$runOptions.' web sh -c "'.$script.'"';
@@ -685,7 +651,7 @@ function getMysqlCommandLine($targetEnv, $targetLanguage, $script, $sqlBatchFile
             return "docker compose run --rm -v $volume db sh -c \"$script --defaults-extra-file=/backup/.mysql.cnf $extraParams -P 3306 -h db -u root $dbname $sqlBatchFile\"";
 
         case 'preprod':
-            return "docker compose -f '.$dir.'docker-compose.prod.yml run --rm -v $volume db sh -c \"$script --defaults-extra-file=/backup/.mysql.cnf $extraParams -P 3306 -h db -u root ".$dbname."_preprod $sqlBatchFile\"";
+            return "docker compose -f '.$dir.'docker-compose.prod.yml -f '.$dir.'docker-compose.preprod.yml run --rm -v $volume db sh -c \"$script --defaults-extra-file=/backup/.mysql.cnf $extraParams -P 3306 -h db -u root ".$dbname."_preprod $sqlBatchFile\"";
 
         case 'prod':
             return "docker compose -f '.$dir.'docker-compose.prod.yml run --rm -v $volume db sh -c \"$script --defaults-extra-file=/backup/.mysql.cnf $extraParams -P 3306 -h db -u root ".$dbname."_prod $sqlBatchFile\"";

@@ -504,23 +504,6 @@ wfLoadExtension( 'SemanticScribunto' );
 // Neayi's extensions
 wfLoadExtension( 'Carousel' );
 
-// CirrusSearch
-wfLoadExtension( 'Elastica' );
-wfLoadExtension( 'CirrusSearch' );
-// $wgDisableSearchUpdate = true; // set this to stop cirrus from indexing pages
-// $wgCirrusSearchServers = [ 'elasticsearch' ];
-$wgSearchType = 'CirrusSearch';
-$wgCirrusSearchUseCompletionSuggester = 'yes';
-$wgCirrusSearchCompletionSettings = 'fuzzy-subphrases';
-$wgCirrusSearchPhraseSuggestProfiles = 'default';
-$wgCirrusSearchCompletionSuggesterSubphrases = [
-   'build' => true,
-   'use' => true,
-   'type' => 'anywords',
-   'limit' => 10,
-];
-$wgCirrusSearchCompletionSuggesterUseDefaultSort = true;
-
 // More parser functions
 wfLoadExtension( 'EmbedVideo' );
 $wgEmbedVideoDefaultWidth = 640;
@@ -603,7 +586,11 @@ $wgOAuthRedirectUri = 'https://' . $domainName . "/index.php/Special:PluggableAu
 $wgPluggableAuth_EnableAutoLogin = false;
 $wgPluggableAuth_EnableLocalLogin = false;
 
-$wgPasswordAttemptThrottle = false;
+$wgPluggableAuth_Config['Log in using Triple Performance'] = [
+	'plugin' => 'NeayiAuth'
+];
+
+$wgPasswordAttemptThrottle = [];
 $wgAccountCreationThrottle = 0;
 
 $wgOAuthUri = getenv('INSIGHT_URL', true) . '/register?&';
