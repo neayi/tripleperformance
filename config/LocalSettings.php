@@ -512,7 +512,8 @@ $wgEmbedVideoRequireConsent = false;
 // Related Articles (shows related articles at the bottom of the page)
 wfLoadExtension( 'RelatedArticles' );
 $wgRelatedArticlesFooterWhitelistedSkins = ['chameleon'];
-$wgRelatedArticlesUseCirrusSearch = true;
+$wgRelatedArticlesUseCirrusSearch = false;
+$wgRelatedArticlesDescriptionSource = 'pagedescription';
 
 // OpenGraph extensions:
 wfLoadExtension( 'PageImages' );
