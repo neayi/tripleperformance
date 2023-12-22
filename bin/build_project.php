@@ -358,8 +358,8 @@ function getWikiComponents()
 
 	// Neayi extensions and forks
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/HitCounters',
-							'git' => '--branch Neayi1_37 https://github.com/neayi/mediawiki-extensions-HitCounters.git',
-							'branch' => 'Neayi1_37',
+							'git' => '--branch Neayi1_39 https://github.com/neayi/mediawiki-extensions-HitCounters.git',
+							'branch' => 'Neayi1_39',
 							'postinstall' => 'composer');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Link_Attributes',
