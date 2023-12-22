@@ -734,8 +734,13 @@ if (!empty($slackWebHook))
     $wgSlackExcludedPermission = "bot"; // bots and admin
 }
 
+
+
+// ROTTEN LINKS IS NOT COMPATIBLE WITH 1.39 - REACTIVATE WITH 1.40
+
 // https://www.mediawiki.org/wiki/Extension:RottenLinks
-wfLoadExtension( 'RottenLinks' );
+// wfLoadExtension( 'RottenLinks' );
+
 
 // https://www.mediawiki.org/wiki/Extension:LinkTitles
 wfLoadExtension( 'LinkTitles' );
