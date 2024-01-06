@@ -44,6 +44,8 @@ function create_wiki_env()
 	// checkout the wiki
 	$wiki = getWiki();
     checkout_project($wiki);
+	
+	allowComposerPlugins();
 
 	linkWikiSettings('LocalSettings.php');
 	linkWikiSettings('robots.txt');
@@ -79,7 +81,7 @@ function create_wiki_env()
 	{
 		foreach ($components as $aComponent)
 		{
-			if (preg_match('/:neayi/', $aComponent['git']))
+			if (!empty($aComponent['git']) && preg_match('/:neayi/', $aComponent['git']))
 				setOwner(root_web . $aComponent['dest'], '1000');
 		}
 	}
@@ -608,6 +610,35 @@ function addComponentToComposer($aComponent)
 	changeDir($wiki_install_dir);
 	runCommand($cmd);
 }
+
+
+/**
+ * Specifically allow some plugins
+ */
+function allowComposerPlugins()
+{
+	$wiki_install_dir = getInstallDir();
+
+	$composerInit = <<<COMPOSER
+{
+	"config": {
+		"optimize-autoloader": true,
+		"prepend-autoloader": false,
+		"allow-plugins": {
+				"composer/package-versions-deprecated": true,
+				"wikimedia/composer-merge-plugin": true,
+				"composer/installers": true
+		}
+	}
+}
+COMPOSER;
+
+	file_put_contents($wiki_install_dir . '/composer.local.json', $composerInit);
+	// changeDir($wiki_install_dir);
+//	runCommand($cmd);
+}
+
+
 
 /**
  * Updates composer

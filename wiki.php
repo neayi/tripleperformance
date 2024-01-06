@@ -101,9 +101,14 @@ try {
             $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('initSiteStats.php'), '', false);
         }
     }
-    else if ($script == 'buildSitemap.php')
+    else if ($script == 'buildSitemap.php' ||
+            $script == 'build_project.php')
     {
-        $commandLines[] = getExecCommandLine($targetEnv, getScriptPath('buildSitemap.php'));
+        while ($arg = array_shift($argv)) {
+            $scriptPath .= ' ' . $arg;
+        }
+        
+        $commandLines[] = getExecCommandLine($targetEnv, $scriptPath);
     }
     else if ($script == 'generateSitemap.php')
     {
