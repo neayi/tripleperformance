@@ -61,7 +61,7 @@ RUN apt-get update  \
   && rm -rf /tmp/pear \
   && docker-php-ext-enable redis;
 
-RUN a2enmod rewrite headers deflate
+RUN a2enmod rewrite headers deflate remoteip
 
 RUN test -z "$DEBUG_TOOLS" || ( \
         pecl install xdebug-3.2.2 \
