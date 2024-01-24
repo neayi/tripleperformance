@@ -409,7 +409,8 @@ function getWikiComponents()
 							'git' => 'https://github.com/neayi/mw-WikiSearchLink.git');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/ECharts',
-							'git' => 'https://github.com/neayi/mw-echarts.git');
+							'git' => 'https://github.com/neayi/mw-echarts.git',
+							'postinstall' => 'submodules');
 
 	return $components;
 }
