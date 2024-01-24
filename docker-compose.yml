@@ -29,25 +29,6 @@ services:
     env_file: .env
     volumes:
       - ./:/var/www
-      - /home/bertrand/tripleperformance/html/images/a:/var/www/html/images/a
-      - /home/bertrand/tripleperformance/html/images/b:/var/www/html/images/b
-      - /home/bertrand/tripleperformance/html/images/c:/var/www/html/images/c
-      - /home/bertrand/tripleperformance/html/images/d:/var/www/html/images/d
-      - /home/bertrand/tripleperformance/html/images/e:/var/www/html/images/e
-      - /home/bertrand/tripleperformance/html/images/f:/var/www/html/images/f
-      - /home/bertrand/tripleperformance/html/images/0:/var/www/html/images/0
-      - /home/bertrand/tripleperformance/html/images/1:/var/www/html/images/1
-      - /home/bertrand/tripleperformance/html/images/2:/var/www/html/images/2
-      - /home/bertrand/tripleperformance/html/images/3:/var/www/html/images/3
-      - /home/bertrand/tripleperformance/html/images/4:/var/www/html/images/4
-      - /home/bertrand/tripleperformance/html/images/5:/var/www/html/images/5
-      - /home/bertrand/tripleperformance/html/images/6:/var/www/html/images/6
-      - /home/bertrand/tripleperformance/html/images/7:/var/www/html/images/7
-      - /home/bertrand/tripleperformance/html/images/8:/var/www/html/images/8
-      - /home/bertrand/tripleperformance/html/images/9:/var/www/html/images/9
-      - /home/bertrand/tripleperformance/html/images/thumb:/var/www/html/images/thumb
-      - /home/bertrand/tripleperformance/html/images/deleted:/var/www/html/images/deleted
-      - /home/bertrand/tripleperformance/html/images/archive:/var/www/html/images/archive
     labels:
       - 'traefik.enable=true'
       - 'traefik.port=80'
