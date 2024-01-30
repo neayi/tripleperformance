@@ -178,9 +178,14 @@ $wgEnableUploads = true;
 $wgUseImageMagick = true; // disable on OVH https://www.mediawiki.org/wiki/Topic:Uysful50s28egg8a
 $wgImageMagickConvertCommand = "/usr/bin/convert";
 $wgFileExtensions[] = 'svg';
+$wgFileExtensions[] = 'webp';
 $wgSVGConverter = 'ImageMagick';
 
 $wgAllowExternalImages = true;
+
+$wgGroupPermissions['*']['upload_by_url'] = true;
+$wgAllowCopyUploads = true;
+$wgVerifyMimeType = false;
 
 // Maximum amount of virtual memory available to shell processes under Linux, in KiB.
 $wgMaxShellMemory = 614400;
@@ -780,6 +785,13 @@ wfLoadExtension( 'WikiSearchLink' );
 
 
 wfLoadExtension( 'ECharts' );
+
+require_once("$IP/extensions/UploadConvert/UploadConvert/UploadConvert.php");
+extUploadConvert::filterByExtention('bmp','png','/usr/bin/convert bmp:%from% png:%to%', 'mandatory');
+extUploadConvert::filterByExtention('tiff','png','/usr/bin/convert tiff:%from% png:%to%');
+extUploadConvert::filterByExtention('webp','jpg','/usr/bin/convert webp:%from% jpg:%to%', 'mandatory');
+extUploadConvert::filterByExtention('jpg','jpg','/usr/bin/convert %from% -resize 1200x1200\> jpg:%to%', 'mandatory');
+extUploadConvert::filterByExtention('jpeg','jpeg','/usr/bin/convert %from% -resize 1200x1200\> jpg:%to%', 'mandatory');
 
 // Debug and error reporting :
 

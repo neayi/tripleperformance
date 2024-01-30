@@ -412,6 +412,9 @@ function getWikiComponents()
 							'git' => 'https://github.com/neayi/mw-echarts.git',
 							'postinstall' => 'submodules');
 
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/UploadConvert',
+							'git' => 'https://github.com/neayi/mw-uploadconvert.git');
+
 	return $components;
 }
 
