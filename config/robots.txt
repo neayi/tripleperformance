@@ -1,33 +1,18 @@
 User-agent: Amazonbot  # Amazon's user agent
-Disallow: /            # disallow this directory
-
 User-agent: MJ12bot
-Disallow: /
-
 User-agent: mauibot
-Disallow: /
-
 User-agent: blexbot
-Disallow: /
-
 User-agent: seo spider
-Disallow: /
-
 User-agent: AhrefsBot
-Disallow: /
-
 User-agent: SemrushBot
-Disallow: /
-
 User-agent: YandexBot
-Disallow: /
-
 User-agent: baiduspider
 Disallow: /
 
 User-agent: Googlebot
 Crawl-delay: 0
 Disallow: /index.php?
+Allow: /*&redirect=no
 
 User-agent: googlebot-image
 Crawl-delay: 0
