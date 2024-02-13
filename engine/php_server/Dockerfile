@@ -106,5 +106,6 @@ RUN rm -r /var/www/html
 
 COPY --chown=www-data:www-data bin bin/
 COPY --chown=www-data:www-data config config/
+ENV COMPOSER_ALLOW_SUPERUSER=1
 
 RUN php bin/build_project.php --create-env
