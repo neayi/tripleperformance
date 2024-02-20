@@ -44,7 +44,7 @@ function create_wiki_env()
 	// checkout the wiki
 	$wiki = getWiki();
     checkout_project($wiki);
-	
+
 	allowComposerPlugins();
 
 	linkWikiSettings('LocalSettings.php');
@@ -103,7 +103,7 @@ function update_wiki_env()
 	$wiki = getWiki();
 
 	// Before pulling the wiki, lets restore composer.json
-	restore_composer();
+	allowComposerPlugins();
 
 	// pull_project($wiki);
 
@@ -171,15 +171,6 @@ function upgradeWiki()
 function getInstallDir()
 {
 	return root_web . '/html';
-}
-
-function restore_composer()
-{
-	$wiki_install_dir = getInstallDir();
-	changeDir($wiki_install_dir);
-
-	$cmd = 'rm -f composer.local.json';
-	runCommand($cmd);
 }
 
 function getWiki()
@@ -638,8 +629,6 @@ function allowComposerPlugins()
 COMPOSER;
 
 	file_put_contents($wiki_install_dir . '/composer.local.json', $composerInit);
-	// changeDir($wiki_install_dir);
-//	runCommand($cmd);
 }
 
 
