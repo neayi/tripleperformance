@@ -105,7 +105,7 @@ function update_wiki_env()
 	// Before pulling the wiki, lets restore composer.json
 	allowComposerPlugins();
 
-	// pull_project($wiki);
+	pull_project($wiki);
 
 	linkWikiSettings('LocalSettings.php');
 	linkWikiSettings('robots.txt');
@@ -199,7 +199,7 @@ function getWikiComponents()
 
 	// Composer components
 	$components[] = array(	'composer' => 'mediawiki/chameleon-skin "~4.3"' );
-	$components[] = array(	'composer' => 'mediawiki/semantic-media-wiki "~4.1.2"' );
+	$components[] = array(	'composer' => 'mediawiki/semantic-media-wiki "~4.1.3"' );
 	$components[] = array(	'composer' => 'mediawiki/maps' );
 	$components[] = array(	'composer' => 'mediawiki/semantic-result-formats' );
 	$components[] = array(	'composer' => 'mediawiki/semantic-forms-select "~4.0.0-beta"' ); // "~3.0"
@@ -323,17 +323,6 @@ function getWikiComponents()
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/LinkTitles',
 							'git' => '--branch fix-68 https://github.com/neayi/LinkTitles.git',
 							'branch' => 'fix-68');
-
-	// $components[] = array(	'dest' => $wiki_extensions_dir . '/JsonConfig',
-	// 						'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-JsonConfig.git',
-	// 						'branch' => $wiki_version);
-	// $components[] = array(	'dest' => $wiki_extensions_dir . '/Graph',
-	// 						'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-Graph.git',
-	// 						'branch' => $wiki_version);
-	// $components[] = array(	'dest' => $wiki_extensions_dir . '/TemplateStyles',
-	// 						'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-TemplateStyles.git',
-	// 						'branch' => $wiki_version,
-	// 						'postinstall' => 'composer');
 
 	// Translation
 	// $components[] = array(	'dest' => $wiki_extensions_dir . '/UniversalLanguageSelector',
