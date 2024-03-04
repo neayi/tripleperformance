@@ -98,7 +98,7 @@ services:
 
   db:
     image: mysql:5.7
-    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --max_allowed_packet=64M
     environment:
       - MYSQL_USERNAME=root
       - MYSQL_ROOT_PASSWORD=root

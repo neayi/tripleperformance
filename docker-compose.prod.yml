@@ -72,7 +72,7 @@ services:
 
   db:
     image: mysql:5.7
-    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --max_allowed_packet=64M
     restart: always
     env_file: .env
     volumes:
