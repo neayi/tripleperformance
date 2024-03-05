@@ -199,9 +199,9 @@ function getWikiComponents()
 
 	// Composer components
 
-
+	$components[] = array(	'composer' => 'elasticsearch/elasticsearch "7.10"' );
 	$components[] = array(	'composer' => 'mediawiki/chameleon-skin "~4.3"' );
-	$components[] = array(	'composer' => 'mediawiki/semantic-media-wiki "4.1.2"' );
+	$components[] = array(	'composer' => 'mediawiki/semantic-media-wiki "4.1.3"' );
 	$components[] = array(	'composer' => 'mediawiki/maps' );
 	$components[] = array(	'composer' => 'mediawiki/semantic-result-formats' );
 	$components[] = array(	'composer' => 'mediawiki/semantic-forms-select "~4.0.0-beta"' ); // "~3.0"
@@ -571,6 +571,9 @@ function switchToTag($aComponent)
 
 function git_status_project($aComponent)
 {
+	if (!isset($aComponent['dest']))
+		return;
+
 	if (!is_dir(root_web . $aComponent['dest']))
 		return;
 

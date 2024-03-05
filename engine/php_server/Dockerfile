@@ -1,4 +1,4 @@
-FROM php:8.2-apache AS base
+FROM php:7.4-apache AS base
 
 ARG DEBUG_TOOLS
 
@@ -64,7 +64,7 @@ RUN apt-get update  \
 RUN a2enmod rewrite headers deflate remoteip
 
 RUN test -z "$DEBUG_TOOLS" || ( \
-        pecl install xdebug-3.2.2 \
+        pecl install xdebug-3.1.6 \
             && docker-php-ext-enable xdebug \
             && echo "xdebug.discover_client_host=on" >> /usr/local/etc/php/conf.d/xdebug.ini \
             && echo "xdebug.mode=debug" >> /usr/local/etc/php/conf.d/xdebug.ini \
