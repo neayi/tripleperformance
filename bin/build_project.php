@@ -225,7 +225,7 @@ function getWikiComponents()
 							'branch' => $wiki_version);
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/EmbedVideo',
-							'git' => 'https://github.com/StarCitizenWiki/mediawiki-extensions-EmbedVideo.git');
+							'git' => '--branch issue-84 https://github.com/neayi/mediawiki-extensions-EmbedVideo.git');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/RelatedArticles',
 							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-RelatedArticles.git',
