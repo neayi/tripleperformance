@@ -187,19 +187,16 @@ function getWiki()
 function getWikiComponents()
 {
 	// Mediawiki
-	$wiki_install_dir = '/html';
 	$wiki_extensions_dir = '/html/extensions';
 	$wiki_skins_dir = '/html/skins';
 	$wiki_version = 'REL1_39'; // when migrating to 1_36, see page forms
 	$neayi_wiki_version = 'REL1_34'; // Since we have cloned a few repos, we have our changes in an old branch
-	$latest_wiki_version = 'REL1_39'; // For some extensions we are happy to just take the latest stable
-	$previous_wiki_version = 'REL1_39'; // For some extensions we are happy to just take the latest stable
+	$DPLRelease = '3.5.2';
 
 	$components = array();
 
 	// Composer components
-
-	$components[] = array(	'composer' => 'elasticsearch/elasticsearch "7.10"' );
+	$components[] = array(	'composer' => 'elasticsearch/elasticsearch "7.17.2"' );
 	$components[] = array(	'composer' => 'mediawiki/chameleon-skin "~4.3"' );
 	$components[] = array(	'composer' => 'mediawiki/semantic-media-wiki "4.1.3"' );
 	$components[] = array(	'composer' => 'mediawiki/maps' );
@@ -221,8 +218,8 @@ function getWikiComponents()
 
 	// https://www.mediawiki.org/wiki/Extension:DynamicPageList3
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/DynamicPageList3',
-							'git' => '--branch '.$wiki_version.' https://github.com/Universal-Omega/DynamicPageList3.git',
-							'branch' => $wiki_version);
+							'git' => '--branch '.$DPLRelease.' https://github.com/Universal-Omega/DynamicPageList3.git',
+							'branch' => $DPLRelease);
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/EmbedVideo',
 							'git' => '--branch issue-84 https://github.com/neayi/mediawiki-extensions-EmbedVideo.git');
