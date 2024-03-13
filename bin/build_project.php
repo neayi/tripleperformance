@@ -191,7 +191,6 @@ function getWikiComponents()
 	$wiki_skins_dir = '/html/skins';
 	$wiki_version = 'REL1_39'; // when migrating to 1_36, see page forms
 	$neayi_wiki_version = 'REL1_34'; // Since we have cloned a few repos, we have our changes in an old branch
-	$DPLRelease = '3.5.2';
 
 	$components = array();
 
@@ -218,8 +217,7 @@ function getWikiComponents()
 
 	// https://www.mediawiki.org/wiki/Extension:DynamicPageList3
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/DynamicPageList3',
-							'git' => '--branch '.$DPLRelease.' https://github.com/Universal-Omega/DynamicPageList3.git',
-							'branch' => $DPLRelease);
+							'git' => 'https://github.com/Universal-Omega/DynamicPageList3.git');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/EmbedVideo',
 							'git' => '--branch issue-84 https://github.com/neayi/mediawiki-extensions-EmbedVideo.git');
