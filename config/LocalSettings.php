@@ -791,6 +791,13 @@ extUploadConvert::filterByExtention('webp','jpg','/usr/bin/convert webp:%from% j
 extUploadConvert::filterByExtention('jpg','jpg','/usr/bin/convert %from% -resize 1200x1200\> jpg:%to%', 'mandatory');
 extUploadConvert::filterByExtention('jpeg','jpeg','/usr/bin/convert %from% -resize 1200x1200\> jpg:%to%', 'mandatory');
 
+wfLoadExtension( 'IFrameTag' );
+$iFrameOnWikiConfig=false;
+$iFrameDomains = [
+    'matomo.tripleperformance.fr'
+];
+
+
 // Debug and error reporting :
 
 if ($debug) {
