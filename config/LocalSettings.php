@@ -792,10 +792,8 @@ extUploadConvert::filterByExtention('jpg','jpg','/usr/bin/convert %from% -resize
 extUploadConvert::filterByExtention('jpeg','jpeg','/usr/bin/convert %from% -resize 1200x1200\> jpg:%to%', 'mandatory');
 
 wfLoadExtension( 'IFrameTag' );
-$iFrameOnWikiConfig=false;
-$iFrameDomains = [
-    'matomo.tripleperformance.fr'
-];
+$iFrameOnWikiConfig = true;
+// See https://wiki.tripleperformance.fr/wiki/MediaWiki:Iframe-cfg.json
 
 
 // Debug and error reporting :
