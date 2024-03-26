@@ -281,7 +281,7 @@ function getWikiComponents()
 							'git' => 'https://github.com/Open-CSP/WikiSearch.git',
 							'postinstall' => 'composer');
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/WikiSearchFront',
-							'git' => '--branch Neayi https://github.com/neayi/WikiSearchFront.git');
+							'git' => '--branch Neayi.v3 https://github.com/neayi/WikiSearchFront.git');
 
 
 	// Extensions maintained by Yaron Koren which should work better on the master branch:
