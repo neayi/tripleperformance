@@ -1,5 +1,3 @@
-version: '3.7'
-
 services:
   web_preprod:
     image: ghcr.io/neayi/tripleperformance/wiki:$WIKI_VERSION_PREPROD
