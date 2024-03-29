@@ -329,6 +329,15 @@ $smwgElasticsearchEndpoints = [ [ 'host' => $elastic_parts[2],
                                   'scheme' => 'http',
                                   'user' => $elastic_parts[0],
                                   'pass' => $elastic_parts[1] ] ];
+
+$smwgElasticsearchCredentials = [
+    'host' => $elastic_parts[2],
+    'port' => 9200,
+    'scheme' => 'http',
+    'user' => $elastic_parts[0],
+    'pass' => $elastic_parts[1],
+];
+
 unset($elastic_parts);
 $smwgElasticsearchConfig["indexer"]["raw.text"] = true;
 

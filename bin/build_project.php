@@ -195,13 +195,14 @@ function getWikiComponents()
 	$components = array();
 
 	// Composer components
+	$components[] = array(	'composer' => 'elasticsearch/elasticsearch "7.17.2"' );
 	$components[] = array(	'composer' => 'mediawiki/chameleon-skin "~4.3"' );
-	$components[] = array(	'composer' => 'mediawiki/semantic-media-wiki "4.1.2"' );
+	$components[] = array(	'composer' => 'mediawiki/semantic-media-wiki "~4.1.3"' );
 	$components[] = array(	'composer' => 'mediawiki/maps' );
 	$components[] = array(	'composer' => 'mediawiki/semantic-result-formats' );
-	$components[] = array(	'composer' => 'mediawiki/semantic-forms-select "~4.0.0-beta"' ); // "~3.0"
-	$components[] = array(	'composer' => 'mediawiki/semantic-scribunto' ); // "~2.1"
-	$components[] = array(	'composer' => 'mediawiki/semantic-extra-special-properties' ); // "~2.1"
+	$components[] = array(	'composer' => 'mediawiki/semantic-forms-select "~4.0.0-beta"' );
+	$components[] = array(	'composer' => 'mediawiki/semantic-scribunto' );
+	$components[] = array(	'composer' => 'mediawiki/semantic-extra-special-properties' );
 	$components[] = array(	'composer' => 'mediawiki/iframe-tag' );
 
 	// Regular Mediawiki extensions
@@ -282,7 +283,7 @@ function getWikiComponents()
 							'git' => 'https://github.com/Open-CSP/WikiSearch.git',
 							'postinstall' => 'composer');
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/WikiSearchFront',
-							'git' => '--branch Neayi https://github.com/neayi/WikiSearchFront.git');
+							'git' => '--branch Neayi.v3 https://github.com/neayi/WikiSearchFront.git');
 
 
 	// Extensions maintained by Yaron Koren which should work better on the master branch:
@@ -567,6 +568,9 @@ function switchToTag($aComponent)
 
 function git_status_project($aComponent)
 {
+	if (!isset($aComponent['dest']))
+		return;
+
 	if (!is_dir(root_web . $aComponent['dest']))
 		return;
 

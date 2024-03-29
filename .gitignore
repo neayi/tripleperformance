@@ -23,3 +23,4 @@ backup/.mysql.cnf
 /piwigo/
 /sitemap.xml
 up
+web_bash
