@@ -770,10 +770,6 @@ wfLoadExtension( 'Piwigo' );
 $wgPiwigoURL = 'https://' . str_replace('wiki', 'photos', $domainName);
 $wgPiwigoGalleryLayout = 'fluid'; // one of the four: fluid (default), grid, thumbnails, clean
 
-// https://github.com/neayi/mw-Agrinovateur
-wfLoadExtension( 'Agrinovateur' );
-$wgAgrinovateurToken = getenv('AGRINOVATEUR_TOKEN', true);
-
 // WikiSearch
 wfLoadExtension( 'WikiSearch' );
 $wgWikiSearchElasticSearchHosts	= [getenv('ELASTICSEARCH_SERVER', true)]; // ["localhost:9200"]	Sets the list of ElasticSearch hosts to use.
