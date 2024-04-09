@@ -280,18 +280,24 @@ $wgDiff3 = "/usr/bin/diff3";
 # Define custome namespaces
 define("NS_STRUCTURE", 3000); // This MUST be even.
 define("NS_STRUCTURE_TALK", 3001); // This MUST be the following odd integer.
+define("NS_TRAINING", 3002); // This MUST be even.
+define("NS_TRAINING_TALK", 3003); // This MUST be the following odd integer.
 
 // Add namespaces.
 $wgExtraNamespaces[NS_STRUCTURE] = "Structure";
 $wgExtraNamespaces[NS_STRUCTURE_TALK] = "Structure_talk"; // Note underscores in the namespace name.
+$wgExtraNamespaces[NS_TRAINING] = "Formation";
+$wgExtraNamespaces[NS_TRAINING_TALK] = "Formation_talk"; // Note underscores in the namespace name.
 
 // Those namespace are seen as content for extensions
 $wgContentNamespaces[] = NS_STRUCTURE;
+$wgContentNamespaces[] = NS_TRAINING;
 $wgContentNamespaces[] = NS_CATEGORY;
 $wgContentNamespaces[] = NS_PROJECT;
 $wgContentNamespaces[] = NS_HELP;
 
 $wgNamespacesToBeSearchedDefault[NS_STRUCTURE] = true;
+$wgNamespacesToBeSearchedDefault[NS_TRAINING] = true;
 $wgNamespacesToBeSearchedDefault[NS_CATEGORY] = true;
 
 # The following permissions were set based on your choice in the installer
@@ -322,6 +328,8 @@ wfLoadExtension( 'SemanticMediaWiki' );
 enableSemantics( $domainName );
 $smwgConfigFileDir = $wgUploadDirectory;
 $smwgNamespacesWithSemanticLinks[NS_STRUCTURE] = true;
+$smwgNamespacesWithSemanticLinks[NS_TRAINING] = true;
+
 $smwgDefaultStore = 'SMWElasticStore';
 $elastic_parts = preg_split("/[:@]/", getenv('ELASTICSEARCH_SERVER', true));
 $smwgElasticsearchEndpoints = [ [ 'host' => $elastic_parts[2],
@@ -374,13 +382,15 @@ $wgSitemapNamespaces = [
     // 112, // Schemas
     // 828, // Modules
     // 844, // Special
-    3000 // Structures
+    3000, // Structures
+    3002 // Training
 ];
 
 $wgSitemapNamespacesPriorities = [
     2 => '0.9',
     6 => '0.9',
-    14 => '0.9'
+    14 => '0.9',
+    3002 => '0.9'
 ];
 
 // Add some color to the browser (in mobile mode)
@@ -759,8 +769,8 @@ wfLoadExtension( 'LinkTitles' );
 $wgLinkTitlesParseOnEdit = false;
 $wgLinkTitlesParseOnRender = false;
 $wgLinkTitlesSmartMode = true; // Case insensitive
-$wgLinkTitlesSourceNamespaces = [NS_MAIN, NS_STRUCTURE, NS_CATEGORY];
-$wgLinkTitlesTargetNamespaces = [NS_MAIN, NS_STRUCTURE, NS_CATEGORY, NS_USER];
+$wgLinkTitlesSourceNamespaces = [NS_MAIN, NS_STRUCTURE, NS_TRAINING, NS_CATEGORY];
+$wgLinkTitlesTargetNamespaces = [NS_MAIN, NS_STRUCTURE, NS_TRAINING, NS_CATEGORY, NS_USER];
 $wgLinkTitlesSamenamespace = true;
 $wgLinkTitlesSkipTemplates = true;
 $wgLinkTitlesFirstOnly = true;
