@@ -551,6 +551,7 @@ $wgPageImagesBlacklist = array(
 );
 // Bump the score of the first image
 $wgPageImagesScores['position'] = [ 99, 6, 4, 3 ];
+$wgPageImagesNamespaces = [NS_MAIN, NS_STRUCTURE, NS_TRAINING, NS_CATEGORY];
 
 wfLoadExtension( 'TextExtracts' );
 wfLoadExtension( 'Description2' );
