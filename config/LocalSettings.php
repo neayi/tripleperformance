@@ -811,6 +811,7 @@ wfLoadExtension( 'IFrameTag' );
 $iFrameOnWikiConfig = true;
 // See https://wiki.tripleperformance.fr/wiki/MediaWiki:Iframe-cfg.json
 
+wfLoadExtension( 'FleurAgroecologie' );
 
 // Debug and error reporting :
 

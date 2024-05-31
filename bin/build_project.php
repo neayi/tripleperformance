@@ -391,6 +391,9 @@ function getWikiComponents()
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/UploadConvert',
 							'git' => 'https://github.com/neayi/mw-uploadconvert.git');
 
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/FleurAgroecologie',
+							'git' => 'https://github.com/neayi/mw-fleur-agroecologie.git');
+
 	return $components;
 }
 
