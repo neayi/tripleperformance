@@ -490,6 +490,10 @@ $wgHooks['AuthChangeFormFields'][] = function ($requests, $fieldInfo, &$formDesc
 // https://www.mediawiki.org/wiki/Manual:$wgFixDoubleRedirects
 $wgFixDoubleRedirects = true;
 
+// Allow to change the title of a page : https://www.mediawiki.org/wiki/Display_title
+$wgAllowDisplayTitle = true; // defaults to true
+$wgRestrictDisplayTitle = false; // defaults to true
+
 // Chameleon
 wfLoadExtension( 'Bootstrap' );
 wfLoadSkin( 'chameleon' );
