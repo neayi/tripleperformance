@@ -84,5 +84,6 @@ sans = [
   "traefik.vps.tripleperformance.fr",
   "forum.vps.tripleperformance.fr",
   "photos.vps.tripleperformance.fr",
-  "matomo.vps.tripleperformance.fr"
+  "matomo.vps.tripleperformance.fr",
+  "portainer.vps.tripleperformance.fr"
 ]

@@ -90,7 +90,7 @@ services:
     labels:
       - 'traefik.enable=true'
       - 'traefik.port=9000'
-      - 'traefik.frontend.rule=Host:portainer.tripleperformance.fr'
+      - 'traefik.frontend.rule=Host:portainer.tripleperformance.fr, portainer.vps.tripleperformance.fr'
     volumes:
       - portainer_data:/data
       - /var/run/docker.sock:/var/run/docker.sock
