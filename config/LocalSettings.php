@@ -826,7 +826,7 @@ if ($debug) {
 // $wgShowDebug = true;
 
     $wgShowExceptionDetails = true;
-    $wgDebugToolbar = true;
+    $wgDebugToolbar = false;
     $wgResourceLoaderDebug = true;
     $wgWikiSearchEnableDebugMode = true;
     $wgJobRunRate = 1;

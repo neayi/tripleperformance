@@ -75,4 +75,14 @@ sans = [
   "it.forum.tripleperformance.ag",
   "nl.forum.tripleperformance.ag",
   "pl.forum.tripleperformance.ag",
+
+  "wiki.vps.tripleperformance.fr",
+  "phpmyadmin.vps.tripleperformance.fr",
+  "elasticsearch.vps.tripleperformance.fr",
+  "insights.vps.tripleperformance.fr",
+  "elasticvue.vps.tripleperformance.fr",
+  "traefik.vps.tripleperformance.fr",
+  "forum.vps.tripleperformance.fr",
+  "photos.vps.tripleperformance.fr",
+  "matomo.vps.tripleperformance.fr"
 ]

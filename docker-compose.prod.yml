@@ -11,7 +11,7 @@ services:
     labels:
       - 'traefik.enable=true'
       - 'traefik.port=9000'
-      - 'traefik.frontend.rule=Host:traefik.tripleperformance.fr'
+      - 'traefik.frontend.rule=Host:traefik.tripleperformance.fr, traefik.vps.tripleperformance.fr'
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./engine/traefik/traefik-prod.toml:/etc/traefik/traefik.toml
@@ -33,7 +33,7 @@ services:
     labels:
       - 'traefik.enable=true'
       - 'traefik.port=80'
-      - 'traefik.frontend.rule=Host:wiki.tripleperformance.fr, tripleperformance.fr, pratiques.tripleperformance.fr, www.tripleperformance.fr, 3perf.fr, de.tripleperformance.ag, en.tripleperformance.ag, es.tripleperformance.ag, fr.tripleperformance.ag, it.tripleperformance.ag, nl.tripleperformance.ag, pl.tripleperformance.ag'
+      - 'traefik.frontend.rule=Host:wiki.tripleperformance.fr, tripleperformance.fr, wiki.vps.tripleperformance.fr, www.tripleperformance.fr, 3perf.fr, de.tripleperformance.ag, en.tripleperformance.ag, es.tripleperformance.ag, fr.tripleperformance.ag, it.tripleperformance.ag, nl.tripleperformance.ag, pl.tripleperformance.ag'
       - 'traefik.frontend.redirect.regex=^https?://(pratiques.)?tripleperformance.fr/(.*)'
       - 'traefik.frontend.redirect.replacement=https://wiki.tripleperformance.fr/$${2}'
       - 'traefik.frontend.redirect.permanent=true'
@@ -66,7 +66,7 @@ services:
     labels:
       - 'traefik.enable=true'
       - 'traefik.port=80'
-      - 'traefik.frontend.rule=Host:insights.tripleperformance.fr'
+      - 'traefik.frontend.rule=Host:insights.tripleperformance.fr, insights.vps.tripleperformance.fr'
 
   db:
     image: mysql:5.7
@@ -82,7 +82,7 @@ services:
     labels:
       - 'traefik.enable=true'
       - 'traefik.port=80'
-      - 'traefik.frontend.rule=Host:phpmyadmin.tripleperformance.fr'
+      - 'traefik.frontend.rule=Host:phpmyadmin.tripleperformance.fr, phpmyadmin.vps.tripleperformance.fr'
 
   portainer:
     image: portainer/portainer-ce
@@ -117,7 +117,7 @@ services:
     labels:
       - 'traefik.enable=true'
       - 'traefik.port=9200'
-      - 'traefik.frontend.rule=Host:elasticsearch.tripleperformance.fr'
+      - 'traefik.frontend.rule=Host:elasticsearch.tripleperformance.fr, elasticsearch.vps.tripleperformance.fr'
 
   elasticvue:
     image: cars10/elasticvue
@@ -125,7 +125,7 @@ services:
     labels:
       - 'traefik.enable=true'
       - 'traefik.port=8080'
-      - 'traefik.frontend.rule=Host:elasticvue.tripleperformance.fr'
+      - 'traefik.frontend.rule=Host:elasticvue.tripleperformance.fr, elasticvue.vps.tripleperformance.fr'
 
   piwigo:
     image: lscr.io/linuxserver/piwigo:latest
@@ -140,7 +140,7 @@ services:
     labels:
       - 'traefik.enable=true'
       - 'traefik.port=80'
-      - 'traefik.frontend.rule=Host:photos.tripleperformance.fr'
+      - 'traefik.frontend.rule=Host:photos.tripleperformance.fr, photos.vps.tripleperformance.fr'
 
   matomo:
     image: matomo
@@ -149,7 +149,7 @@ services:
     labels:
       - 'traefik.enable=true'
       - 'traefik.port=80'
-      - 'traefik.frontend.rule=Host:matomo.tripleperformance.fr'
+      - 'traefik.frontend.rule=Host:matomo.tripleperformance.fr, matomo.vps.tripleperformance.fr'
     depends_on:
       - db
     restart: always
