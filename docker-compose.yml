@@ -198,6 +198,8 @@ services:
     image: matomo
     environment:
       - MATOMO_DATABASE_HOST=db
+    volumes:
+      - matomo:/var/www/html:z
     labels:
       - 'traefik.enable=true'
       - 'traefik.port=80'
@@ -212,6 +214,8 @@ networks:
     name: tripleperformance_traefik
 
 volumes:
+  matomo:
+    driver: local
   data-mysql:
     driver: local
   data01:
