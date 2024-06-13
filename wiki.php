@@ -604,7 +604,7 @@ function getCommandLine($targetEnv, $targetLanguage, $script, $volume = '', $bUs
  */
 function getMatomoCommandLine($targetEnv, $script, $bUseWwwData = true, $bCronMode = false)
 {
-    $runOptions = '';
+    $runOptions = '--rm ';
     if ($bUseWwwData)
         $runOptions .= ' --user=www-data:www-data ';
 
