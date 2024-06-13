@@ -90,15 +90,15 @@ try {
             $volume = '-v '.dirname($arg).':/out';
             $fullScript = $scriptPath . ' /out/' . basename($arg);
             foreach ($targetLanguages as $targetLanguage)
-                $commandLines[] = getCommandLine($targetEnv, $targetLanguage, $fullScript, $volume, false);
+                $commandLines[] = getCommandLine($targetEnv, $targetLanguage, $fullScript, $volume);
         }
 
         // You might want to run rebuildrecentchanges.php to regenerate RecentChanges,
         // and initSiteStats.php to update page and revision counts
         foreach ($targetLanguages as $targetLanguage)
         {
-            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildrecentchanges.php'), '', false);
-            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('initSiteStats.php'), '', false);
+            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildrecentchanges.php'));
+            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('initSiteStats.php'));
         }
     }
     else if ($script == 'buildSitemap.php' ||
@@ -114,7 +114,7 @@ try {
     {
         foreach ($targetLanguages as $targetLanguage)
         {
-            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('generateSitemap.php') . ' --memory-limit=50M --fspath=html/images/'.$targetLanguage.'/sitemap/ --identifier='.$targetLanguage.' --urlpath=/images/'.$targetLanguage.'/sitemap/ --compress=no --skip-redirects', '', true, true);
+            $commandLines[] = getCronCommandLine($targetEnv, $targetLanguage, getScriptPath('generateSitemap.php') . ' --memory-limit=50M --fspath=html/images/'.$targetLanguage.'/sitemap/ --identifier='.$targetLanguage.' --urlpath=/images/'.$targetLanguage.'/sitemap/ --compress=no --skip-redirects');
         }
 
         $commandLines[] = getExecCommandLine($targetEnv, getScriptPath('buildSitemap.php'), true);
@@ -122,17 +122,19 @@ try {
     else if ($script == 'frequent_jobs')
     {
         foreach ($targetLanguages as $targetLanguage)
-            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('runJobs.php') . ' --maxtime=1000 --memory-limit=256M', '', false, true);
+            $commandLines[] = getCronCommandLine($targetEnv, $targetLanguage, getScriptPath('runJobs.php') . ' --maxtime=1000 --memory-limit=256M');
+
+        $commandLines[] = getMatomoCommandLine($targetEnv, '/usr/bin/php /var/www/html/console core:archive --url=http://matomo.tripleperformance.fr/', true, true);
     }
     else if ($script == 'daily_jobs')
     {
         foreach ($targetLanguages as $targetLanguage)
         {
-            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('generateSitemap.php') . ' --memory-limit=50M --fspath=html/images/'.$targetLanguage.'/sitemap/ --identifier='.$targetLanguage.' --urlpath=/images/'.$targetLanguage.'/sitemap/ --compress=no --skip-redirects', '', true, true);
-            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildData.php') . ' --quiet --shallow-update', '', false, true);
-            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('disposeOutdatedEntities.php') . ' --quiet', '', false, true);
-            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildPropertyStatistics.php') . ' --quiet', '', false, true);
-            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildConceptCache.php') . ' --quiet --update --create', '', false, true);
+            $commandLines[] = getCronCommandLine($targetEnv, $targetLanguage, getScriptPath('generateSitemap.php') . ' --memory-limit=50M --fspath=html/images/'.$targetLanguage.'/sitemap/ --identifier='.$targetLanguage.' --urlpath=/images/'.$targetLanguage.'/sitemap/ --compress=no --skip-redirects');
+            $commandLines[] = getCronCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildData.php') . ' --quiet --shallow-update');
+            $commandLines[] = getCronCommandLine($targetEnv, $targetLanguage, getScriptPath('disposeOutdatedEntities.php') . ' --quiet');
+            $commandLines[] = getCronCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildPropertyStatistics.php') . ' --quiet');
+            $commandLines[] = getCronCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildConceptCache.php') . ' --quiet --update --create');
         }
 
         $commandLines[] = getExecCommandLine($targetEnv, getScriptPath('buildSitemap.php'), true);
@@ -141,29 +143,29 @@ try {
     {
         foreach ($targetLanguages as $targetLanguage)
         {
-            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildElasticIndex.php'), '', false, true);
+            $commandLines[] = getCronCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildElasticIndex.php'));
 
-            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildData.php') . ' -p --quiet -d 50', '', false, true);
+            $commandLines[] = getCronCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildData.php') . ' -p --quiet -d 50');
 
             $size = 5000;
             $startId = 0;
             while ($startId < 101000)
             {
                 $endId = $startId + $size;
-//                $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildData.php') . "  -s $startId -e $endId --quiet -d 50", '', false);
-                $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildData.php') . "  --startidfile=/var/www/html/images/'.$targetLanguage.'/rebuildDataIndex.txt -n $size --quiet -d 50", '', false, true);
+//                $commandLines[] = getCronCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildData.php') . "  -s $startId -e $endId --quiet -d 50");
+                $commandLines[] = getCronCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildData.php') . "  --startidfile=/var/www/html/images/'.$targetLanguage.'/rebuildDataIndex.txt -n $size --quiet -d 50");
                 $startId = $endId + 1;
             }
 
 
-            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('setupStore.php') . ' --quiet --skip-import', '', false, true);
+            $commandLines[] = getCronCommandLine($targetEnv, $targetLanguage, getScriptPath('setupStore.php') . ' --quiet --skip-import');
         }
     }
     else if ($script == 'monthly_jobs')
     {
         foreach ($targetLanguages as $targetLanguage)
         {
-            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, getScriptPath('removeDuplicateEntities.php') . ' --quiet', '', false);
+            $commandLines[] = getCronCommandLine($targetEnv, $targetLanguage, getScriptPath('removeDuplicateEntities.php') . ' --quiet');
         }
     }
     else if ($script == 'importImages.php')
@@ -178,7 +180,7 @@ try {
         $fullScript = $scriptPath . ' /out/';
 
         foreach ($targetLanguages as $targetLanguage)
-            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, $fullScript, $volume, false);
+            $commandLines[] = getCommandLine($targetEnv, $targetLanguage, $fullScript, $volume);
     }
     else
     {
@@ -190,7 +192,7 @@ try {
         foreach ($targetLanguages as $targetLanguage)
         {
             if ($script == 'update.php')
-                $commandLines[] = getCommandLine($targetEnv, $targetLanguage, $scriptPath . ' --quick', '', false);
+                $commandLines[] = getCommandLine($targetEnv, $targetLanguage, $scriptPath . ' --quick');
             else
                 $commandLines[] = getCommandLine($targetEnv, $targetLanguage, $scriptPath);
         }
@@ -563,6 +565,11 @@ function getScriptPath($script)
     }
 }
 
+function getCronCommandLine($targetEnv, $targetLanguage, $script, $volume = '')
+{
+    return getCommandLine($targetEnv, $targetLanguage, $script, $volume = '', true, true);
+}
+
 /**
  * $volume -v ~/youtube:/out (in that case make sure the files you import are in /out)
  */
@@ -590,6 +597,31 @@ function getCommandLine($targetEnv, $targetLanguage, $script, $volume = '', $bUs
             return 'docker compose -f '.$dir.'docker-compose.prod.yml -f '.$dir.'docker-compose.workers.yml  run '.$runOptions.' web sh -c "'.$script.'"';
     }
 }
+
+
+/**
+ * $volume -v ~/youtube:/out (in that case make sure the files you import are in /out)
+ */
+function getMatomoCommandLine($targetEnv, $script, $bUseWwwData = true, $bCronMode = false)
+{
+    $runOptions = "--rm $volume ";
+    if ($bUseWwwData)
+        $runOptions .= ' --user=www-data:www-data ';
+
+    if ($bCronMode)
+        $runOptions .= ' --no-TTY ';
+
+    $dir = __DIR__ . '/';
+
+    switch ($targetEnv) {
+        case 'dev':
+            return 'docker compose -f '.$dir.'docker-compose.yml -f '.$dir.'docker-compose.workers.yml run '. $runOptions.' matomo sh -c "'.$script.'"';
+
+        case 'prod':
+            return 'docker compose -f '.$dir.'docker-compose.prod.yml -f '.$dir.'docker-compose.workers.yml  run '.$runOptions.' matomo sh -c "'.$script.'"';
+    }
+}
+
 
 /**
  * Note: When we execute a command on the container, there's no possibility to specify which language to operate
