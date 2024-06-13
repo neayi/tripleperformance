@@ -124,7 +124,7 @@ try {
         foreach ($targetLanguages as $targetLanguage)
             $commandLines[] = getCronCommandLine($targetEnv, $targetLanguage, getScriptPath('runJobs.php') . ' --maxtime=1000 --memory-limit=256M');
 
-        $commandLines[] = getMatomoCommandLine($targetEnv, '/usr/bin/php /var/www/html/console core:archive --url=http://matomo.tripleperformance.fr/', true, true);
+        $commandLines[] = getMatomoCommandLine($targetEnv, 'php /var/www/html/console core:archive --url=http://matomo.tripleperformance.fr/', true, true);
     }
     else if ($script == 'daily_jobs')
     {
