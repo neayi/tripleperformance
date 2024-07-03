@@ -1,0 +1,2 @@
+docker compose -p tripleperformance_prod -f /var/www/tripleperformance_docker/docker-compose.prod.yml exec -T --user="www-data:www-data" insights_preprod bash -c "/usr/local/bin/php /var/www/html/artisan schedule:run"
+docker compose -p tripleperformance_prod -f /var/www/tripleperformance_docker/docker-compose.prod.yml exec -T --user="www-data:www-data" insights bash -c "/usr/local/bin/php /var/www/html/artisan schedule:run"
