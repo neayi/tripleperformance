@@ -197,13 +197,20 @@ function getWikiComponents()
 	// Composer components
 	$components[] = array(	'composer' => 'elasticsearch/elasticsearch "7.17.2"' );
 	$components[] = array(	'composer' => 'mediawiki/chameleon-skin "~4.3"' );
-	$components[] = array(	'composer' => 'mediawiki/semantic-media-wiki "~4.1.3"' );
+//	$components[] = array(	'composer' => 'mediawiki/semantic-media-wiki "~4.1.3"' );
 	$components[] = array(	'composer' => 'mediawiki/maps' );
 	$components[] = array(	'composer' => 'mediawiki/semantic-result-formats' );
 	$components[] = array(	'composer' => 'mediawiki/semantic-forms-select "~4.0.0-beta"' );
 	$components[] = array(	'composer' => 'mediawiki/semantic-scribunto' );
 	$components[] = array(	'composer' => 'mediawiki/semantic-extra-special-properties' );
 	$components[] = array(	'composer' => 'mediawiki/iframe-tag' );
+
+	
+	// Remove when the patch will be merged, and uncomment the component above
+	// @ee https://github.com/SemanticMediaWiki/SemanticMediaWiki/pull/5652
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/SemanticMediaWiki',
+							'git' => '--branch  5651-ask-query-with-a-conjunction-of-negations-fails-when-using-elasticsearch https://github.com/WikibaseSolutions/SemanticMediaWiki.git',
+							'branch' => ' 5651-ask-query-with-a-conjunction-of-negations-fails-when-using-elasticsearch');
 
 	// Regular Mediawiki extensions
 

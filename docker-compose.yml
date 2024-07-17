@@ -204,8 +204,6 @@ services:
       - 'traefik.enable=true'
       - 'traefik.port=80'
       - 'traefik.frontend.rule=Host:matomo.dev.tripleperformance.fr'
-    depends_on:
-      - db
     restart: unless-stopped
 
 networks:
