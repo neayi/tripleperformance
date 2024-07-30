@@ -779,6 +779,8 @@ $wgLinkTitlesTargetNamespaces = [NS_MAIN, NS_STRUCTURE, NS_TRAINING, NS_CATEGORY
 $wgLinkTitlesSamenamespace = true;
 $wgLinkTitlesSkipTemplates = true;
 $wgLinkTitlesFirstOnly = true;
+$wgLinkTitlesMinimumTitleLength = 3;
+$wgLinkTitlesMaximumTitleLength = 25;
 
 // https://github.com/neayi/mw-Piwigo
 wfLoadExtension( 'Piwigo' );
