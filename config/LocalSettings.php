@@ -781,6 +781,8 @@ $wgLinkTitlesSkipTemplates = true;
 $wgLinkTitlesFirstOnly = true;
 $wgLinkTitlesMinimumTitleLength = 3;
 $wgLinkTitlesMaximumTitleLength = 25;
+$wgLinkTitlesEnableNoTargetMagicWord = true;
+$wgLinkTitlesCheckRedirect = false;
 
 // https://github.com/neayi/mw-Piwigo
 wfLoadExtension( 'Piwigo' );
