@@ -319,6 +319,8 @@ wfLoadExtension( 'Link_Attributes' );
 wfLoadExtension( 'PdfHandler' );
 wfLoadExtension( 'PDFEmbed' );
 $wgGroupPermissions['*']['embed_pdf'] = true;
+$wgGroupPermissions['user']['embed_pdf'] = true;
+$wgGroupPermissions['bot']['embed_pdf'] = true;
 
 # End of automatically generated settings.
 # Add more configuration options below.
