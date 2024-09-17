@@ -282,12 +282,16 @@ define("NS_STRUCTURE", 3000); // This MUST be even.
 define("NS_STRUCTURE_TALK", 3001); // This MUST be the following odd integer.
 define("NS_TRAINING", 3002); // This MUST be even.
 define("NS_TRAINING_TALK", 3003); // This MUST be the following odd integer.
+define("NS_IFRAME", 3004); // This MUST be even.
+define("NS_IFRAME_TALK", 3005); // This MUST be the following odd integer.
 
 // Add namespaces.
 $wgExtraNamespaces[NS_STRUCTURE] = "Structure";
 $wgExtraNamespaces[NS_STRUCTURE_TALK] = "Structure_talk"; // Note underscores in the namespace name.
 $wgExtraNamespaces[NS_TRAINING] = "Formation";
 $wgExtraNamespaces[NS_TRAINING_TALK] = "Formation_talk"; // Note underscores in the namespace name.
+$wgExtraNamespaces[NS_IFRAME] = "Iframe";
+$wgExtraNamespaces[NS_IFRAME_TALK] = "IFrame_talk"; // Note underscores in the namespace name.
 
 // Those namespace are seen as content for extensions
 $wgContentNamespaces[] = NS_STRUCTURE;
@@ -295,6 +299,7 @@ $wgContentNamespaces[] = NS_TRAINING;
 $wgContentNamespaces[] = NS_CATEGORY;
 $wgContentNamespaces[] = NS_PROJECT;
 $wgContentNamespaces[] = NS_HELP;
+$wgContentNamespaces[] = NS_IFRAME;
 
 $wgNamespacesToBeSearchedDefault[NS_STRUCTURE] = true;
 $wgNamespacesToBeSearchedDefault[NS_TRAINING] = true;
@@ -386,6 +391,7 @@ $wgSitemapNamespaces = [
     // 844, // Special
     3000, // Structures
     3002 // Training
+    // 3004 // Iframes
 ];
 
 $wgSitemapNamespacesPriorities = [
