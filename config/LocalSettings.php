@@ -90,7 +90,7 @@ function getWikiLanguage()
 {
     $forcedWikiLanguage = getenv('WIKI_LANGUAGE', true);
 
-    if (empty($forcedWikiLanguage))
+    if (empty($forcedWikiLanguage) && isset($_SERVER['HTTP_HOST']))
         $hostparts = explode('.', $_SERVER['HTTP_HOST']);
     else
         $hostparts = [ $forcedWikiLanguage ];
