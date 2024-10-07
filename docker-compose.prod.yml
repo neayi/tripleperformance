@@ -33,7 +33,7 @@ services:
     labels:
       - 'traefik.enable=true'
       - 'traefik.port=80'
-      - 'traefik.frontend.rule=Host:wiki.tripleperformance.fr, tripleperformance.fr, wiki.vps.tripleperformance.fr, www.tripleperformance.fr, 3perf.fr, de.tripleperformance.ag, en.tripleperformance.ag, es.tripleperformance.ag, fr.tripleperformance.ag, it.tripleperformance.ag, nl.tripleperformance.ag, pl.tripleperformance.ag'
+      - 'traefik.frontend.rule=Host:wiki.tripleperformance.fr, tripleperformance.fr, demo.tripleperformance.fr, wiki.vps.tripleperformance.fr, www.tripleperformance.fr, 3perf.fr, de.tripleperformance.ag, en.tripleperformance.ag, es.tripleperformance.ag, fr.tripleperformance.ag, it.tripleperformance.ag, nl.tripleperformance.ag, pl.tripleperformance.ag'
       - 'traefik.frontend.redirect.regex=^https?://(pratiques.)?tripleperformance.fr/(.*)'
       - 'traefik.frontend.redirect.replacement=https://wiki.tripleperformance.fr/$${2}'
       - 'traefik.frontend.redirect.permanent=true'
@@ -41,6 +41,7 @@ services:
       default:
         aliases:
           - wiki.tripleperformance.fr
+          - demo.tripleperformance.fr
           - de.tripleperformance.ag
           - en.tripleperformance.ag
           - es.tripleperformance.ag

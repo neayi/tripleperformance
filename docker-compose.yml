@@ -32,11 +32,12 @@ services:
     labels:
       - 'traefik.enable=true'
       - 'traefik.port=80'
-      - 'traefik.frontend.rule=Host:wiki.dev.tripleperformance.fr, de.dev.tripleperformance.ag, en.dev.tripleperformance.ag, es.dev.tripleperformance.ag, fr.dev.tripleperformance.ag, it.dev.tripleperformance.ag, nl.dev.tripleperformance.ag, pl.dev.tripleperformance.ag'
+      - 'traefik.frontend.rule=Host:wiki.dev.tripleperformance.fr, demo.dev.tripleperformance.fr, de.dev.tripleperformance.ag, en.dev.tripleperformance.ag, es.dev.tripleperformance.ag, fr.dev.tripleperformance.ag, it.dev.tripleperformance.ag, nl.dev.tripleperformance.ag, pl.dev.tripleperformance.ag'
     networks:
       default:
         aliases:
           - wiki.dev.tripleperformance.fr
+          - demo.dev.tripleperformance.fr
           - de.dev.tripleperformance.ag
           - en.dev.tripleperformance.ag
           - es.dev.tripleperformance.ag
@@ -51,6 +52,7 @@ services:
       traefik:
         aliases:
           - wiki.dev.tripleperformance.fr
+          - demo.dev.tripleperformance.fr
           - de.dev.tripleperformance.ag
           - en.dev.tripleperformance.ag
           - es.dev.tripleperformance.ag

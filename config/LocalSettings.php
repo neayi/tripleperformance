@@ -98,6 +98,9 @@ function getWikiLanguage()
     foreach ($hostparts as $chunk)
     {
         switch ($chunk) {
+            case 'demo':
+                return 'fr';
+
             case 'de':
             case 'en':
             case 'es':
@@ -401,9 +404,13 @@ $wgSitemapNamespacesPriorities = [
     3002 => '0.9'
 ];
 
-// Add some color to the browser (in mobile mode)
 wfLoadExtension( 'HeadScript' );
+
+// Add some color to the browser (in mobile mode)
 $wgHeadScriptCode = '<meta name="theme-color" content="#15A072">';
+
+// Add the Triple Performance icon font
+$wgHeadScriptCode .= '<link rel="stylesheet" href="https://neayi.github.io/tripleperformance-icon-font/style.css" />';
 
 if('prod' === $env) {
     $wgEnableCanonicalServerLink = true;
@@ -509,9 +516,14 @@ $wgDefaultSkin='chameleon';
 
 $egChameleonLayoutFile = dirname(MW_CONFIG_FILE) . '/skins/skin-neayi/layout.'.$wiki_language.'.xml';
 $egChameleonExternalStyleModules = array(
-    dirname(MW_CONFIG_FILE) . '/skins/skin-neayi/chameleon-tripleperformance-variables.scss' => 'afterVariables',
+    dirname(MW_CONFIG_FILE) . '/skins/skin-neayi/chameleon-tripleperformance-variables.scss' => 'afterVariables',// 'afterVariables',
     dirname(MW_CONFIG_FILE) . '/skins/skin-neayi/chameleon-neayi.scss' => 'afterMain'
 );
+
+if (isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'demo') !== false) {
+    $egChameleonExternalStyleModules[dirname(MW_CONFIG_FILE) . '/skins/skin-neayi/clients/demo/skin_variables.scss'] = 'afterVariables';
+    $egChameleonExternalStyleModules[dirname(MW_CONFIG_FILE) . '/skins/skin-neayi/clients/demo/skin.scss'] = 'afterMain';
+}
 
 // Allow custom CSS on Special Pages :
 $wgAllowSiteCSSOnRestrictedPages = true;
