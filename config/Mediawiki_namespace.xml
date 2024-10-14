@@ -1,0 +1,363 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.11/ http://www.mediawiki.org/xml/export-0.11.xsd" version="0.11" xml:lang="fr">
+  <siteinfo>
+    <sitename>Triple Performance</sitename>
+    <dbname>wiki_prod</dbname>
+    <base>https://wiki.tripleperformance.fr/wiki/Triple_Performance</base>
+    <generator>MediaWiki 1.39.10</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Média</namespace>
+      <namespace key="-1" case="first-letter">Spécial</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Discussion</namespace>
+      <namespace key="2" case="first-letter">Utilisateur</namespace>
+      <namespace key="3" case="first-letter">Discussion utilisateur</namespace>
+      <namespace key="4" case="first-letter">Triple Performance</namespace>
+      <namespace key="5" case="first-letter">Discussion Triple Performance</namespace>
+      <namespace key="6" case="first-letter">Fichier</namespace>
+      <namespace key="7" case="first-letter">Discussion fichier</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">Discussion MediaWiki</namespace>
+      <namespace key="10" case="first-letter">Modèle</namespace>
+      <namespace key="11" case="first-letter">Discussion modèle</namespace>
+      <namespace key="12" case="first-letter">Aide</namespace>
+      <namespace key="13" case="first-letter">Discussion aide</namespace>
+      <namespace key="14" case="first-letter">Catégorie</namespace>
+      <namespace key="15" case="first-letter">Discussion catégorie</namespace>
+      <namespace key="102" case="first-letter">Attribut</namespace>
+      <namespace key="103" case="first-letter">Discussion attribut</namespace>
+      <namespace key="106" case="first-letter">Formulaire</namespace>
+      <namespace key="107" case="first-letter">Discussion formulaire</namespace>
+      <namespace key="108" case="first-letter">Concept</namespace>
+      <namespace key="109" case="first-letter">Discussion concept</namespace>
+      <namespace key="112" case="first-letter">smw/schema</namespace>
+      <namespace key="113" case="first-letter">smw/schema talk</namespace>
+      <namespace key="114" case="first-letter">Rule</namespace>
+      <namespace key="115" case="first-letter">Rule talk</namespace>
+      <namespace key="420" case="first-letter">GeoJson</namespace>
+      <namespace key="421" case="first-letter">GeoJson talk</namespace>
+      <namespace key="460" case="case-sensitive">Campaign</namespace>
+      <namespace key="461" case="case-sensitive">Campaign talk</namespace>
+      <namespace key="828" case="first-letter">Module</namespace>
+      <namespace key="829" case="first-letter">Discussion module</namespace>
+      <namespace key="3000" case="first-letter">Structure</namespace>
+      <namespace key="3001" case="first-letter">Structure talk</namespace>
+      <namespace key="3002" case="first-letter">Formation</namespace>
+      <namespace key="3003" case="first-letter">Formation talk</namespace>
+      <namespace key="3004" case="first-letter">Iframe</namespace>
+      <namespace key="3005" case="first-letter">IFrame talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>MediaWiki:Common.css</title>
+    <ns>8</ns>
+    <id>7160</id>
+    <revision>
+      <id>141856</id>
+      <parentid>141855</parentid>
+      <timestamp>2024-07-23T09:42:18Z</timestamp>
+      <contributor>
+        <username>Bertrand Gorge</username>
+        <id>11</id>
+      </contributor>
+      <minor/>
+      <origin>141856</origin>
+      <model>css</model>
+      <format>text/css</format>
+      <text bytes="4646" sha1="nid2xf3im4ldcdqhih4t12kf6htfatw" xml:space="preserve">/* Le CSS placé ici sera appliqué à tous les habillages. */
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;800');
+@import url('https://fonts.googleapis.com/css2?family=Merriweather&amp;display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
+
+.oo-ui-windowManager-modal.oo-ui-windowManager-floating &gt; .oo-ui-dialog &gt; .oo-ui-window-frame {
+    top: 7em;
+}
+
+.oo-ui-windowManager-modal &gt; .oo-ui-dialog.oo-ui-window-active {
+    top: 90px;
+}
+
+.mainContainer .toc ul li {
+    margin-bottom: 0.2em;
+}
+
+table.infos-formation td, table.infos-formation th {
+   padding: 5px 6px;
+   line-height: 21px;
+}
+
+
+        table.FA_Table {
+            border: 2px SOLID #000000;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        table.FA_Table td {
+            background-color: #ffffff;
+            color: #000000;
+            font-size: 10pt;
+            vertical-align: middle;
+            padding: 2px 3px 2px 3px;
+            border-bottom: solid 1px #d9ead3;
+            line-height: 1.5em;
+        }
+
+        .FA_Table .FA_Petale {
+            background-color: #f3f3f3;
+            text-align: left;
+            font-weight: bold;
+            font-size: 12pt;
+            width: 189px;
+            min-width: 189px;
+        }
+
+        .FA_Table .FA_rappel {
+            background-color: #f3f3f3;
+            text-align: left;
+            font-style: italic;
+            color: #666666;
+        }
+
+        table.FA_subtable {
+            font-weight: bold;
+            width: 100%;
+            font-size: 10pt;
+        }
+        table.FA_subtable td {
+            text-align: left;
+            border-bottom: none;
+            background-color: #f3f3f3;
+        }
+        table.FA_subtable td.FA_subtable_right {
+            text-align: right;
+        }        
+                
+        .FA_Table .FA_Note_Col {
+            text-align: center;
+            font-weight: bold;
+            font-size: 19pt;
+            width:28px;
+            min-width:28px;
+            color: #FFFFFF;
+            border-left: solid 1px #d9ead3;
+
+        }
+
+        .FA_Table .FA_Note_Vert_0 {
+            background-color: #ffffff;
+            color: #000000;
+        }
+        .FA_Table .FA_Note_Vert_1 {
+            background-color: #d9ead3;
+            color: #000000;
+        }
+
+        .FA_Table .FA_Note_Vert_2 {
+            background-color: #b6d7a8;
+            color: #000000;
+        }
+
+        .FA_Table .FA_Note_Vert_3 {
+            background-color: #93c47d;
+            text-align: center;
+        }
+
+        .FA_Table .FA_Note_Vert_4 {
+            background-color: #6aa84f;
+        }
+
+        .FA_Table .FA_Note_Gris_0 {
+            background-color: #ffffff;
+            color: #000000;
+        }
+        .FA_Table .FA_Note_Gris_1 {
+            background-color: #efefef;
+            color: #000000;
+        }
+        .FA_Table .FA_Note_Gris_2 {
+            background-color: #b7b7b7;
+            color: #000000;
+        }
+        .FA_Table .FA_Note_Gris_3 {
+            background-color: #999999;
+        }
+
+        .FA_Table .FA_Note_Gris_4 {
+            background-color: #434343;
+            text-align: center;
+            font-weight: bold;
+        }
+        table.FA_Table td.FA_Note_Header {
+            background-color: #f3f3f3;
+            text-align: center;
+            font-weight: bold;
+            font-size: 12pt;
+            border-bottom: none;
+        }
+
+        .FA_Table .FA_Petale_compartiment_texte {
+            text-align: left;
+            min-width: 460px;
+        }
+
+
+        .FA_Table .FA_Petale_compartiment_titre {
+            text-align: left;
+            width: 189px;
+
+            font-weight: bold;
+        }
+
+
+        .FA_Table .FA_Note_Texte {
+            background-color: #ffffff;
+            text-align: left;
+        }
+
+.FA_Table .FA_Note_Bleu_0 {
+    background-color: #ffffff;
+    color: #000000;
+}
+.FA_Table .FA_Note_Bleu_1 {
+    background-color: #cfe2f3;
+    color: #000000;
+}
+
+.FA_Table .FA_Note_Bleu_2 {
+    background-color: #9fc5e8;
+    color: #000000;
+}
+
+.FA_Table .FA_Note_Bleu_3 {
+    background-color: #6fa8dc;
+    text-align: center;
+}
+
+.FA_Table .FA_Note_Bleu_4 {
+    background-color: #3d85c6;
+}
+
+.FA_Table .FA_Note_Rouge_0 {
+    background-color: #ffffff;
+    color: #000000;
+}
+.FA_Table .FA_Note_Rouge_1 {
+    background-color: #f4cccc;
+    color: #000000;
+}
+
+.FA_Table .FA_Note_Rouge_2 {
+    background-color: #ea9999;
+    color: #000000;
+}
+
+.FA_Table .FA_Note_Rouge_3 {
+    background-color: #e06666;
+    text-align: center;
+}
+
+.FA_Table .FA_Note_Rouge_4 {
+    background-color: #cc0000;
+}</text>
+      <sha1>nid2xf3im4ldcdqhih4t12kf6htfatw</sha1>
+    </revision>
+  </page>
+  <page>
+    <title>MediaWiki:Common.js</title>
+    <ns>8</ns>
+    <id>7155</id>
+    <revision>
+      <id>111264</id>
+      <parentid>101040</parentid>
+      <timestamp>2022-11-24T07:59:06Z</timestamp>
+      <contributor>
+        <username>Bertrand Gorge</username>
+        <id>11</id>
+      </contributor>
+      <minor/>
+      <origin>111264</origin>
+      <model>javascript</model>
+      <format>text/javascript</format>
+      <text bytes="268" sha1="9izgt4u7yjohqpxh1sr3924tt88cofe" xml:space="preserve">/* Force le champ de recherche de la page d'accueil à activer l'autosuggest */
+var homesearchinput = document.getElementById('homesearch');
+if (homesearchinput)
+{
+  homesearchinput.action = '/index.php';
+  document.getElementsByName('search')[1].id = 'searchInput';
+}</text>
+      <sha1>9izgt4u7yjohqpxh1sr3924tt88cofe</sha1>
+    </revision>
+  </page>
+  <page>
+    <title>MediaWiki:Sidebar</title>
+    <ns>8</ns>
+    <id>1657</id>
+    <revision>
+      <id>89853</id>
+      <parentid>83977</parentid>
+      <timestamp>2021-10-19T15:47:45Z</timestamp>
+      <contributor>
+        <username>Bertrand Gorge</username>
+        <id>11</id>
+      </contributor>
+      <origin>89853</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="77" sha1="7wnvycbqsdtxig0qgiemf5ovjfssy6a" xml:space="preserve">
+* navigation
+** mainpage|mainpage-description
+* SEARCH
+* TOOLBOX
+* LANGUAGES</text>
+      <sha1>7wnvycbqsdtxig0qgiemf5ovjfssy6a</sha1>
+    </revision>
+  </page>
+  <page>
+    <title>MediaWiki:Mainpage</title>
+    <ns>8</ns>
+    <id>11302</id>
+    <revision>
+      <id>85148</id>
+      <timestamp>2021-06-25T16:42:29Z</timestamp>
+      <contributor>
+        <username>Bertrand Gorge</username>
+        <id>11</id>
+      </contributor>
+      <comment>Page créée avec « Triple Performance »</comment>
+      <origin>85148</origin>
+      <model>wikitext</model>
+      <format>text/x-wiki</format>
+      <text bytes="18" sha1="kavnusi17oldtulwupmxkr08h1rcewo" xml:space="preserve">Triple Performance</text>
+      <sha1>kavnusi17oldtulwupmxkr08h1rcewo</sha1>
+    </revision>
+  </page>
+  <page>
+    <title>MediaWiki:Iframe-cfg.json</title>
+    <ns>8</ns>
+    <id>21153</id>
+    <revision>
+      <id>140386</id>
+      <parentid>139886</parentid>
+      <timestamp>2024-06-19T08:40:13Z</timestamp>
+      <contributor>
+        <username>Bertrand Gorge</username>
+        <id>11</id>
+      </contributor>
+      <origin>140386</origin>
+      <model>json</model>
+      <format>application/json</format>
+      <text bytes="141" sha1="p2k7iu0oim2n0n0api7cflirf7ljdc2" xml:space="preserve">{
+	"domains": [
+		"matomo.tripleperformance.fr",
+		"widget.weezevent.com",
+		"www.canva.com",
+		"docs.google.com",
+		"share.hsforms.com"
+	]
+}</text>
+      <sha1>p2k7iu0oim2n0n0api7cflirf7ljdc2</sha1>
+    </revision>
+  </page>
+</mediawiki>

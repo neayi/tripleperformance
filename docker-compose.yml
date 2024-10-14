@@ -32,7 +32,7 @@ services:
     labels:
       - 'traefik.enable=true'
       - 'traefik.port=80'
-      - 'traefik.frontend.rule=Host:wiki.dev.tripleperformance.fr, demo.dev.tripleperformance.fr, de.dev.tripleperformance.ag, en.dev.tripleperformance.ag, es.dev.tripleperformance.ag, fr.dev.tripleperformance.ag, it.dev.tripleperformance.ag, nl.dev.tripleperformance.ag, pl.dev.tripleperformance.ag'
+      - 'traefik.frontend.rule=Host:wiki.dev.tripleperformance.fr, demo.dev.tripleperformance.fr, fr.dev.tripleperformance.ag, en.dev.tripleperformance.ag, de.dev.tripleperformance.ag, es.dev.tripleperformance.ag, fi.dev.tripleperformance.ag, pt.dev.tripleperformance.ag, it.dev.tripleperformance.ag, gr.dev.tripleperformance.ag, hu.dev.tripleperformance.ag, pl.dev.tripleperformance.ag, nl.dev.tripleperformance.ag'
     networks:
       default:
         aliases:
@@ -45,6 +45,10 @@ services:
           - it.dev.tripleperformance.ag
           - nl.dev.tripleperformance.ag
           - pl.dev.tripleperformance.ag
+          - gr.dev.tripleperformance.ag
+          - hu.dev.tripleperformance.ag
+          - fi.dev.tripleperformance.ag
+          - pt.dev.tripleperformance.ag
 
       # Add the traefik network. This is so that discourse can access this container using the backend. We do
       # that only on dev, because the host is not a real IP. On production we can use the public DNS resolution
@@ -60,6 +64,10 @@ services:
           - it.dev.tripleperformance.ag
           - nl.dev.tripleperformance.ag
           - pl.dev.tripleperformance.ag
+          - gr.dev.tripleperformance.ag
+          - hu.dev.tripleperformance.ag
+          - fi.dev.tripleperformance.ag
+          - pt.dev.tripleperformance.ag
     profiles:
       - min
       - all

@@ -98,16 +98,20 @@ function getWikiLanguage()
     foreach ($hostparts as $chunk)
     {
         switch ($chunk) {
+            case 'fr':
             case 'demo':
                 return 'fr';
 
             case 'de':
             case 'en':
             case 'es':
-            case 'fr':
             case 'it':
             case 'nl':
             case 'pl':
+            case 'gr':
+            case 'hu':
+            case 'fi':
+            case 'pt':                
                 return $chunk;
         }
     }
@@ -717,7 +721,11 @@ $wgUploadWizardConfig = array(
         'pl' => 'Polski',
         'nl' => 'Nederlands',
         'it' => 'Italiano',
-        'es' => 'Español'
+        'es' => 'Español',
+        'gr' => 'Ελληνικά',
+        'hu' => 'Magyar',
+        'fi' => 'Suomi',
+        'pt' => 'Português'
         ), // Selectable languages for file descriptions - defaults to 'en'
     'tutorial' => array(
             'skip' => true

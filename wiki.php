@@ -274,6 +274,10 @@ function isLanguage($env)
         case '--it':
         case '--nl':
         case '--pl':
+        case '--gr':
+        case '--hu':
+        case '--fi':
+        case '--pt':
         case '--all-languages':
             return true;
     }
@@ -291,6 +295,11 @@ function getLanguage($env)
         case '--it':
         case '--nl':
         case '--pl':
+        case '--gr':
+        case '--hu':
+        case '--fi':
+        case '--pt':
+        
         case '--all-languages':
             return trim($env, '-');
     }
@@ -670,6 +679,10 @@ function getMysqlCommandLine($targetEnv, $targetLanguage, $script, $sqlBatchFile
             case 'it':
             case 'nl':
             case 'pl':
+            case 'gr':
+            case 'hu':
+            case 'fi':
+            case 'pt':
                 $dbname = "wiki_$targetLanguage";
                 break;
 
