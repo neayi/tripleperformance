@@ -78,15 +78,4 @@ sans = [
   "hu.preprod.tripleperformance.ag",
   "fi.preprod.tripleperformance.ag",
   "pt.preprod.tripleperformance.ag",
-
-  "wiki.vps.tripleperformance.fr",
-  "phpmyadmin.vps.tripleperformance.fr",
-  "elasticsearch.vps.tripleperformance.fr",
-  "insights.vps.tripleperformance.fr",
-  "elasticvue.vps.tripleperformance.fr",
-  "traefik.vps.tripleperformance.fr",
-  "forum.vps.tripleperformance.fr",
-  "photos.vps.tripleperformance.fr",
-  "matomo.vps.tripleperformance.fr",
-  "portainer.vps.tripleperformance.fr"
 ]
