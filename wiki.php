@@ -309,8 +309,17 @@ function getLanguage($env)
 
 function getAllLanguages()
 {
-    return ['fr',
-            'en'];
+    return ['de',
+            'en',
+            'es',
+            'fr',
+            'it',
+            'nl',
+            'pl',
+            'gr',
+            'hu',
+            'fi',
+            'pt'];
 }
 
 function getScriptPath($script)
