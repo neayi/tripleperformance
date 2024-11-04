@@ -692,9 +692,6 @@ wfLoadExtension( 'TemplateData' );
 wfLoadExtension( 'PageForms' );
 $wgPageFormsLinkAllRedLinksToForms = true;
 $wgPageFormsAutocompleteOnAllChars = true;
-$wgPageFormsMaxAutocompleteValues = 250;
-
-wfLoadExtension( 'SemanticFormsSelect' );
 
 wfLoadExtension( 'UploadWizard' );
 $wgUseInstantCommons = true;

@@ -200,7 +200,6 @@ function getWikiComponents()
 	$components[] = array(	'composer' => 'mediawiki/semantic-media-wiki "~4.2"' );
 	$components[] = array(	'composer' => 'mediawiki/maps' );
 	$components[] = array(	'composer' => 'mediawiki/semantic-result-formats' );
-	$components[] = array(	'composer' => 'mediawiki/semantic-forms-select "~4.0.0-beta"' );
 	$components[] = array(	'composer' => 'mediawiki/semantic-scribunto' );
 	$components[] = array(	'composer' => 'mediawiki/semantic-extra-special-properties' );
 	$components[] = array(	'composer' => 'mediawiki/iframe-tag' );
@@ -288,8 +287,7 @@ function getWikiComponents()
 
 	// Extensions maintained by Yaron Koren which should work better on the master branch:
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/PageForms',
-							'git' => '--branch master https://github.com/neayi/mediawiki-extensions-PageForms.git',
-							'branch' => 'master');
+							'git' => 'https://github.com/neayi/mediawiki-extensions-PageForms.git');
 						// TODO: Revert to wikimedia when https://phabricator.wikimedia.org/T378723 is fixed
 
 	// Other extensions
