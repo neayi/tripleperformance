@@ -287,8 +287,7 @@ function getWikiComponents()
 
 	// Extensions maintained by Yaron Koren which should work better on the master branch:
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/PageForms',
-							'git' => 'https://github.com/neayi/mediawiki-extensions-PageForms.git');
-						// TODO: Revert to wikimedia when https://phabricator.wikimedia.org/T378723 is fixed
+							'git' => 'https://github.com/wikimedia/mediawiki-extensions-PageForms.git');
 
 	// Other extensions
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Realnames',
