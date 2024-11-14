@@ -57,7 +57,7 @@ RUN apt-get update \
 RUN a2enmod rewrite headers deflate remoteip
 
 RUN test -z "$DEBUG_TOOLS" || ( \
-       pecl install xdebug-3.3 \ 
+       pecl install xdebug-3.3.2 \
     && docker-php-ext-enable xdebug \
     && echo "xdebug.discover_client_host=on" >> /usr/local/etc/php/conf.d/xdebug.ini \
     && echo "xdebug.mode=debug" >> /usr/local/etc/php/conf.d/xdebug.ini \
