@@ -33,7 +33,7 @@ services:
     labels:
       - 'traefik.enable=true'
       - 'traefik.port=80'
-      - 'traefik.frontend.rule=Host:wiki.tripleperformance.fr, tripleperformance.fr, demo.tripleperformance.fr, wiki.vps.tripleperformance.fr, www.tripleperformance.fr, 3perf.fr, de.tripleperformance.ag, en.tripleperformance.ag, es.tripleperformance.ag, fr.tripleperformance.ag, it.tripleperformance.ag, nl.tripleperformance.ag, pl.tripleperformance.ag, el.tripleperformance.ag, hu.tripleperformance.ag, fi.tripleperformance.ag, pt.tripleperformance.ag'
+      - 'traefik.frontend.rule=Host:wiki.tripleperformance.fr, tripleperformance.fr, demo.tripleperformance.fr, wiki.vps.tripleperformance.fr, www.tripleperformance.fr, 3perf.fr, de.tripleperformance.ag, en.tripleperformance.ag, es.tripleperformance.ag, fr.tripleperformance.ag, it.tripleperformance.ag, nl.tripleperformance.ag, pl.tripleperformance.ag, el.tripleperformance.ag, hu.tripleperformance.ag, fi.tripleperformance.ag, pt.tripleperformance.ag, ar.tripleperformance.ag'
       - 'traefik.frontend.redirect.regex=^https?://(pratiques.)?tripleperformance.fr/(.*)'
       - 'traefik.frontend.redirect.replacement=https://wiki.tripleperformance.fr/$${2}'
       - 'traefik.frontend.redirect.permanent=true'
@@ -53,6 +53,7 @@ services:
           - hu.tripleperformance.ag
           - fi.tripleperformance.ag
           - pt.tripleperformance.ag
+          - ar.tripleperformance.ag
 
   insights:
     image: ghcr.io/neayi/insights/insights:$INSIGHTS_VERSION_PROD
@@ -82,7 +83,7 @@ services:
     labels:
       - 'traefik.enable=true'
       - 'traefik.port=80'
-      - 'traefik.frontend.rule=Host:wiki.preprod.tripleperformance.fr, de.preprod.tripleperformance.ag, en.preprod.tripleperformance.ag, es.preprod.tripleperformance.ag, fr.preprod.tripleperformance.ag, it.preprod.tripleperformance.ag, nl.preprod.tripleperformance.ag, pl.preprod.tripleperformance.ag, el.preprod.tripleperformance.ag, hu.preprod.tripleperformance.ag, fi.preprod.tripleperformance.ag, pt.preprod.tripleperformance.ag'
+      - 'traefik.frontend.rule=Host:wiki.preprod.tripleperformance.fr, de.preprod.tripleperformance.ag, en.preprod.tripleperformance.ag, es.preprod.tripleperformance.ag, fr.preprod.tripleperformance.ag, it.preprod.tripleperformance.ag, nl.preprod.tripleperformance.ag, pl.preprod.tripleperformance.ag, el.preprod.tripleperformance.ag, hu.preprod.tripleperformance.ag, fi.preprod.tripleperformance.ag, pt.preprod.tripleperformance.ag, ar.preprod.tripleperformance.ag'
     networks:
       default:
         aliases:
@@ -98,6 +99,7 @@ services:
           - hu.preprod.tripleperformance.ag
           - fi.preprod.tripleperformance.ag
           - pt.preprod.tripleperformance.ag          
+          - ar.preprod.tripleperformance.ag          
     deploy:
       resources:
         limits:

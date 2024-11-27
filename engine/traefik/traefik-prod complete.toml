@@ -65,6 +65,7 @@ sans = [
   "hu.tripleperformance.ag",
   "fi.tripleperformance.ag",
   "pt.tripleperformance.ag",
+  "ar.tripleperformance.ag",
 
   "de.preprod.tripleperformance.ag",
   "en.preprod.tripleperformance.ag",
@@ -77,7 +78,8 @@ sans = [
   "hu.preprod.tripleperformance.ag",
   "fi.preprod.tripleperformance.ag",
   "pt.preprod.tripleperformance.ag",
-  
+  "ar.preprod.tripleperformance.ag",
+
   "de.forum.tripleperformance.ag",
   "en.forum.tripleperformance.ag",
   "es.forum.tripleperformance.ag",

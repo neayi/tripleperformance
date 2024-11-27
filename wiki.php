@@ -271,6 +271,7 @@ function isLanguage($env)
         case '--en':
         case '--es':
         case '--fr':
+        case '--ar':
         case '--it':
         case '--nl':
         case '--pl':
@@ -292,6 +293,7 @@ function getLanguage($env)
         case '--en':
         case '--es':
         case '--fr':
+        case '--ar':
         case '--it':
         case '--nl':
         case '--pl':
@@ -313,6 +315,7 @@ function getAllLanguages()
             'en',
             'es',
             'fr',
+            'ar',
             'it',
             'nl',
             'pl',
@@ -685,6 +688,7 @@ function getMysqlCommandLine($targetEnv, $targetLanguage, $script, $sqlBatchFile
             case 'de':
             case 'en':
             case 'es':
+            case 'ar':
             case 'it':
             case 'nl':
             case 'pl':

@@ -8,7 +8,7 @@ services:
     labels:
       - 'traefik.enable=true'
       - 'traefik.port=80'
-      - 'traefik.frontend.rule=Host:wiki.preprod.tripleperformance.fr, de.preprod.tripleperformance.ag, en.preprod.tripleperformance.ag, es.preprod.tripleperformance.ag, fr.preprod.tripleperformance.ag, it.preprod.tripleperformance.ag, nl.preprod.tripleperformance.ag, pl.preprod.tripleperformance.ag, el.preprod.tripleperformance.ag, hu.preprod.tripleperformance.ag, fi.preprod.tripleperformance.ag, pt.preprod.tripleperformance.ag'
+      - 'traefik.frontend.rule=Host:wiki.preprod.tripleperformance.fr, de.preprod.tripleperformance.ag, en.preprod.tripleperformance.ag, es.preprod.tripleperformance.ag, fr.preprod.tripleperformance.ag, it.preprod.tripleperformance.ag, nl.preprod.tripleperformance.ag, pl.preprod.tripleperformance.ag, el.preprod.tripleperformance.ag, hu.preprod.tripleperformance.ag, fi.preprod.tripleperformance.ag, pt.preprod.tripleperformance.ag, ar.preprod.tripleperformance.ag'
     networks:
       default:
         aliases:
@@ -24,6 +24,7 @@ services:
           - hu.preprod.tripleperformance.ag
           - fi.preprod.tripleperformance.ag
           - pt.preprod.tripleperformance.ag   
+          - ar.preprod.tripleperformance.ag   
     deploy:
       resources:
         limits:

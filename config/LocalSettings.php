@@ -106,6 +106,7 @@ function getWikiLanguage()
             case 'en':
             case 'es':
             case 'it':
+            case 'ar':                
             case 'nl':
             case 'pl':
             case 'el':
@@ -717,6 +718,7 @@ $wgUploadWizardConfig = array(
         'en' => 'English',
         'de' => 'Deutsch',
         'pl' => 'Polski',
+        'ar' => 'الدارجة',        
         'nl' => 'Nederlands',
         'it' => 'Italiano',
         'es' => 'Español',
