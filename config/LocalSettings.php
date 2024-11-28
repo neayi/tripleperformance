@@ -693,6 +693,7 @@ wfLoadExtension( 'TemplateData' );
 wfLoadExtension( 'PageForms' );
 $wgPageFormsLinkAllRedLinksToForms = true;
 $wgPageFormsAutocompleteOnAllChars = true;
+$wgPageFormsRenameMainEditTab = true; // renames only the "edit" tab to "edit source" (in whatever language the wiki is being viewed in)
 
 wfLoadExtension( 'UploadWizard' );
 $wgUseInstantCommons = true;
