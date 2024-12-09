@@ -693,6 +693,8 @@ wfLoadExtension( 'TemplateData' );
 wfLoadExtension( 'PageForms' );
 $wgPageFormsLinkAllRedLinksToForms = true;
 $wgPageFormsAutocompleteOnAllChars = true;
+
+$wgPageFormsRenameEditTabs = false; // renames the "edit with form" tab to "edit", and the "edit" tab to "edit source" (in whatever language the wiki is being viewed in)
 $wgPageFormsRenameMainEditTab = true; // renames only the "edit" tab to "edit source" (in whatever language the wiki is being viewed in)
 
 wfLoadExtension( 'UploadWizard' );
@@ -849,6 +851,8 @@ $iFrameOnWikiConfig = true;
 // See https://wiki.tripleperformance.fr/wiki/MediaWiki:Iframe-cfg.json
 
 wfLoadExtension( 'FleurAgroecologie' );
+
+wfLoadExtension( 'ConvertPDF2Wiki' );
 
 // Debug and error reporting :
 

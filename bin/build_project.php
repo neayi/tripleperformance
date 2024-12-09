@@ -356,6 +356,9 @@ function getWikiComponents()
 							'git' => '--branch '.$wiki_version.' https://github.com/neayi/NeayiAuth.git',
 							'postinstall' => 'composer');
 
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/convertPDF2Wiki',
+							'git' => 'https://github.com/neayi/mw-convertPDF2Wiki.git');
+
 	// TODO: Create a new repo and get rid of CommentStreams
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/DiscourseIntegration',
 							'git' => '--branch main https://github.com/neayi/mw-DiscourseIntegration.git',

@@ -208,6 +208,7 @@ services:
 
   matomo:
     image: matomo
+    restart: unless-stopped
     environment:
       - MATOMO_DATABASE_HOST=db
     volumes:
@@ -216,7 +217,6 @@ services:
       - 'traefik.enable=true'
       - 'traefik.port=80'
       - 'traefik.frontend.rule=Host:matomo.dev.tripleperformance.fr'
-    restart: unless-stopped
 
 networks:
   default: ~
