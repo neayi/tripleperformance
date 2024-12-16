@@ -854,6 +854,8 @@ wfLoadExtension( 'FleurAgroecologie' );
 
 wfLoadExtension( 'ConvertPDF2Wiki' );
 
+wfLoadExtension( 'NeayiRelatedPages' );
+
 // Debug and error reporting :
 
 if ($debug) {
