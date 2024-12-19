@@ -210,7 +210,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.port=5678
-      - traefik.frontend.rule=Host:n8n.dev.tripleperformance.fr
+      - traefik.frontend.rule=Host:n8n.tripleperformance.fr
     environment:
       - N8N_HOST=n8n.tripleperformance.fr
       - N8N_PORT=5678
