@@ -204,6 +204,24 @@ services:
       - db
     restart: always
 
+  n8n:
+    image: docker.n8n.io/n8nio/n8n
+    restart: always
+    labels:
+      - traefik.enable=true
+      - traefik.port=5678
+      - traefik.frontend.rule=Host:n8n.dev.tripleperformance.fr
+    environment:
+      - N8N_HOST=n8n.tripleperformance.fr
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=https
+      - NODE_ENV=production
+      - WEBHOOK_URL=https://n8n.tripleperformance.fr/
+      - GENERIC_TIMEZONE=Europe/Paris
+    volumes:
+      - n8n_data:/home/node/.n8n
+      - ./backup/n8n:/files
+
 networks:
   default: ~
   traefik:
@@ -213,4 +231,6 @@ volumes:
   portainer_data:
     driver: local
   matomo:
+    driver: local
+  n8n_data:
     driver: local

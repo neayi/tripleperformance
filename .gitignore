@@ -24,3 +24,4 @@ backup/.mysql.cnf
 /sitemap.xml
 up
 web_bash
+backup/n8n/
