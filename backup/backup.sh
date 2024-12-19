@@ -19,4 +19,8 @@ rsync -va /var/www/tripleperformance_docker/piwigo/config/www/_data/i/upload nea
 scp $DIR/.env $DIR/.env.preprod neayi.com:~/backup/
 scp $DIR/insights/.env neayi.com:~/backup/.env.insights
 
+docker exec tripleperformance_prod-n8n-1 sh -c "n8n export:workflow --backup --output=/files/workflows/"
+docker exec tripleperformance_prod-n8n-1 sh -c "n8n export:credentials --backup --output=/files/credentials/"
+rsync -va $DIR/n8n neayi.com:~/backup/n8n
+
 find $DIR/DBs -name "*.gz" -type f -mtime +10 -exec rm -f {} \;
