@@ -322,6 +322,10 @@ function getWikiComponents()
 							'git' => '--branch fix-68 https://github.com/neayi/LinkTitles.git',
 							'branch' => 'fix-68');
 
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/Math',
+							'git' => '--branch '.$wiki_version.' https://gerrit.wikimedia.org/r/mediawiki/extensions/Math',
+							'branch' => $wiki_version);
+
 	// Translation
 	// $components[] = array(	'dest' => $wiki_extensions_dir . '/UniversalLanguageSelector',
 	// 						'git' => '--branch '.$wiki_version.' https://gerrit.wikimedia.org/r/mediawiki/extensions/UniversalLanguageSelector.git',

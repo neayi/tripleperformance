@@ -856,6 +856,8 @@ wfLoadExtension( 'ConvertPDF2Wiki' );
 
 wfLoadExtension( 'NeayiRelatedPages' );
 
+wfLoadExtension( 'Math' );
+
 // Debug and error reporting :
 
 if ($debug) {
