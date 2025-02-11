@@ -303,9 +303,6 @@ function getWikiComponents()
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/RottenLinks',
 							'git' => 'https://github.com/miraheze/RottenLinks.git');
 
-	$components[] = array(	'dest' => $wiki_extensions_dir . '/PDFEmbed',
-	                        'git' => 'https://github.com/miraheze/PDFEmbed.git');
-
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/SlackNotifications',
 							'git' => 'https://github.com/kulttuuri/SlackNotifications.git');
 
@@ -336,6 +333,9 @@ function getWikiComponents()
 							'branch' => $wiki_version);
 
 	// Neayi extensions and forks
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/PDFEmbed',
+	                        'git' => 'https://github.com/neayi/PDFEmbed.git'); // Forked from https://github.com/miraheze/PDFEmbed.git to remove the check on users
+
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/HitCounters',
 							'git' => '--branch Neayi1_39 https://github.com/neayi/mediawiki-extensions-HitCounters.git',
 							'branch' => 'Neayi1_39',
