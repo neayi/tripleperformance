@@ -543,9 +543,6 @@ $egChameleonExternalStyleVariables = [
     'primary' => '#15A072'
 ];
 
-// Database and cross referencing
-wfLoadExtension( 'DynamicPageList3' );
-
 // Scripting and parsing
 wfLoadExtension( 'Loops' );
 wfLoadExtension( 'Variables' );

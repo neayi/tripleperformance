@@ -215,11 +215,6 @@ function getWikiComponents()
 							'git' => '--branch '.$wiki_version.' https://github.com/wikimedia/mediawiki-extensions-HeadScript.git',
 							'branch' => $wiki_version);
 
-	// https://www.mediawiki.org/wiki/Extension:DynamicPageList3
-	$components[] = array(	'dest' => $wiki_extensions_dir . '/DynamicPageList3',
-							'git' => 'https://github.com/Universal-Omega/DynamicPageList3.git');
-
-
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/EmbedVideo',
 							'git' => 'https://github.com/StarCitizenWiki/mediawiki-extensions-EmbedVideo.git');
 
