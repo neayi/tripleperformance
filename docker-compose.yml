@@ -232,6 +232,14 @@ services:
       - NODE_ENV=production
       - WEBHOOK_URL=https://n8n.dev.tripleperformance.fr/
       - GENERIC_TIMEZONE=Europe/Paris
+      - N8N_EMAIL_MODE
+      - N8N_SMTP_HOST
+      - N8N_SMTP_USER
+      - N8N_SMTP_PASS
+      - N8N_SMTP_SENDER
+      - N8N_SMTP_PORT
+      - N8N_SMTP_SSL
+      - N8N_SMTP_TLS      
     volumes:
       - n8n_data:/home/node/.n8n
       - ./backup/n8n:/files
