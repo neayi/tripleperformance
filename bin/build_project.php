@@ -201,9 +201,10 @@ function getWikiComponents()
 	$components[] = array(	'composer' => 'mediawiki/maps' );
 	$components[] = array(	'composer' => 'mediawiki/semantic-result-formats' );
 	$components[] = array(	'composer' => 'mediawiki/semantic-scribunto' );
-	$components[] = array(	'composer' => 'mediawiki/semantic-extra-special-properties' );
+	$components[] = array(	'composer' => 'mediawiki/semantic-extra-special-properties "~3.0"' );
 	$components[] = array(	'composer' => 'mediawiki/iframe-tag' );
-
+	$components[] = array(	'composer' => 'react/promise "~2.0"' ); // A supprimer quand WikiSearch n'aura plus besoin du 2 mais sera sur 3...
+	
 	// Regular Mediawiki extensions
 
 	// https://www.mediawiki.org/wiki/Extension:GTag
