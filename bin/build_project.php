@@ -349,7 +349,8 @@ function getWikiComponents()
 							'branch' => 'Neayi');
 
 	$components[] = array(	'dest' => $wiki_skins_dir . '/skin-neayi',
-							'git' => 'https://github.com/neayi/skin-neayi.git');
+							'git' => 'https://github.com/neayi/skin-neayi.git',
+							'branch' => '2025-03'); // none
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Carousel',
 							'git' => 'https://github.com/neayi/ext-carousel.git');
@@ -366,7 +367,7 @@ function getWikiComponents()
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/DiscourseIntegration',
 							'git' => 'https://github.com/neayi/mw-DiscourseIntegration.git',
 							'postinstall' => 'submodules',
-							'branch' => 'main');
+							'branch' => '2025-03'); // main
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/InputBox',
 							'git' => 'https://github.com/neayi/mediawiki-extensions-InputBox.git',
@@ -375,7 +376,7 @@ function getWikiComponents()
 	// TODO: Merge integration-of-discourse in master
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/NeayiInteractions',
 							'git' => 'https://github.com/neayi/mw-NeayiInteractions.git',
-							'branch' => 'integration-of-discourse');
+							'branch' => '2025-03'); // integration-of-discourse
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/NeayiNavbar',
 							'git' => 'https://github.com/neayi/mw-NeayiNavbar.git');
@@ -384,7 +385,8 @@ function getWikiComponents()
 							'git' => 'https://github.com/neayi/mw-NeayiIntroJS.git');
 					
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/NeayiRelatedPages',
-							'git' => 'https://github.com/neayi/mw-NeayiRelatedPages.git');
+							'git' => 'https://github.com/neayi/mw-NeayiRelatedPages.git',
+							'branch' => '2025-03');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Piwigo',
 							'git' => 'https://github.com/neayi/mw-Piwigo.git');
