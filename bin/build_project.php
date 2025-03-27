@@ -376,7 +376,7 @@ function getWikiComponents()
 	// TODO: Merge integration-of-discourse in master
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/NeayiInteractions',
 							'git' => 'https://github.com/neayi/mw-NeayiInteractions.git',
-							'branch' => '2025-03'); // integration-of-discourse
+							'branch' => 'integration-of-discourse');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/NeayiNavbar',
 							'git' => 'https://github.com/neayi/mw-NeayiNavbar.git');
