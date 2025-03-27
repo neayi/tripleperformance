@@ -25,3 +25,6 @@ backup/.mysql.cnf
 up
 web_bash
 backup/n8n/
+insights_bash
+backup/locales_config.sql
+*:Zone.Identifier
