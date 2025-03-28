@@ -349,8 +349,7 @@ function getWikiComponents()
 							'branch' => 'Neayi');
 
 	$components[] = array(	'dest' => $wiki_skins_dir . '/skin-neayi',
-							'git' => 'https://github.com/neayi/skin-neayi.git',
-							'branch' => '2025-03'); // none
+							'git' => 'https://github.com/neayi/skin-neayi.git');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Carousel',
 							'git' => 'https://github.com/neayi/ext-carousel.git');
@@ -367,7 +366,7 @@ function getWikiComponents()
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/DiscourseIntegration',
 							'git' => 'https://github.com/neayi/mw-DiscourseIntegration.git',
 							'postinstall' => 'submodules',
-							'branch' => '2025-03'); // main
+							'branch' => 'main');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/InputBox',
 							'git' => 'https://github.com/neayi/mediawiki-extensions-InputBox.git',
@@ -385,8 +384,7 @@ function getWikiComponents()
 							'git' => 'https://github.com/neayi/mw-NeayiIntroJS.git');
 					
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/NeayiRelatedPages',
-							'git' => 'https://github.com/neayi/mw-NeayiRelatedPages.git',
-							'branch' => '2025-03');
+							'git' => 'https://github.com/neayi/mw-NeayiRelatedPages.git');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Piwigo',
 							'git' => 'https://github.com/neayi/mw-Piwigo.git');
