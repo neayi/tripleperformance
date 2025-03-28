@@ -201,10 +201,9 @@ function getWikiComponents()
 	$components[] = array(	'composer' => 'mediawiki/maps' );
 	$components[] = array(	'composer' => 'mediawiki/semantic-result-formats' );
 	$components[] = array(	'composer' => 'mediawiki/semantic-scribunto' );
-	$components[] = array(	'composer' => 'mediawiki/semantic-extra-special-properties "~3.0"' );
+	$components[] = array(	'composer' => 'mediawiki/semantic-extra-special-properties "^4.0"' );
 	$components[] = array(	'composer' => 'mediawiki/iframe-tag' );
-	$components[] = array(	'composer' => 'react/promise "~2.0"' ); // A supprimer quand WikiSearch n'aura plus besoin du 2 mais sera sur 3...
-	
+
 	// Regular Mediawiki extensions
 
 	// https://www.mediawiki.org/wiki/Extension:GTag
@@ -217,7 +216,8 @@ function getWikiComponents()
 							'branch' => $wiki_version);
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/EmbedVideo',
-							'git' => 'https://github.com/StarCitizenWiki/mediawiki-extensions-EmbedVideo.git');
+							'git' => 'https://github.com/StarCitizenWiki/mediawiki-extensions-EmbedVideo.git',
+							'branch' => 'v3.4.2'); // We are using an old branch until this bug is fixed: https://github.com/StarCitizenWiki/mediawiki-extensions-EmbedVideo/issues/115
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/RelatedArticles',
 							'git' => 'https://github.com/wikimedia/mediawiki-extensions-RelatedArticles.git',
