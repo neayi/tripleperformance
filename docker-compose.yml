@@ -81,6 +81,7 @@ services:
       target: base
       args:
         - DEBUG_TOOLS=true
+    user: "${UID:-1000}:${GID:-1000}"
     networks:
       - default
       - traefik
