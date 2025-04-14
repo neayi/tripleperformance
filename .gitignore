@@ -14,7 +14,8 @@ backup/.mysql.cnf
 /insights
 /.cache
 /.data
-/bin/sql/wiki_prod.sql
+/bin/sql/wiki_*.sql
+/bin/sql/insights_*.sql
 /discourse/discourse-data
 /discourse/.env
 /discourse/.pgpass
