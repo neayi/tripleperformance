@@ -498,6 +498,27 @@ else
     $wgDefaultRobotPolicy = 'noindex,nofollow';
 }
 
+
+if ('dev' === $env) {
+    
+    $wgHeadScriptCode .= <<<START_END_MARKER
+    <!-- Matomo -->
+    <script>
+    var _paq = window._paq = window._paq || [];
+    /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+    (function() {
+        var u="//matomo.dev.tripleperformance.fr/";
+        _paq.push(['setTrackerUrl', u+'matomo.php']);
+        _paq.push(['setSiteId', '$matomoSiteId']);
+        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+        g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+    })();
+    </script>
+START_END_MARKER;
+
+}
 // Cookies
 $wgCookieExpiration = 180 * 86400; // 180 days
 $wgExtendedLoginCookieExpiration = null;
@@ -616,6 +637,7 @@ $wgDiscourseAPIKey = getenv($wiki_language_prefix . '_DISCOURSE_API_KEY', true);
 $wgDiscourseHost = getenv($wiki_language_prefix . '_DISCOURSE_API_HOST', true);
 $wgDiscourseURL = getenv($wiki_language_prefix . '_DISCOURSE_ROOT_URL', true);
 $wgDiscourseDefaultCategoryId = getenv($wiki_language_prefix . '_DISCOURSE_DEFAULT_CATEGORY', true);
+$wgDiscourseDefaultTagGroupId = getenv($wiki_language_prefix . '_DISCOURSE_DEFAULT_TAGGROUP', true);
 
 wfLoadExtension( 'NeayiInteractions' );
 wfLoadExtension( 'NeayiNavbar' );
