@@ -376,8 +376,28 @@ $sespgEnabledPropertyList = [
 //    '_DESCRIPTION',
     '_PAGELGTH',
     '_NREV',
-    '_PAGEIMG'
+    '_PAGEIMG',
+    '_DESCRIPTION'
 ];
+
+$sespgLocalDefinitions['_DESCRIPTION'] = [
+	'id'    => '___DESCRIPTION',
+	'type'  => '_txt',
+	'alias' => 'sesp-property-description',
+	'label' => 'Description',
+    'callback'  => static function(\SESP\AppFactory $appFactory, \SMW\DIProperty $property, \SMW\SemanticData $semanticData ) {
+        $title = $semanticData->getSubject()->getTitle();
+        $pageProps = MediaWiki\MediaWikiServices::getInstance()->getPageProps();
+
+        $propertyNames = [ 'description' ]; // Replace with your property name
+        $properties = $pageProps->getProperties( [ $title ], $propertyNames );
+        $pageId = $title->getArticleID();
+        $value = $properties[$pageId]['description'] ?? null;
+
+        return new \SMWDIBlob( $value );
+    }
+];
+
 $sespgUseFixedTables = true;
 $sespgExcludeBotEdits = true;
 
