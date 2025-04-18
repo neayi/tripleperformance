@@ -244,6 +244,18 @@ services:
     volumes:
       - n8n_data:/home/node/.n8n
       - ./backup/n8n:/files
+      - './downloads:/downloads'
+
+  yt-dlp:
+    command: yt-dlp-webui
+    image: ghcr.io/alexta69/metube
+    environment:
+      - 'YTDL_OPTIONS={"format":"bestaudio[ext=m4a]", "postprocessors":[{"key":"Exec","exec_cmd":"sh /downloads/compress-audio.sh","when":"after_move"}]}'
+      - 'OUTPUT_TEMPLATE=%(id)S.%(ext)s'
+    volumes:
+      - './backup/n8n:/downloads'
+    ports:
+      - "8081:8081"
 
 networks:
   default: ~
