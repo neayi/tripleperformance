@@ -705,6 +705,8 @@ function getMysqlCommandLine($targetEnv, $targetLanguage, $script, $sqlBatchFile
     }
     else if (strpos($sqlBatchFile, "insights"))
         $dbname = 'insights';
+    else if (strpos($sqlBatchFile, "matomo"))
+        $dbname = 'matomo';    
     else
         throw new Exception("Unrecognized DB name", 1);
 

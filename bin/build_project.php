@@ -216,8 +216,7 @@ function getWikiComponents()
 							'branch' => $wiki_version);
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/EmbedVideo',
-							'git' => 'https://github.com/neayi/mediawiki-extensions-EmbedVideo.git',
-							'branch' => 'fixed-compatibility-with-extensions'); // We are using an old branch until this bug is fixed: https://github.com/StarCitizenWiki/mediawiki-extensions-EmbedVideo/issues/115
+							'git' => 'https://github.com/StarCitizenWiki/mediawiki-extensions-EmbedVideo.git');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/RelatedArticles',
 							'git' => 'https://github.com/wikimedia/mediawiki-extensions-RelatedArticles.git',
