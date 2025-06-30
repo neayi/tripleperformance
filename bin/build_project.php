@@ -275,7 +275,8 @@ function getWikiComponents()
 	// WikiSearch
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/WikiSearch',
 							'git' => 'https://github.com/Open-CSP/WikiSearch.git',
-							'postinstall' => 'composer');
+							'postinstall' => 'composer',
+							'branch' => 'v8.0.1');
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/WikiSearchFront',
 							'git' => 'https://github.com/neayi/WikiSearchFront.git',
 							'branch' => 'Neayi.v3');
