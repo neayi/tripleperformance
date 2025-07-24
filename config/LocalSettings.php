@@ -443,16 +443,16 @@ if('prod' === $env) {
     // https://www.mediawiki.org/wiki/Extension:GTag
     // https://mwusers.org/files/file/4-gtag/
     // https://github.com/SkizNet/mediawiki-GTag
-    wfLoadExtension( 'GTag' );
-    $wgGTagAnalyticsId  = 'G-FXVTX5HGV7'; // 'UA-116409512-5';
+    // wfLoadExtension( 'GTag' );
+    // $wgGTagAnalyticsId  = 'G-FXVTX5HGV7'; // 'UA-116409512-5';
 
-    // If true, insert tracking code into sensitive pages such as Special:UserLogin and Special:Preferences. If false, no tracking code is added to these pages.
-    $wgGTagTrackSensitivePages = true;
+    // // If true, insert tracking code into sensitive pages such as Special:UserLogin and Special:Preferences. If false, no tracking code is added to these pages.
+    // $wgGTagTrackSensitivePages = true;
 
-    // Use 'gtag-exempt' permission to exclude specific user groups from web analytics, e.g.
-    $wgGroupPermissions['sysop']['gtag-exempt'] = true;
-    $wgGroupPermissions['bot']['gtag-exempt'] = true;
-    $wgGroupPermissions['bureaucrat']['gtag-exempt'] = true;
+    // // Use 'gtag-exempt' permission to exclude specific user groups from web analytics, e.g.
+    // $wgGroupPermissions['sysop']['gtag-exempt'] = true;
+    // $wgGroupPermissions['bot']['gtag-exempt'] = true;
+    // $wgGroupPermissions['bureaucrat']['gtag-exempt'] = true;
 
     switch (getWikiLanguage()) {
         case 'en':
