@@ -216,8 +216,8 @@ function getWikiComponents()
 							'branch' => $wiki_version);
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/EmbedVideo',
-							'git' => 'https://github.com/StarCitizenWiki/mediawiki-extensions-EmbedVideo.git',
-							'branch' => 'develop'); // Revert to master when develop will be merged into master
+							'git' => 'https://github.com/bertrandgorge/mediawiki-extensions-EmbedVideo.git',
+							'branch' => 'neayiOk'); // Revert to https://github.com/StarCitizenWiki/mediawiki-extensions-EmbedVideo.git with MW 1.43
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/RelatedArticles',
 							'git' => 'https://github.com/wikimedia/mediawiki-extensions-RelatedArticles.git',
