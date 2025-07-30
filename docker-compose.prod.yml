@@ -229,7 +229,10 @@ services:
     volumes:
       - n8n_data:/home/node/.n8n
       - ./backup/n8n:/files
-
+      
+  pdf-to-image:
+    image: joanfabregat/pdf2img
+      
 networks:
   default: ~
   traefik:
