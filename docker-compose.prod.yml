@@ -232,7 +232,13 @@ services:
       
   pdf-to-image:
     image: joanfabregat/pdf2img
-      
+
+  chrome-headless:
+    image: ghcr.io/browserless/chromium
+    environment:
+      - CONCURRENT=10
+      - TOKEN=6R0W53R135510
+
 networks:
   default: ~
   traefik:
