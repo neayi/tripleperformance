@@ -198,7 +198,7 @@ function getWikiComponents()
 	$components[] = array(	'composer' => 'elasticsearch/elasticsearch "7.17.2"' );
 	$components[] = array(	'composer' => 'mediawiki/chameleon-skin "~4.4"' );
 	$components[] = array(	'composer' => 'mediawiki/semantic-media-wiki "~4.2"' );
-	$components[] = array(	'composer' => 'mediawiki/maps' );
+	$components[] = array(	'composer' => 'mediawiki/maps "~11"' ); // v12 is up there but it requires Mediawiki >= 1.40.0.\
 	$components[] = array(	'composer' => 'mediawiki/semantic-result-formats' );
 	$components[] = array(	'composer' => 'mediawiki/semantic-scribunto' );
 	$components[] = array(	'composer' => 'mediawiki/semantic-extra-special-properties "^4.0"' );
