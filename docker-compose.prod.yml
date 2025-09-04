@@ -231,10 +231,12 @@ services:
       - ./backup/n8n:/files
       
   pdf-to-image:
+    restart: always
     image: joanfabregat/pdf2img
 
   chrome-headless:
     image: ghcr.io/browserless/chromium
+    restart: always
     environment:
       - CONCURRENT=10
       - TOKEN=6R0W53R135510

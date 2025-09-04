@@ -18,7 +18,6 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends libgmp-dev \
     && apt-get install -y --no-install-recommends libicu-dev \
     && apt-get install -y --no-install-recommends libzip-dev \
-    && apt-get install -y --no-install-recommends libc-client-dev \
     && apt-get install -y --no-install-recommends libkrb5-dev \
     && apt-get install -y --no-install-recommends libpspell-dev \
     && apt-get install -y --no-install-recommends libmagickwand-dev \

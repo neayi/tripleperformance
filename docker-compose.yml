@@ -249,6 +249,7 @@ services:
   yt-dlp:
     command: yt-dlp-webui
     image: ghcr.io/alexta69/metube
+    restart: unless-stopped
     environment:
       - 'YTDL_OPTIONS={"format":"bestaudio[ext=m4a]", "postprocessors":[{"key":"Exec","exec_cmd":"sh /downloads/compress-audio.sh","when":"after_move"}]}'
       - 'OUTPUT_TEMPLATE=%(id)S.%(ext)s'
@@ -258,10 +259,12 @@ services:
       - "8081:8081"
 
   pdf-to-image:
+    restart: unless-stopped
     image: joanfabregat/pdf2img
 
   chrome-headless:
     image: ghcr.io/browserless/chromium
+    restart: unless-stopped
     environment:
       - CONCURRENT=10
       - TOKEN=6R0W53R135510
