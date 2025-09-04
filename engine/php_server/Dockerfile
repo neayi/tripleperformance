@@ -73,6 +73,8 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 COPY engine/php_server/apache/000-default.conf /etc/apache2/sites-enabled/000-default.conf
 COPY engine/php_server/apache/apache.prod.conf /etc/apache2/conf-available/z-app.conf
+COPY engine/php_server/apache/mpm_prefork.conf /etc/apache2/mods-enabled/mpm_prefork.conf
+
 RUN a2enconf z-app
 
 COPY <<EOF /usr/local/etc/php/conf.d/sendmail.ini
