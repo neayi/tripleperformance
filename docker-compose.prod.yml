@@ -241,6 +241,22 @@ services:
       - CONCURRENT=10
       - TOKEN=6R0W53R135510
 
+
+  itk-info:
+    image: ghcr.io/neayi/itk-info:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - PORT=3000
+    restart: unless-stopped
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.port=3000'
+      - 'traefik.frontend.rule=Host:itk-info.tripleperformance.fr'
+
+
+
 networks:
   default: ~
   traefik:
