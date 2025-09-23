@@ -1,85 +1,24 @@
-debug = false
+
 logLevel = "INFO"
 
-defaultEntryPoints = ["http", "https", "dashboard"]
+[entryPoints]
+  [entryPoints.http]
+    address = ":80"
+  [entryPoints.https]
+    address = ":443"
+    [entryPoints.https.tls]
+      certResolver = "default"
+
+[providers.docker]
+  endpoint = "unix:///var/run/docker.sock"
+  exposedByDefault = false
 
 [api]
-entryPoint = "dashboard"
-dashboard = true
-debug = true
+  dashboard = true
 
-[entryPoints]
-[entryPoints.dashboard]
-address = ":9000"
-[entryPoints.dashboard.auth.basic]
-users = ["neayi:$apr1$uLdBpQUA$cI8PON.uMbsbUSk27A57b1"]
-[entryPoints.http]
-address = ":80"
-[entryPoints.http.redirect]
-entryPoint = "https"
-[entryPoints.https]
-address = ":443"
-[entryPoints.https.tls]
+[certificatesResolvers.default.acme]
+  email = "bertrand.gorge@neayi.com"
+  storage = "/etc/traefik/acme.json"
+  [certificatesResolvers.default.acme.httpChallenge]
+    entryPoint = "http"
 
-[retry]
-
-[docker]
-domain = "tripleperformance.fr"
-watch = true
-exposedbydefault = false
-
-# Deal with Let's Encrypt: https://doc.traefik.io/traefik/https/acme/
-# NB: you need to create adme.json - see README.md about it.
-[acme]
-email = "bertrand.gorge@neayi.com"
-storage = "/etc/traefik/acme.json"
-entryPoint = "https"
-onHostRule = true
-[acme.httpChallenge]
-entryPoint = "http"
-[[acme.domains]]
-main = "tripleperformance.fr"
-sans = [
-  "tripleperformance.fr",
-  "www.tripleperformance.fr",
-  "wiki.tripleperformance.fr",
-  "phpmyadmin.tripleperformance.fr",
-  "elasticsearch.tripleperformance.fr",
-  "insights.tripleperformance.fr",
-  "elasticvue.tripleperformance.fr",
-  "traefik.tripleperformance.fr",
-  "wiki.preprod.tripleperformance.fr",
-  "insights.preprod.tripleperformance.fr",
-  "forum.tripleperformance.fr",
-  "3perf.fr",
-  "demo.tripleperformance.fr",
-  "photos.tripleperformance.fr",
-  "matomo.tripleperformance.fr",
-  "de.tripleperformance.ag",
-  "en.tripleperformance.ag",
-  "es.tripleperformance.ag",
-  "fr.tripleperformance.ag",
-  "it.tripleperformance.ag",
-  "nl.tripleperformance.ag",
-  "pl.tripleperformance.ag",
-  "el.tripleperformance.ag",
-  "hu.tripleperformance.ag",
-  "fi.tripleperformance.ag",
-  "pt.tripleperformance.ag",
-  "ar.tripleperformance.ag",
-
-  "de.preprod.tripleperformance.ag",
-  "en.preprod.tripleperformance.ag",
-  "es.preprod.tripleperformance.ag",
-  "fr.preprod.tripleperformance.ag",
-  "it.preprod.tripleperformance.ag",
-  "nl.preprod.tripleperformance.ag",
-  "pl.preprod.tripleperformance.ag",
-  "el.preprod.tripleperformance.ag",
-  "hu.preprod.tripleperformance.ag",
-  "fi.preprod.tripleperformance.ag",
-  "pt.preprod.tripleperformance.ag",
-  "ar.preprod.tripleperformance.ag",
-
-  "n8n.tripleperformance.fr"
-]

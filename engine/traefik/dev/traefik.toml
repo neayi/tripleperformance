@@ -1,26 +1,17 @@
-debug = false
+
 logLevel = "INFO"
 
-defaultEntryPoints = ["http", "https", "dashboard"]
-
-[api]
-entryPoint = "dashboard"
-dashboard = true
-debug = true
-
 [entryPoints]
-  [entryPoints.dashboard]
-    address = ":9000"
   [entryPoints.http]
     address = ":80"
   [entryPoints.https]
     address = ":443"
     [entryPoints.https.tls]
-      [[entryPoints.https.tls.certificates]]
-        certFile = "/etc/ssl/server.crt"
-        keyFile = "/etc/ssl/server.key"
+      certResolver = "default"
 
-[docker]
-domain = "tripleperformance.fr"
-watch = true
-exposedbydefault = false
+[providers.docker]
+  endpoint = "unix:///var/run/docker.sock"
+  exposedByDefault = false
+
+[api]
+  dashboard = true
