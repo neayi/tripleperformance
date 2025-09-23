@@ -1,0 +1,14 @@
+entryPoints:
+  web:
+    address: ":80"
+  websecure:
+    address: ":443"
+     
+providers:
+  docker:
+    exposedByDefault: false
+  file:
+    filename: /etc/traefik/traefik_dynamic.yml
+
+api:
+  dashboard: true
