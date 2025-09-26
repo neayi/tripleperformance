@@ -56,7 +56,7 @@ foreach (['en'] as $k => $langCode) {
 
     $k = $k + 2;
     $subSite = <<<EOT
-        forum_{$langCode}:
+          forum_{$langCode}:
            adapter: postgresql
            database: {$langCode}_discourse
            pool: 25

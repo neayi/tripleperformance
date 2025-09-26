@@ -139,17 +139,12 @@ hooks:
           - git clone https://github.com/discourse/docker_manager.git
           - git clone https://github.com/discourse/discourse-perspective-api
           - git clone https://github.com/discourse/discourse-characters-required
-          - git clone https://github.com/discourse/discourse-data-explorer
           - git clone https://github.com/discourse/discourse-push-notifications
-          - git clone https://github.com/discourse/discourse-solved
           - git clone https://github.com/discourse/discourse-staff-alias
           - git clone https://github.com/discourse/discourse-translator
-          - git clone https://github.com/discourse/discourse-topic-voting
           - git clone https://github.com/discourse/discourse-yearly-review
           - git clone https://github.com/discourse/discourse-category-experts
           - git clone https://github.com/discourse/discourse-docs
-          - git clone https://github.com/discourse/discourse-chat-integration
-          - git clone https://github.com/discourse/discourse-reactions
 
   before_bundle_exec:
     - file:
