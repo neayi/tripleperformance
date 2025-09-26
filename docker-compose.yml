@@ -37,10 +37,10 @@ services:
 
       # Observability 
       - "--log.level=INFO"
-      - "--accesslog=true"
+      - "--accesslog=false"
 
     labels:
-      # Enable self‑routing
+      # Enable self-routing
       - "traefik.enable=true"
 
       # Dashboard router

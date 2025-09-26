@@ -32,36 +32,25 @@ Copier les fichiers `.env` et `docker-compose.override.yml`, et éventuellement 
 
 ### Création des certificats de dev
 
+Télécharger mkcert pour Windows : https://github.com/FiloSottile/mkcert/releases
+
+Extraire mkcert.exe dans un dossier, par exemple C:\mkcert\.
+
+Ajouter ce dossier au PATH pour pouvoir l’exécuter depuis n’importe où :
+
+    Win + X → Système → Paramètres système avancés → Variables d’environnement → PATH → Ajouter C:\mkcert\
+
+Installer le CA local (une seule fois) :
+
     rm -rf .cache/ssl && mkdir .cache/ssl
-    docker run --rm -v $(pwd):/src alpine:3.9 sh -c "/src/engine/traefik/dev/generate-certs.sh && chown -R $(id -u):$(id -g) /src/.cache/ssl"
-    docker compose up -d --force-recreate traefik
 
-Il est possible d'installer les certificats rapidement sous windows avec la commande PowerShell:
+    /mnt/c/mkcert/mkcert.exe -install
+    /mnt/c/mkcert/mkcert.exe "*.dev.tripleperformance.fr"
 
-    & '.\engine\traefik\dev\install certificates.ps1'
 
 Attention : après avoir créé les certificats, il faut absolument recréer le container de Traefik, qui monte ces certificats dans un volume :
 
     docker compose up -d --force-recreate traefik
-
-### Installation des certificats dans les navigateurs
-
-Sous Windows : installer d'abord le certificat `root` puis le certificat `server` ainsi créés dans `.cache/ssl` dans [l'autorité racine de confiance](https://docs.microsoft.com/en-us/dotnet/framework/wcf/feature-details/how-to-create-temporary-certificates-for-use-during-development) - en pratique il faut double cliquer sur les fichiers .crt, puis cliquer sur **Installer un certificat**, Ordinateur local, et choisir **Autorités de certification racines de confiance**
-
-Pour installer le certificat dans Firefox, le plus simple est de faire en sorte que Firefox respecte les certificats racine de Windows en allant dans about:config, et en [changeant le réglage setting security.enterprise_roots.enabled à true](https://gist.github.com/cecilemuller/9492b848eb8fe46d462abeb26656c4f8).
-
-Pour utiliser le certificat avec Chrome sous Linix, aller dans [chrome://settings/certificates](chrome://settings/certificates), cliquez sur "Authorities", et importez le certificat root.pem (NB : sous Windows, Chrome utilise les certificats de la machine).
-
-Pour les autres OS ou navigateurs, [ajouter le certificat root au système](https://manuals.gfi.com/en/kerio/connect/content/server-configuration/ssl-certificates/adding-trusted-root-certificates-to-the-server-1605.html)
-et redémarrez votre pc, au cas où.
-
-Pour ubuntu, par exemple :
-```bash
-sudo cp .cache/ssl/root.crt /usr/local/share/ca-certificates
-sudo update-ca-certificates
-openssl verify .cache/ssl/server.pem
-reboot
-```
 
 ### Lancement de docker
 * Dev, prod et preprod : `docker compose up --build -d`
