@@ -29,3 +29,6 @@ backup/n8n/
 insights_bash
 backup/locales_config.sql
 *:Zone.Identifier
+bin/discourse/forum.prod.yml
+bin/discourse/test.yml
+bin/discourse/forum copy.yml

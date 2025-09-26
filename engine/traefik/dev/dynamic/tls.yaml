@@ -3,4 +3,3 @@ tls:
   certificates:        
     - certFile: "/etc/ssl/_wildcard.dev.tripleperformance.fr.pem"
       keyFile: "/etc/ssl/_wildcard.dev.tripleperformance.fr-key.pem"
-       

@@ -4,34 +4,56 @@ services:
     ports:
       - "80:80"
       - "443:443"
-    command:
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.websecure.address=:443"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--api.dashboard=true"
-      - "--api.insecure=true"
-      # - "--tls.stores.default.defaultCertificate.certFile=/etc/ssl/_wildcard.dev.tripleperformance.fr.pem"
-      # - "--tls.stores.default.defaultCertificate.keyFile=/etc/ssl/_wildcard.dev.tripleperformance.fr-key.pem"  
-      - "--providers.file.filename=/etc/traefik/traefik.yml"    
+      - "8080:8080"
+
     networks:
-      - default
       - traefik
+
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./engine/traefik/dev/traefik.yml:/etc/traefik/traefik.yml:ro
-      - ./engine/traefik/dev/traefik_dynamic.yml:/etc/traefik/traefik_dynamic.yml:ro      
+      - ./engine/traefik/dev/dynamic:/dynamic:ro
       - ./.cache/ssl:/etc/ssl:ro
-    labels:
-      - "traefik.enable=true"
-      # Router Dashboard
-      - "traefik.http.routers.traefik.rule=Host(`traefik.dev.tripleperformance.fr`)"
-      - "traefik.http.routers.traefik.entrypoints=websecure"
-      - "traefik.http.routers.traefik.service=api@internal"
-      - "traefik.http.routers.traefik.middlewares=traefik-auth"      
-      - "traefik.http.services.traefik.loadbalancer.server.port=8080"      
-      - "traefik.http.middlewares.traefik-auth.basicauth.users=$TRAEFIKUSER:$TRAEFIKPASSWORD"
 
+    command:
+      #entrypoints
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
+      - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.websecure.http.tls=true"
+
+      # Attach the static configuration tls.yaml file that contains the tls configuration settings
+      - "--providers.file.filename=/dynamic/tls.yaml"
+
+      # Providers 
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.network=traefik"
+
+      # API & Dashboard 
+      - "--api.dashboard=true"
+      - "--api.insecure=false"
+
+      # Observability 
+      - "--log.level=INFO"
+      - "--accesslog=true"
+
+    labels:
+      # Enable self‑routing
+      - "traefik.enable=true"
+
+      # Dashboard router
+      - "traefik.http.routers.dashboard.rule=Host(`traefik.dev.tripleperformance.fr`)"
+      - "traefik.http.routers.dashboard.entrypoints=websecure"
+      - "traefik.http.routers.dashboard.service=api@internal"
+      - "traefik.http.routers.dashboard.tls=true"
+
+      # Basic‑auth middleware
+      - "traefik.http.middlewares.dashboard-auth.basicauth.users=$TRAEFIKUSER:$TRAEFIKPASSWORD"
+      - "traefik.http.routers.dashboard.middlewares=dashboard-auth@docker"
+
+      
   web:
     build:
       context: .
@@ -92,7 +114,6 @@ services:
     user: "${UID:-1000}:${GID:-1000}"
     networks:
       - default
-      - traefik
     volumes:
       - ./insights:/var/www/html
       - ./.cache/composer:/.composer
@@ -109,6 +130,7 @@ services:
       - "traefik.http.routers.insights.tls=true"
       - "traefik.http.services.insights.loadbalancer.server.port=80"
     networks:
+      traefik:
       default:
         aliases:
           - insights.dev.tripleperformance.fr
@@ -134,6 +156,9 @@ services:
       - "traefik.http.routers.phpmyadmin.entrypoints=websecure"
       - "traefik.http.routers.phpmyadmin.tls=true"
       - "traefik.http.services.phpmyadmin.loadbalancer.server.port=80"
+    networks:
+      - default
+      - traefik
 
   redis:
     image: redis
@@ -150,6 +175,9 @@ services:
       memlock:
         soft: -1
         hard: -1
+    networks:
+      - default
+      - traefik  
     volumes:
       - data01:/usr/share/elasticsearch/data
     labels:
@@ -167,6 +195,9 @@ services:
       - "traefik.http.routers.elasticvue.entrypoints=websecure"
       - "traefik.http.routers.elasticvue.tls=true"
       - "traefik.http.services.elasticvue.loadbalancer.server.port=8080"
+    networks:
+      - default
+      - traefik
 
   wordpress:
     image: wordpress
@@ -183,9 +214,12 @@ services:
       - "traefik.http.routers.wordpress.rule=Host(`wordpress.dev.tripleperformance.fr`)"
       - "traefik.http.routers.wordpress.entrypoints=websecure"
       - "traefik.http.routers.wordpress.tls=true"
-      - "traefik.http.services.wordpress.loadbalancer.server.port=80"      
+      - "traefik.http.services.wordpress.loadbalancer.server.port=80"
     profiles:
       - wordpress
+    networks:
+      - default
+      - traefik
 
   piwigo:
     image: lscr.io/linuxserver/piwigo:latest
@@ -204,6 +238,7 @@ services:
       - "traefik.http.routers.piwigo.tls=true"
       - "traefik.http.services.piwigo.loadbalancer.server.port=80"        
     networks:
+      traefik:
       default:
         aliases:
           - photos.dev.tripleperformance.fr
@@ -215,6 +250,9 @@ services:
       - MATOMO_DATABASE_HOST=db
     volumes:
       - matomo:/var/www/html:z
+    networks:
+      - default
+      - traefik      
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.matomo.rule=Host(`matomo.dev.tripleperformance.fr`)"
@@ -230,6 +268,9 @@ services:
       - "traefik.http.routers.n8n.entrypoints=websecure"
       - "traefik.http.routers.n8n.tls=true"
       - "traefik.http.services.n8n.loadbalancer.server.port=5678"
+    networks:
+      - default
+      - traefik      
     environment:
       - N8N_HOST=n8n.dev.tripleperformance.fr
       - N8N_PORT=5678
@@ -290,7 +331,7 @@ services:
 networks:
   default: ~
   traefik:
-    name: tripleperformance_traefik
+    name: traefik
 
 volumes:
   matomo:
