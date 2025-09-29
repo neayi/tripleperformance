@@ -55,6 +55,7 @@ services:
       - "traefik.http.routers.dashboard.entrypoints=websecure"
       - "traefik.http.routers.dashboard.service=api@internal"
       - "traefik.http.routers.dashboard.tls=true"
+      - "traefik.http.routers.dashboard.tls.certresolver=letsencrypt"
 
       # Basic-auth middleware
       - "traefik.http.middlewares.dashboard-auth.basicauth.users=$TRAEFIKUSER:$TRAEFIKPASSWORD"
@@ -72,6 +73,7 @@ services:
       - 'traefik.http.routers.web.rule=Host(`wiki.tripleperformance.fr`) || Host(`tripleperformance.fr`) || Host(`www.tripleperformance.fr`) || Host(`demo.tripleperformance.fr`) || Host(`fr.tripleperformance.ag`) || Host(`ar.tripleperformance.ag`) || Host(`en.tripleperformance.ag`) || Host(`de.tripleperformance.ag`) || Host(`es.tripleperformance.ag`) || Host(`fi.tripleperformance.ag`) || Host(`pt.tripleperformance.ag`) || Host(`it.tripleperformance.ag`) || Host(`el.tripleperformance.ag`) || Host(`hu.tripleperformance.ag`) || Host(`pl.tripleperformance.ag`) || Host(`nl.tripleperformance.ag`)'
       - 'traefik.http.routers.web.entrypoints=websecure'
       - 'traefik.http.routers.web.tls=true'
+      - "traefik.http.routers.web.tls.certresolver=letsencrypt"
       - 'traefik.http.services.web.loadbalancer.server.port=80'
 
       # Redirect middleware for old URLs
@@ -127,6 +129,7 @@ services:
       - 'traefik.http.routers.insights.rule=Host(`insights.tripleperformance.fr`)'
       - 'traefik.http.routers.insights.entrypoints=websecure'
       - 'traefik.http.routers.insights.tls=true'
+      - 'traefik.http.routers.insights.tls.certresolver=letsencrypt'
       - 'traefik.http.services.insights.loadbalancer.server.port=80'
 
   web_preprod:
@@ -140,6 +143,7 @@ services:
       - 'traefik.http.routers.web_preprod.rule=Host(`wiki.preprod.tripleperformance.fr`) || Host(`de.preprod.tripleperformance.ag`) || Host(`en.preprod.tripleperformance.ag`) || Host(`es.preprod.tripleperformance.ag`) || Host(`fr.preprod.tripleperformance.ag`) || Host(`it.preprod.tripleperformance.ag`) || Host(`nl.preprod.tripleperformance.ag`) || Host(`pl.preprod.tripleperformance.ag`) || Host(`el.preprod.tripleperformance.ag`) || Host(`hu.preprod.tripleperformance.ag`) || Host(`fi.preprod.tripleperformance.ag`) || Host(`pt.preprod.tripleperformance.ag`) || Host(`ar.preprod.tripleperformance.ag`)'
       - 'traefik.http.routers.web_preprod.entrypoints=websecure'
       - 'traefik.http.routers.web_preprod.tls=true'
+      - 'traefik.http.routers.web_preprod.tls.certresolver=letsencrypt'
       - 'traefik.http.services.web_preprod.loadbalancer.server.port=80'
     networks:
       traefik:
@@ -174,6 +178,7 @@ services:
       - 'traefik.http.routers.insights_preprod.rule=Host(`insights.preprod.tripleperformance.fr`)'
       - 'traefik.http.routers.insights_preprod.entrypoints=websecure'
       - 'traefik.http.routers.insights_preprod.tls=true'
+      - 'traefik.http.routers.insights_preprod.tls.certresolver=letsencrypt'
       - 'traefik.http.services.insights_preprod.loadbalancer.server.port=80'
     networks:
       - default
@@ -195,6 +200,7 @@ services:
       - 'traefik.http.routers.phpmyadmin.rule=Host(`phpmyadmin.tripleperformance.fr`)'
       - 'traefik.http.routers.phpmyadmin.entrypoints=websecure'
       - 'traefik.http.routers.phpmyadmin.tls=true'
+      - 'traefik.http.routers.phpmyadmin.tls.certresolver=letsencrypt'
       - 'traefik.http.services.phpmyadmin.loadbalancer.server.port=80'
     networks:
       - default
@@ -208,6 +214,7 @@ services:
       - 'traefik.http.routers.portainer.rule=Host(`portainer.tripleperformance.fr`)'
       - 'traefik.http.routers.portainer.entrypoints=websecure'
       - 'traefik.http.routers.portainer.tls=true'
+      - 'traefik.http.routers.portainer.tls.certresolver=letsencrypt'
       - 'traefik.http.services.portainer.loadbalancer.server.port=9000'
     volumes:
       - portainer_data:/data
@@ -253,6 +260,7 @@ services:
       - 'traefik.http.routers.elasticvue.rule=Host(`elasticvue.tripleperformance.fr`)'
       - 'traefik.http.routers.elasticvue.entrypoints=websecure'
       - 'traefik.http.routers.elasticvue.tls=true'
+      - 'traefik.http.routers.elasticvue.tls.certresolver=letsencrypt'
       - 'traefik.http.services.elasticvue.loadbalancer.server.port=8080'
     networks:
       - default
@@ -273,6 +281,7 @@ services:
       - "traefik.http.routers.piwigo.rule=Host(`photos.tripleperformance.fr`)"
       - "traefik.http.routers.piwigo.entrypoints=websecure"
       - "traefik.http.routers.piwigo.tls=true"
+      - "traefik.http.routers.piwigo.tls.certresolver=letsencrypt"
       - "traefik.http.services.piwigo.loadbalancer.server.port=80"      
     networks:
       traefik:
@@ -294,6 +303,7 @@ services:
       - 'traefik.http.routers.matomo.rule=Host(`matomo.tripleperformance.fr`)'
       - 'traefik.http.routers.matomo.entrypoints=websecure'
       - 'traefik.http.routers.matomo.tls=true'
+      - 'traefik.http.routers.matomo.tls.certresolver=letsencrypt'
       - 'traefik.http.services.matomo.loadbalancer.server.port=80'
     depends_on:
       - db
@@ -307,6 +317,7 @@ services:
       - 'traefik.http.routers.n8n.rule=Host(`n8n.tripleperformance.fr`)'
       - 'traefik.http.routers.n8n.entrypoints=websecure'
       - 'traefik.http.routers.n8n.tls=true'
+      - 'traefik.http.routers.n8n.tls.certresolver=letsencrypt'
       - 'traefik.http.services.n8n.loadbalancer.server.port=5678'
     networks:
       - default
@@ -354,6 +365,7 @@ services:
       - 'traefik.http.routers.itk-info.rule=Host(`itk-info.tripleperformance.fr`)'
       - 'traefik.http.routers.itk-info.entrypoints=websecure'
       - 'traefik.http.routers.itk-info.tls=true'
+      - 'traefik.http.routers.itk-info.tls.certresolver=letsencrypt'
       - 'traefik.http.services.itk-info.loadbalancer.server.port=3000'
     networks:
       - default
