@@ -342,13 +342,13 @@ services:
     environment:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - PORT=3000
-    restart: unless-stopped
+    restart: always
     labels:
       - 'traefik.enable=true'
-      - 'traefik.port=3000'
-      - 'traefik.frontend.rule=Host:itk-info.tripleperformance.fr'
-
-
+      - 'traefik.http.routers.itk-info.rule=Host(`itk-info.tripleperformance.fr`)'
+      - 'traefik.http.routers.itk-info.entrypoints=websecure'
+      - 'traefik.http.routers.itk-info.tls=true'
+      - 'traefik.http.services.itk-info.loadbalancer.server.port=3000'
 
 networks:
   default: ~
