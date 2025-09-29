@@ -273,10 +273,16 @@ function getWikiComponents()
 							'branch' => $wiki_version);
 
 	// WikiSearch
+	// $components[] = array(	'dest' => $wiki_extensions_dir . '/WikiSearch',
+	// 						'git' => 'https://github.com/Open-CSP/WikiSearch.git',
+	// 						'postinstall' => 'composer',
+	// 						'branch' => 'v8.1.2');
+
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/WikiSearch',
-							'git' => 'https://github.com/Open-CSP/WikiSearch.git',
+							'git' => 'https://github.com/neayi/WikiSearch.git',
 							'postinstall' => 'composer',
-							'branch' => 'v8.1.2');
+							'branch' => '62-Fixed-unmet-dependency-on-elasticsearch-dsl');
+
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/WikiSearchFront',
 							'git' => 'https://github.com/neayi/WikiSearchFront.git',
 							'branch' => 'Neayi.v3.2.2');							
