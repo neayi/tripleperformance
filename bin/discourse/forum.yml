@@ -29,13 +29,14 @@ labels:
   traefik.enable: true
   # traefik.port: '80'
   # traefik.backend: 'forum'
-  # traefik.frontend.rule: '@TRAFIK_1.7_HOSTS@'
+  # traefik.frontend.rule: '@TRAEFIK_1.7_HOSTS@'
   # traefik.docker.network: 'traefik'
 
-  traefik.http.routers.forum.rule: @TRAFIK_3.57_HOSTS@
+  traefik.http.routers.forum.rule: @TRAEFIK_3.57_HOSTS@
   traefik.http.routers.forum.entrypoints: websecure
   traefik.http.routers.forum.tls: true
   traefik.http.services.forum.loadbalancer.server.port: 80
+  @TRAEFIK_LETSENCRYPT@
 
 docker_args:
   - "--network=traefik @NETWORK_ALIASES@"
