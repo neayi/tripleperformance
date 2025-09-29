@@ -177,7 +177,7 @@ function getWiki()
 {
 	// Mediawiki
 	$wiki_install_dir = '/html';
-	$wiki_version = 'REL1_39';
+	$wiki_version = 'REL1_43';
 
 	return array(	'git' => 'https://github.com/wikimedia/mediawiki.git',
 					'dest' => $wiki_install_dir,
@@ -189,20 +189,20 @@ function getWikiComponents()
 	// Mediawiki
 	$wiki_extensions_dir = '/html/extensions';
 	$wiki_skins_dir = '/html/skins';
-	$wiki_version = 'REL1_39'; // when migrating to 1_36, see page forms
-	$neayi_wiki_version = 'REL1_34'; // Since we have cloned a few repos, we have our changes in an old branch
+	$wiki_version = 'REL1_43'; // when migrating to 1_36, see page forms
 
 	$components = array();
 
 	// Composer components
-	$components[] = array(	'composer' => 'elasticsearch/elasticsearch "7.17.2"' );
-	$components[] = array(	'composer' => 'mediawiki/chameleon-skin "~4.4"' );
-	$components[] = array(	'composer' => 'mediawiki/semantic-media-wiki "~4.2"' );
-	$components[] = array(	'composer' => 'mediawiki/maps "~11"' ); // v12 is up there but it requires Mediawiki >= 1.40.0.\
-	$components[] = array(	'composer' => 'mediawiki/semantic-result-formats' );
-	$components[] = array(	'composer' => 'mediawiki/semantic-scribunto' );
-	$components[] = array(	'composer' => 'mediawiki/semantic-extra-special-properties "^4.0"' );
-	$components[] = array(	'composer' => 'mediawiki/iframe-tag' );
+	$components[] = array(	'composer' => 'elasticsearch/elasticsearch "^7.17"' );
+	$components[] = array(	'composer' => 'mediawiki/chameleon-skin "^5.0.1"' ); // https://packagist.org/packages/mediawiki/chameleon-skin
+	$components[] = array(	'composer' => 'mediawiki/semantic-media-wiki "^6.0.1"' ); // https://packagist.org/packages/mediawiki/semantic-media-wiki
+	$components[] = array(	'composer' => 'mediawiki/maps "^12.0"' ); // https://packagist.org/packages/mediawiki/maps
+	$components[] = array(	'composer' => 'mediawiki/semantic-result-formats "^5.1.0"' ); // https://packagist.org/packages/mediawiki/semantic-result-formats
+	$components[] = array(	'composer' => 'mediawiki/semantic-scribunto "^2.4.0.x-dev"' ); // https://packagist.org/packages/mediawiki/semantic-scribunto
+	$components[] = array(	'composer' => 'mediawiki/semantic-extra-special-properties "^4.0"' ); // https://packagist.org/packages/mediawiki/semantic-extra-special-properties
+	$components[] = array(	'composer' => 'mediawiki/iframe-tag "^1.1.1"' ); // https://packagist.org/packages/mediawiki/iframe-tag
+	$components[] = array(	'composer' => 'mediawiki/page-forms "^6.0.1"' ); // https://packagist.org/packages/mediawiki/page-forms
 
 	// Regular Mediawiki extensions
 
@@ -216,8 +216,7 @@ function getWikiComponents()
 							'branch' => $wiki_version);
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/EmbedVideo',
-							'git' => 'https://github.com/bertrandgorge/mediawiki-extensions-EmbedVideo.git',
-							'branch' => 'neayiOk'); // Revert to https://github.com/StarCitizenWiki/mediawiki-extensions-EmbedVideo.git with MW 1.43
+							'git' => 'https://github.com/StarCitizenWiki/mediawiki-extensions-EmbedVideo.git');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/RelatedArticles',
 							'git' => 'https://github.com/wikimedia/mediawiki-extensions-RelatedArticles.git',
@@ -274,19 +273,19 @@ function getWikiComponents()
 							'branch' => $wiki_version);
 
 	// WikiSearch
+	// $components[] = array(	'dest' => $wiki_extensions_dir . '/WikiSearch',
+	// 						'git' => 'https://github.com/Open-CSP/WikiSearch.git',
+	// 						'postinstall' => 'composer',
+	// 						'branch' => 'v8.1.2');
+
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/WikiSearch',
-							'git' => 'https://github.com/Open-CSP/WikiSearch.git',
+							'git' => 'https://github.com/neayi/WikiSearch.git',
 							'postinstall' => 'composer',
-							'branch' => 'v8.0.1');
+							'branch' => '62-Fixed-unmet-dependency-on-elasticsearch-dsl');
+
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/WikiSearchFront',
 							'git' => 'https://github.com/neayi/WikiSearchFront.git',
-							'branch' => 'Neayi.v3');
-
-
-	// Extensions maintained by Yaron Koren which should work better on the master branch:
-	$components[] = array(	'dest' => $wiki_extensions_dir . '/PageForms',
-							'git' => 'https://github.com/wikimedia/mediawiki-extensions-PageForms.git',
-							'branch' => '5.9.1'); // 5.9.1 is the last version that works with REL1_39 (go back to master when moving to REL1_42)
+							'branch' => 'Neayi.v3.2.2');							
 
 	// Other extensions
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Realnames',
@@ -357,7 +356,7 @@ function getWikiComponents()
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/NeayiAuth',
 							'git' => 'https://github.com/neayi/NeayiAuth.git',
-							'branch' => $wiki_version,
+							'branch' => 'REL1_39',
 							'postinstall' => 'composer');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/ConvertPDF2Wiki',
@@ -371,7 +370,7 @@ function getWikiComponents()
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/InputBox',
 							'git' => 'https://github.com/neayi/mediawiki-extensions-InputBox.git',
-							'branch' => $neayi_wiki_version);
+							'branch' => 'REL1_43');
 
 	// TODO: Merge integration-of-discourse in master
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/NeayiInteractions',
@@ -697,7 +696,6 @@ function initWikiSubModules($dir)
 								'extensions/OATHAuth',
 								'extensions/Math',
 								'extensions/Poem',
-								'extensions/Renameuser',
 								'extensions/SecureLinkFixer',
 								'extensions/SpamBlacklist',
 								'extensions/SyntaxHighlight_GeSHi',

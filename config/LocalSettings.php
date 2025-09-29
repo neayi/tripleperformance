@@ -321,6 +321,8 @@ $wgGroupPermissions['*']['edit'] = false;
 # wfLoadExtensions('ExtensionName');
 # to LocalSettings.php. Check specific extension documentation for more details.
 # The following extensions were automatically enabled:
+
+
 wfLoadExtension( 'MultimediaViewer' );
 wfLoadExtension( 'ParserFunctions' );
 $wgPFEnableStringFunctions = true;
@@ -520,6 +522,16 @@ else
 
 
 if ('dev' === $env) {
+    
+    switch (getWikiLanguage()) {
+        case 'en':
+            $matomoSiteId = 2;
+            break;
+        case 'fr':
+        default:
+            $matomoSiteId = 1;
+            break;
+    }
     
     $wgHeadScriptCode .= <<<START_END_MARKER
     <!-- Matomo -->
@@ -900,14 +912,18 @@ wfLoadExtension( 'Math' );
 // Debug and error reporting :
 
 if ($debug) {
-// error_reporting( -1 );
-// ini_set( 'display_errors', 1 );
-// $wgDebugLogFile = __DIR__ . '/debug.log';
-// $wgShowDebug = true;
+    error_reporting( -1 );
+    ini_set( 'display_errors', 1 );
+    // $wgDebugLogFile = __DIR__ . '/debug.log';
+    // $wgShowDebug = true;
 
     $wgShowExceptionDetails = true;
     $wgDebugToolbar = false;
     $wgResourceLoaderDebug = true;
     $wgWikiSearchEnableDebugMode = true;
     $wgJobRunRate = 1;
+
+    $wgShowErrors = true;
+    $wgDevelopmentWarnings = true;
+    
 }

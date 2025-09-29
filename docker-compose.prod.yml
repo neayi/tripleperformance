@@ -1,42 +1,86 @@
 services:
   traefik:
-    image: traefik:1.7-alpine
+    image: traefik:3.5
     restart: always
     ports:
       - '80:80'
       - '443:443'
+      - '8080:8080'
+
     networks:
-      - default
       - traefik
-    labels:
-      - 'traefik.enable=true'
-      - 'traefik.port=9000'
-      - 'traefik.frontend.rule=Host:traefik.tripleperformance.fr, traefik.vps.tripleperformance.fr'
+
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./engine/traefik/traefik-prod.toml:/etc/traefik/traefik.toml
+      - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./.data/acme.json:/etc/traefik/acme.json
+
+    command:
+      # Entrypoints
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
+      - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.websecure.http.tls=true"
+
+      # Providers
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.network=traefik"
+
+      # Certificate Resolvers (Let's Encrypt)
+      - "--certificatesresolvers.letsencrypt.acme.email=bertrand.gorge@neayi.com"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/etc/traefik/acme.json"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge=true"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
+      # - "--certificatesresolvers.letsencrypt.acme.tlschallenge=true"
+      # - "--certificatesresolvers.letsencrypt.acme.dnschallenge.provider=your-dns-provider" # Needs provider setup
+      - "--entrypoints.websecure.http.tls.certresolver=letsencrypt"
+
+      # API & Dashboard (disabled in production for security)
+      - "--api.dashboard=true"
+      - "--api.insecure=false"
+
+      # Observability
+      - "--log.level=WARN"
+      # - "--accesslog=true"
+      # - "--accesslog.filePath=/logs/access.log"
+            
+    labels:
+      # Enable self-routing
+      - "traefik.enable=true"
+
+      # Dashboard router
+      - "traefik.http.routers.dashboard.rule=Host(`traefik.tripleperformance.fr`)"
+      - "traefik.http.routers.dashboard.entrypoints=websecure"
+      - "traefik.http.routers.dashboard.service=api@internal"
+      - "traefik.http.routers.dashboard.tls=true"
+      - "traefik.http.routers.dashboard.tls.certresolver=letsencrypt"
+
+      # Basic-auth middleware
+      - "traefik.http.middlewares.dashboard-auth.basicauth.users=$TRAEFIKUSER:$TRAEFIKPASSWORD"
+      - "traefik.http.routers.dashboard.middlewares=dashboard-auth@docker"
+
 
   web:
     image: ghcr.io/neayi/tripleperformance/wiki:$WIKI_VERSION_PROD
-    ## Uncomment in order to build the image on the current host
-    #build:
-    #  context: .
-    #  dockerfile: engine/php_server/Dockerfile
-    #  target: prod_sources
-    #  args:
-    #    - MSMTP_SECRET=$MSMTP_SECRET
     restart: always
     env_file: .env
     volumes:
       - ./.data/images:/var/www/html/images
     labels:
       - 'traefik.enable=true'
-      - 'traefik.port=80'
-      - 'traefik.frontend.rule=Host:wiki.tripleperformance.fr, tripleperformance.fr, demo.tripleperformance.fr, wiki.vps.tripleperformance.fr, www.tripleperformance.fr, 3perf.fr, de.tripleperformance.ag, en.tripleperformance.ag, es.tripleperformance.ag, fr.tripleperformance.ag, it.tripleperformance.ag, nl.tripleperformance.ag, pl.tripleperformance.ag, el.tripleperformance.ag, hu.tripleperformance.ag, fi.tripleperformance.ag, pt.tripleperformance.ag, ar.tripleperformance.ag'
-      - 'traefik.frontend.redirect.regex=^https?://(pratiques.)?tripleperformance.fr/(.*)'
-      - 'traefik.frontend.redirect.replacement=https://wiki.tripleperformance.fr/$${2}'
-      - 'traefik.frontend.redirect.permanent=true'
+      - 'traefik.http.routers.web.rule=Host(`wiki.tripleperformance.fr`) || Host(`tripleperformance.fr`) || Host(`www.tripleperformance.fr`) || Host(`demo.tripleperformance.fr`) || Host(`fr.tripleperformance.ag`) || Host(`ar.tripleperformance.ag`) || Host(`en.tripleperformance.ag`) || Host(`de.tripleperformance.ag`) || Host(`es.tripleperformance.ag`) || Host(`fi.tripleperformance.ag`) || Host(`pt.tripleperformance.ag`) || Host(`it.tripleperformance.ag`) || Host(`el.tripleperformance.ag`) || Host(`hu.tripleperformance.ag`) || Host(`pl.tripleperformance.ag`) || Host(`nl.tripleperformance.ag`)'
+      - 'traefik.http.routers.web.entrypoints=websecure'
+      - 'traefik.http.routers.web.tls=true'
+      - "traefik.http.routers.web.tls.certresolver=letsencrypt"
+      - 'traefik.http.services.web.loadbalancer.server.port=80'
+
+      # Redirect middleware for old URLs
+      - 'traefik.http.middlewares.redirect-old-urls.redirectregex.regex=^https?://(pratiques\.)?tripleperformance\.fr/(.*)'
+      - 'traefik.http.middlewares.redirect-old-urls.redirectregex.replacement=https://wiki.tripleperformance.fr/$${2}'
+      - 'traefik.http.middlewares.redirect-old-urls.redirectregex.permanent=true'
+      - 'traefik.http.routers.web.middlewares=redirect-old-urls@docker'
     networks:
       default:
         aliases:
@@ -53,16 +97,27 @@ services:
           - hu.tripleperformance.ag
           - fi.tripleperformance.ag
           - pt.tripleperformance.ag
-          - ar.tripleperformance.ag
+          - ar.tripleperformance.ag          
+      traefik:
+        aliases:
+          - wiki.tripleperformance.fr
+          - demo.tripleperformance.fr
+          - de.tripleperformance.ag
+          - en.tripleperformance.ag
+          - es.tripleperformance.ag
+          - fr.tripleperformance.ag
+          - it.tripleperformance.ag
+          - nl.tripleperformance.ag
+          - pl.tripleperformance.ag
+          - el.tripleperformance.ag
+          - hu.tripleperformance.ag
+          - fi.tripleperformance.ag
+          - pt.tripleperformance.ag
+          - ar.tripleperformance.ag   
 
   insights:
     image: ghcr.io/neayi/insights/insights:$INSIGHTS_VERSION_PROD
     env_file: insights/.env
-    ## Uncomment in order to build the image on the current host
-    #build:
-    #  context: insights
-    #  dockerfile: dockerfiles/php/Dockerfile
-    #  target: prod_sources
     restart: always
     networks:
       - default
@@ -71,8 +126,11 @@ services:
       - ./.data/insights_prod_storage:/var/www/html/storage/app/public
     labels:
       - 'traefik.enable=true'
-      - 'traefik.port=80'
-      - 'traefik.frontend.rule=Host:insights.tripleperformance.fr, insights.vps.tripleperformance.fr'
+      - 'traefik.http.routers.insights.rule=Host(`insights.tripleperformance.fr`)'
+      - 'traefik.http.routers.insights.entrypoints=websecure'
+      - 'traefik.http.routers.insights.tls=true'
+      - 'traefik.http.routers.insights.tls.certresolver=letsencrypt'
+      - 'traefik.http.services.insights.loadbalancer.server.port=80'
 
   web_preprod:
     image: ghcr.io/neayi/tripleperformance/wiki:$WIKI_VERSION_PREPROD
@@ -82,9 +140,13 @@ services:
       - ./.data/images_preprod:/var/www/html/images
     labels:
       - 'traefik.enable=true'
-      - 'traefik.port=80'
-      - 'traefik.frontend.rule=Host:wiki.preprod.tripleperformance.fr, de.preprod.tripleperformance.ag, en.preprod.tripleperformance.ag, es.preprod.tripleperformance.ag, fr.preprod.tripleperformance.ag, it.preprod.tripleperformance.ag, nl.preprod.tripleperformance.ag, pl.preprod.tripleperformance.ag, el.preprod.tripleperformance.ag, hu.preprod.tripleperformance.ag, fi.preprod.tripleperformance.ag, pt.preprod.tripleperformance.ag, ar.preprod.tripleperformance.ag'
+      - 'traefik.http.routers.web_preprod.rule=Host(`wiki.preprod.tripleperformance.fr`) || Host(`de.preprod.tripleperformance.ag`) || Host(`en.preprod.tripleperformance.ag`) || Host(`es.preprod.tripleperformance.ag`) || Host(`fr.preprod.tripleperformance.ag`) || Host(`it.preprod.tripleperformance.ag`) || Host(`nl.preprod.tripleperformance.ag`) || Host(`pl.preprod.tripleperformance.ag`) || Host(`el.preprod.tripleperformance.ag`) || Host(`hu.preprod.tripleperformance.ag`) || Host(`fi.preprod.tripleperformance.ag`) || Host(`pt.preprod.tripleperformance.ag`) || Host(`ar.preprod.tripleperformance.ag`)'
+      - 'traefik.http.routers.web_preprod.entrypoints=websecure'
+      - 'traefik.http.routers.web_preprod.tls=true'
+      - 'traefik.http.routers.web_preprod.tls.certresolver=letsencrypt'
+      - 'traefik.http.services.web_preprod.loadbalancer.server.port=80'
     networks:
+      traefik:
       default:
         aliases:
           - wiki.preprod.tripleperformance.fr
@@ -113,8 +175,14 @@ services:
       - ./.data/insights_preprod_storage:/var/www/html/storage/app/public
     labels:
       - 'traefik.enable=true'
-      - 'traefik.port=80'
-      - 'traefik.frontend.rule=Host:insights.preprod.tripleperformance.fr'
+      - 'traefik.http.routers.insights_preprod.rule=Host(`insights.preprod.tripleperformance.fr`)'
+      - 'traefik.http.routers.insights_preprod.entrypoints=websecure'
+      - 'traefik.http.routers.insights_preprod.tls=true'
+      - 'traefik.http.routers.insights_preprod.tls.certresolver=letsencrypt'
+      - 'traefik.http.services.insights_preprod.loadbalancer.server.port=80'
+    networks:
+      - default
+      - traefik
 
   db:
     image: mysql:5.7
@@ -129,19 +197,31 @@ services:
     restart: always
     labels:
       - 'traefik.enable=true'
-      - 'traefik.port=80'
-      - 'traefik.frontend.rule=Host:phpmyadmin.tripleperformance.fr, phpmyadmin.vps.tripleperformance.fr'
+      - 'traefik.http.routers.phpmyadmin.rule=Host(`phpmyadmin.tripleperformance.fr`)'
+      - 'traefik.http.routers.phpmyadmin.entrypoints=websecure'
+      - 'traefik.http.routers.phpmyadmin.tls=true'
+      - 'traefik.http.routers.phpmyadmin.tls.certresolver=letsencrypt'
+      - 'traefik.http.services.phpmyadmin.loadbalancer.server.port=80'
+    networks:
+      - default
+      - traefik
 
   portainer:
     image: portainer/portainer-ce
     restart: always
     labels:
       - 'traefik.enable=true'
-      - 'traefik.port=9000'
-      - 'traefik.frontend.rule=Host:portainer.tripleperformance.fr, portainer.vps.tripleperformance.fr'
+      - 'traefik.http.routers.portainer.rule=Host(`portainer.tripleperformance.fr`)'
+      - 'traefik.http.routers.portainer.entrypoints=websecure'
+      - 'traefik.http.routers.portainer.tls=true'
+      - 'traefik.http.routers.portainer.tls.certresolver=letsencrypt'
+      - 'traefik.http.services.portainer.loadbalancer.server.port=9000'
     volumes:
       - portainer_data:/data
       - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - default
+      - traefik
 
   redis:
     image: redis
@@ -155,25 +235,36 @@ services:
       xpack.security.enabled: "true"
       http.cors.enabled: "true"
       http.cors.allow-origin: "https://elasticvue.tripleperformance.fr"
-      http.cors.allow-headers: X-Requested-With,Content-Type,Content-Length,Authorization
+      http.cors.allow-headers: X-Requested-With,Content-Type,Content-Length,Authorization      
     ulimits:
       memlock:
         soft: -1
         hard: -1
+    networks:
+      - default
+      - traefik  
     volumes:
       - ./.data/elasticsearch:/usr/share/elasticsearch/data
     labels:
-      - 'traefik.enable=true'
-      - 'traefik.port=9200'
-      - 'traefik.frontend.rule=Host:elasticsearch.tripleperformance.fr, elasticsearch.vps.tripleperformance.fr'
+      - "traefik.enable=true"
+      - "traefik.http.routers.elasticsearch.rule=Host(`elasticsearch.tripleperformance.fr`)"
+      - "traefik.http.routers.elasticsearch.entrypoints=websecure"
+      - "traefik.http.routers.elasticsearch.tls=true"
+      - "traefik.http.services.elasticsearch.loadbalancer.server.port=9200"      
 
   elasticvue:
     image: cars10/elasticvue
     restart: always
     labels:
       - 'traefik.enable=true'
-      - 'traefik.port=8080'
-      - 'traefik.frontend.rule=Host:elasticvue.tripleperformance.fr, elasticvue.vps.tripleperformance.fr'
+      - 'traefik.http.routers.elasticvue.rule=Host(`elasticvue.tripleperformance.fr`)'
+      - 'traefik.http.routers.elasticvue.entrypoints=websecure'
+      - 'traefik.http.routers.elasticvue.tls=true'
+      - 'traefik.http.routers.elasticvue.tls.certresolver=letsencrypt'
+      - 'traefik.http.services.elasticvue.loadbalancer.server.port=8080'
+    networks:
+      - default
+      - traefik
 
   piwigo:
     image: lscr.io/linuxserver/piwigo:latest
@@ -186,20 +277,34 @@ services:
       - ./piwigo/gallery:/gallery
     restart: always
     labels:
-      - 'traefik.enable=true'
-      - 'traefik.port=80'
-      - 'traefik.frontend.rule=Host:photos.tripleperformance.fr, photos.vps.tripleperformance.fr'
+      - "traefik.enable=true"
+      - "traefik.http.routers.piwigo.rule=Host(`photos.tripleperformance.fr`)"
+      - "traefik.http.routers.piwigo.entrypoints=websecure"
+      - "traefik.http.routers.piwigo.tls=true"
+      - "traefik.http.routers.piwigo.tls.certresolver=letsencrypt"
+      - "traefik.http.services.piwigo.loadbalancer.server.port=80"      
+    networks:
+      traefik:
+      default:
+        aliases:
+          - photos.tripleperformance.fr
 
   matomo:
     image: matomo
     environment:
       - MATOMO_DATABASE_HOST=db
     volumes:
-      - matomo:/var/www/html:z      
+      - matomo:/var/www/html:z
+    networks:
+      - default
+      - traefik
     labels:
       - 'traefik.enable=true'
-      - 'traefik.port=80'
-      - 'traefik.frontend.rule=Host:matomo.tripleperformance.fr, matomo.vps.tripleperformance.fr'
+      - 'traefik.http.routers.matomo.rule=Host(`matomo.tripleperformance.fr`)'
+      - 'traefik.http.routers.matomo.entrypoints=websecure'
+      - 'traefik.http.routers.matomo.tls=true'
+      - 'traefik.http.routers.matomo.tls.certresolver=letsencrypt'
+      - 'traefik.http.services.matomo.loadbalancer.server.port=80'
     depends_on:
       - db
     restart: always
@@ -208,9 +313,15 @@ services:
     image: docker.n8n.io/n8nio/n8n
     restart: always
     labels:
-      - traefik.enable=true
-      - traefik.port=5678
-      - traefik.frontend.rule=Host:n8n.tripleperformance.fr
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.n8n.rule=Host(`n8n.tripleperformance.fr`)'
+      - 'traefik.http.routers.n8n.entrypoints=websecure'
+      - 'traefik.http.routers.n8n.tls=true'
+      - 'traefik.http.routers.n8n.tls.certresolver=letsencrypt'
+      - 'traefik.http.services.n8n.loadbalancer.server.port=5678'
+    networks:
+      - default
+      - traefik
     environment:
       - N8N_HOST=n8n.tripleperformance.fr
       - N8N_PORT=5678
@@ -229,7 +340,7 @@ services:
     volumes:
       - n8n_data:/home/node/.n8n
       - ./backup/n8n:/files
-      
+
   pdf-to-image:
     restart: always
     image: joanfabregat/pdf2img
@@ -241,7 +352,6 @@ services:
       - CONCURRENT=10
       - TOKEN=6R0W53R135510
 
-
   itk-info:
     image: ghcr.io/neayi/itk-info:latest
     ports:
@@ -249,18 +359,23 @@ services:
     environment:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - PORT=3000
-    restart: unless-stopped
+    restart: always
     labels:
       - 'traefik.enable=true'
-      - 'traefik.port=3000'
-      - 'traefik.frontend.rule=Host:itk-info.tripleperformance.fr'
-
-
+      - 'traefik.http.routers.itk-info.rule=Host(`itk-info.tripleperformance.fr`)'
+      - 'traefik.http.routers.itk-info.entrypoints=websecure'
+      - 'traefik.http.routers.itk-info.tls=true'
+      - 'traefik.http.routers.itk-info.tls.certresolver=letsencrypt'
+      - 'traefik.http.services.itk-info.loadbalancer.server.port=3000'
+    networks:
+      - default
+      - traefik
 
 networks:
   default: ~
   traefik:
-    name: tripleperformance_traefik
+    name: traefik
+    external: true
 
 volumes:
   portainer_data:
