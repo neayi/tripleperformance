@@ -29,10 +29,10 @@ services:
       - "--providers.docker.network=traefik"
 
       # Certificate Resolvers (Let's Encrypt)
-      - "--certificatesresolvers.letsencrypt.acme.email=hosting@neayi.com"
+      - "--certificatesresolvers.letsencrypt.acme.email=bertrand.gorge@neayi.com"
       - "--certificatesresolvers.letsencrypt.acme.storage=/etc/traefik/acme.json"
-      # - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
-      - "--certificatesresolvers.letsencrypt.acme.tlschallenge=true"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
+      # - "--certificatesresolvers.letsencrypt.acme.tlschallenge=true"
       # - "--certificatesresolvers.letsencrypt.acme.dnschallenge.provider=your-dns-provider" # Needs provider setup
       - "--entrypoints.websecure.http.tls.certresolver=letsencrypt"
 
