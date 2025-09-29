@@ -60,6 +60,8 @@ $wgLogo = "/skins/skin-neayi/favicon/logo-triple-performance.svg";
 $wgAppleTouchIcon = "/skins/skin-neayi/favicon/apple-touch-icon.png";
 $wgFavicon = "/skins/skin-neayi/favicon/favicon.ico";
 
+$wgMainPage = "Triple Performance";
+
 ## UPO means: this is also a user preference option
 
 $wgEnableEmail = true;
