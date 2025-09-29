@@ -38,13 +38,13 @@ services:
       - "--entrypoints.websecure.http.tls.certresolver=letsencrypt"
 
       # API & Dashboard (disabled in production for security)
-      - "--api.dashboard=false"
+      - "--api.dashboard=true"
       - "--api.insecure=false"
 
       # Observability
       - "--log.level=WARN"
-      - "--accesslog=true"
-      - "--accesslog.filePath=/logs/access.log"
+      # - "--accesslog=true"
+      # - "--accesslog.filePath=/logs/access.log"
             
     labels:
       # Enable self-routing
