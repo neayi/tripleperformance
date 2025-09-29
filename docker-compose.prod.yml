@@ -142,6 +142,7 @@ services:
       - 'traefik.http.routers.web_preprod.tls=true'
       - 'traefik.http.services.web_preprod.loadbalancer.server.port=80'
     networks:
+      traefik:
       default:
         aliases:
           - wiki.preprod.tripleperformance.fr
@@ -174,6 +175,9 @@ services:
       - 'traefik.http.routers.insights_preprod.entrypoints=websecure'
       - 'traefik.http.routers.insights_preprod.tls=true'
       - 'traefik.http.services.insights_preprod.loadbalancer.server.port=80'
+    networks:
+      - default
+      - traefik
 
   db:
     image: mysql:5.7
@@ -196,7 +200,6 @@ services:
       - default
       - traefik
 
-
   portainer:
     image: portainer/portainer-ce
     restart: always
@@ -209,6 +212,9 @@ services:
     volumes:
       - portainer_data:/data
       - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - default
+      - traefik
 
   redis:
     image: redis
@@ -273,6 +279,7 @@ services:
       default:
         aliases:
           - photos.tripleperformance.fr
+
   matomo:
     image: matomo
     environment:
@@ -334,7 +341,6 @@ services:
       - CONCURRENT=10
       - TOKEN=6R0W53R135510
 
-
   itk-info:
     image: ghcr.io/neayi/itk-info:latest
     ports:
@@ -349,6 +355,9 @@ services:
       - 'traefik.http.routers.itk-info.entrypoints=websecure'
       - 'traefik.http.routers.itk-info.tls=true'
       - 'traefik.http.services.itk-info.loadbalancer.server.port=3000'
+    networks:
+      - default
+      - traefik
 
 networks:
   default: ~
