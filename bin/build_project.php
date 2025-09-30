@@ -203,8 +203,8 @@ function getWikiComponents()
 	$components[] = array(	'composer' => 'mediawiki/semantic-extra-special-properties "^4.0"' ); // https://packagist.org/packages/mediawiki/semantic-extra-special-properties
 	$components[] = array(	'composer' => 'mediawiki/iframe-tag "^1.1.1"' ); // https://packagist.org/packages/mediawiki/iframe-tag
 	$components[] = array(	'composer' => 'mediawiki/page-forms "^6.0.1"' ); // https://packagist.org/packages/mediawiki/page-forms
-	$components[] = array(	'composer' => 'ongr/elasticsearch-dsl "^7.2"' );
-	$components[] = array(	'composer' => 'open-csp/wiki-search "^8.1"' );
+	$components[] = array(	'composer' => 'ongr/elasticsearch-dsl "^7.2"' ); // See https://github.com/Open-CSP/WikiSearch/pull/63
+	$components[] = array(	'composer' => 'open-csp/wiki-search "^8.1"' ); // https://packagist.org/packages/open-csp/wiki-search
 
 	// Regular Mediawiki extensions
 
