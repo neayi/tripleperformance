@@ -41,7 +41,6 @@ if ($env['ENV'] === 'dev') {
 $replacements = [
     '@TRAEFIK_1.7_HOSTS@' => 'Host:' . implode(',', $hosts),
     '@TRAEFIK_3.57_HOSTS@' => 'Host(`' . implode('`) || Host(`', $hosts) . '`)',
-    '@TRAEFIK_LETSENCRYPT@' => 'traefik.http.routers.forum.tls.certresolver: letsencrypt',
     '@NETWORK_ALIASES@' => '--network-alias=' . implode(' --network-alias=', $hosts),
     '@DISCOURSE_HOSTNAME@' => $hosts[0],
     '@DISCOURSE_SMTP_ADDRESS@' => $env['N8N_SMTP_HOST'] ?? '',
@@ -50,7 +49,10 @@ $replacements = [
     '@DISCOURSE_SMTP_PASSWORD@' => $env['N8N_SMTP_PASS'] ?? '',
     '@DISCOURSE_MAXMIND_LICENSE_KEY@' => $env['MAXMIND_LICENSE_KEY'] ?? '',
 ];
- 
+
+if ($env['ENV'] !== 'dev') {
+    $replacements['@TRAEFIK_LETSENCRYPT@'] = 'traefik.http.routers.forum.tls.certresolver: letsencrypt';
+}
 
 $replacements['@OTHER_LANGUAGES@'] = '';
 foreach (['en'] as $k => $langCode) {
