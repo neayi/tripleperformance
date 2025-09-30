@@ -199,10 +199,12 @@ function getWikiComponents()
 	$components[] = array(	'composer' => 'mediawiki/semantic-media-wiki "^6.0.1"' ); // https://packagist.org/packages/mediawiki/semantic-media-wiki
 	$components[] = array(	'composer' => 'mediawiki/maps "^12.0"' ); // https://packagist.org/packages/mediawiki/maps
 	$components[] = array(	'composer' => 'mediawiki/semantic-result-formats "^5.1.0"' ); // https://packagist.org/packages/mediawiki/semantic-result-formats
-	$components[] = array(	'composer' => 'mediawiki/semantic-scribunto "^2.4.0.x-dev"' ); // https://packagist.org/packages/mediawiki/semantic-scribunto
+	$components[] = array(	'composer' => 'mediawiki/semantic-scribunto "2.4.0.x-dev"' ); // https://packagist.org/packages/mediawiki/semantic-scribunto
 	$components[] = array(	'composer' => 'mediawiki/semantic-extra-special-properties "^4.0"' ); // https://packagist.org/packages/mediawiki/semantic-extra-special-properties
 	$components[] = array(	'composer' => 'mediawiki/iframe-tag "^1.1.1"' ); // https://packagist.org/packages/mediawiki/iframe-tag
 	$components[] = array(	'composer' => 'mediawiki/page-forms "^6.0.1"' ); // https://packagist.org/packages/mediawiki/page-forms
+	$components[] = array(	'composer' => 'ongr/elasticsearch-dsl "^7.2"' );
+	$components[] = array(	'composer' => 'open-csp/wiki-search "^8.1"' );
 
 	// Regular Mediawiki extensions
 
@@ -277,11 +279,6 @@ function getWikiComponents()
 	// 						'git' => 'https://github.com/Open-CSP/WikiSearch.git',
 	// 						'postinstall' => 'composer',
 	// 						'branch' => 'v8.1.2');
-
-	$components[] = array(	'dest' => $wiki_extensions_dir . '/WikiSearch',
-							'git' => 'https://github.com/neayi/WikiSearch.git',
-							'postinstall' => 'composer',
-							'branch' => '62-Fixed-unmet-dependency-on-elasticsearch-dsl');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/WikiSearchFront',
 							'git' => 'https://github.com/neayi/WikiSearchFront.git',
