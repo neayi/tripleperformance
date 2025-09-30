@@ -44,11 +44,11 @@ $replacements = [
     '@TRAEFIK_LETSENCRYPT@' => 'traefik.http.routers.forum.tls.certresolver: letsencrypt',
     '@NETWORK_ALIASES@' => '--network-alias=' . implode(' --network-alias=', $hosts),
     '@DISCOURSE_HOSTNAME@' => $hosts[0],
-    '@DISCOURSE_SMTP_ADDRESS@' => $env['N8N_SMTP_HOST'] ?? 'smtp.mailtrap.io',
-    '@DISCOURSE_SMTP_PORT@' => $env['N8N_SMTP_PORT'] ?? '2525',
-    '@DISCOURSE_SMTP_USER_NAME@' => $env['N8N_SMTP_USER'] ?? '6b76da7b18d1f5',
-    '@DISCOURSE_SMTP_PASSWORD@' => $env['N8N_SMTP_PASS'] ?? 'e533db58674a64',
-    '@DISCOURSE_MAXMIND_LICENSE_KEY@' => $env['MAXMIND_LICENSE_KEY'] ?? '30IYQsKfsamtnj30',
+    '@DISCOURSE_SMTP_ADDRESS@' => $env['N8N_SMTP_HOST'] ?? '',
+    '@DISCOURSE_SMTP_PORT@' => $env['N8N_SMTP_PORT'] ?? '',
+    '@DISCOURSE_SMTP_USER_NAME@' => $env['N8N_SMTP_USER'] ?? '',
+    '@DISCOURSE_SMTP_PASSWORD@' => $env['N8N_SMTP_PASS'] ?? '',
+    '@DISCOURSE_MAXMIND_LICENSE_KEY@' => $env['MAXMIND_LICENSE_KEY'] ?? '',
 ];
  
 
