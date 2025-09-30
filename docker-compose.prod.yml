@@ -70,7 +70,7 @@ services:
       - ./.data/images:/var/www/html/images
     labels:
       - 'traefik.enable=true'
-      - 'traefik.http.routers.web.rule=Host(`wiki.tripleperformance.fr`) || Host(`tripleperformance.fr`) || Host(`www.tripleperformance.fr`) || Host(`demo.tripleperformance.fr`) || Host(`fr.tripleperformance.ag`) || Host(`ar.tripleperformance.ag`) || Host(`en.tripleperformance.ag`) || Host(`de.tripleperformance.ag`) || Host(`es.tripleperformance.ag`) || Host(`fi.tripleperformance.ag`) || Host(`pt.tripleperformance.ag`) || Host(`it.tripleperformance.ag`) || Host(`el.tripleperformance.ag`) || Host(`hu.tripleperformance.ag`) || Host(`pl.tripleperformance.ag`) || Host(`nl.tripleperformance.ag`)'
+      - 'traefik.http.routers.web.rule=Host(`wiki.tripleperformance.fr`) || Host(`3perf.fr`) || Host(`tripleperformance.fr`) || Host(`www.tripleperformance.fr`) || Host(`demo.tripleperformance.fr`) || Host(`fr.tripleperformance.ag`) || Host(`ar.tripleperformance.ag`) || Host(`en.tripleperformance.ag`) || Host(`de.tripleperformance.ag`) || Host(`es.tripleperformance.ag`) || Host(`fi.tripleperformance.ag`) || Host(`pt.tripleperformance.ag`) || Host(`it.tripleperformance.ag`) || Host(`el.tripleperformance.ag`) || Host(`hu.tripleperformance.ag`) || Host(`pl.tripleperformance.ag`) || Host(`nl.tripleperformance.ag`)'
       - 'traefik.http.routers.web.entrypoints=websecure'
       - 'traefik.http.routers.web.tls=true'
       - "traefik.http.routers.web.tls.certresolver=letsencrypt"
