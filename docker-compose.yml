@@ -66,10 +66,13 @@ services:
       - ./:/var/www
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.web.rule=Host(`wiki.dev.tripleperformance.fr`) || Host(`demo.dev.tripleperformance.fr`) || Host(`fr.dev.tripleperformance.ag`) || Host(`ar.dev.tripleperformance.ag`) || Host(`en.dev.tripleperformance.ag`) || Host(`de.dev.tripleperformance.ag`) || Host(`es.dev.tripleperformance.ag`) || Host(`fi.dev.tripleperformance.ag`) || Host(`pt.dev.tripleperformance.ag`) || Host(`it.dev.tripleperformance.ag`) || Host(`el.dev.tripleperformance.ag`) || Host(`hu.dev.tripleperformance.ag`) || Host(`pl.dev.tripleperformance.ag`) || Host(`nl.dev.tripleperformance.ag`)"
-      - "traefik.http.routers.web.entrypoints=websecure"
-      - "traefik.http.routers.web.tls=true"
-      - "traefik.http.services.web.loadbalancer.server.port=80"      
+      - "traefik.http.routers.web-wiki.rule=Host(`wiki.dev.tripleperformance.fr`)"
+      - "traefik.http.routers.web-demo.rule=Host(`demo.dev.tripleperformance.fr`)"
+      - "traefik.http.routers.web-ag.rule=HostRegexp(`{subdomain:(ar|de|en|es|fi|fr|it|nl|pl|el|hu|pt)}.dev.tripleperformance.ag`)"
+      - "traefik.http.routers.web-*.entrypoints=websecure"
+      - "traefik.http.routers.web-*.tls=true"
+      - "traefik.http.routers.web-*.service=web"
+      - "traefik.http.services.web-*.loadbalancer.server.port=80"      
     networks:
       default:
         aliases:
