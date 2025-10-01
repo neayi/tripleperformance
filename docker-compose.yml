@@ -5,15 +5,14 @@ services:
       - "80:80"
       - "443:443"
       - "8080:8080"
-
     networks:
       - traefik
-
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./engine/traefik/dev/dynamic:/dynamic:ro
+      - ./engine/traefik/dynamic/dev:/dynamic:ro
       - ./.cache/ssl:/etc/ssl:ro
-
+      - ./geoip:/plugins/geoip:ro   # dossier contenant GeoLite2-Country.mmdb
+      - ./geoip/geoblock:/plugins-local/src/github.com/PascalMinder/geoblock:ro
     command:
       #entrypoints
       - "--entrypoints.web.address=:80"
@@ -22,37 +21,33 @@ services:
       - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
       - "--entrypoints.websecure.address=:443"
       - "--entrypoints.websecure.http.tls=true"
-
       # Attach the static configuration tls.yaml file that contains the tls configuration settings
       - "--providers.file.filename=/dynamic/tls.yaml"
-
       # Providers 
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--providers.docker.network=traefik"
-
       # API & Dashboard 
       - "--api.dashboard=true"
       - "--api.insecure=false"
-
       # Observability 
       - "--log.level=INFO"
       - "--accesslog=false"
-
+      # Plugins
+      # - "--experimental.plugins.geoblock.moduleName=github.com/PascalMinder/geoblock"
+      # - "--experimental.plugins.geoblock.version=v0.3.3"
+      - "--experimental.localPlugins.geoblock.moduleName=github.com/PascalMinder/geoblock"
     labels:
       # Enable self-routing
       - "traefik.enable=true"
-
       # Dashboard router
       - "traefik.http.routers.dashboard.rule=Host(`traefik.dev.tripleperformance.fr`)"
       - "traefik.http.routers.dashboard.entrypoints=websecure"
       - "traefik.http.routers.dashboard.service=api@internal"
       - "traefik.http.routers.dashboard.tls=true"
-
       # Basic‑auth middleware
       - "traefik.http.middlewares.dashboard-auth.basicauth.users=$TRAEFIKUSER:$TRAEFIKPASSWORD"
       - "traefik.http.routers.dashboard.middlewares=dashboard-auth@docker"
-
       
   web:
     build:
@@ -66,13 +61,11 @@ services:
       - ./:/var/www
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.web-wiki.rule=Host(`wiki.dev.tripleperformance.fr`)"
-      - "traefik.http.routers.web-demo.rule=Host(`demo.dev.tripleperformance.fr`)"
-      - "traefik.http.routers.web-ag.rule=HostRegexp(`{subdomain:(ar|de|en|es|fi|fr|it|nl|pl|el|hu|pt)}.dev.tripleperformance.ag`)"
-      - "traefik.http.routers.web-*.entrypoints=websecure"
-      - "traefik.http.routers.web-*.tls=true"
-      - "traefik.http.routers.web-*.service=web"
-      - "traefik.http.services.web-*.loadbalancer.server.port=80"      
+      - "traefik.http.routers.web.rule=Host(`wiki.dev.tripleperformance.fr`) || Host(`demo.dev.tripleperformance.fr`) || Host(`fr.dev.tripleperformance.ag`) || Host(`ar.dev.tripleperformance.ag`) || Host(`en.dev.tripleperformance.ag`) || Host(`de.dev.tripleperformance.ag`) || Host(`es.dev.tripleperformance.ag`) || Host(`fi.dev.tripleperformance.ag`) || Host(`pt.dev.tripleperformance.ag`) || Host(`it.dev.tripleperformance.ag`) || Host(`el.dev.tripleperformance.ag`) || Host(`hu.dev.tripleperformance.ag`) || Host(`pl.dev.tripleperformance.ag`) || Host(`nl.dev.tripleperformance.ag`)"
+      - "traefik.http.routers.web.entrypoints=websecure"
+      - "traefik.http.routers.web.tls=true"
+      - "traefik.http.services.web.loadbalancer.server.port=80"     
+      - "traefik.http.routers.web.middlewares=geoblock-ch@file"
     networks:
       default:
         aliases:

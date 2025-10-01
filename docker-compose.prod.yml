@@ -13,6 +13,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./.data/acme.json:/etc/traefik/acme.json
+      - ./engine/traefik/dynamic/prod:/dynamic:ro
 
     command:
       # Entrypoints
@@ -27,6 +28,9 @@ services:
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--providers.docker.network=traefik"
+
+      # Attach the static configuration tls.yaml file that contains the tls configuration settings
+      - "--providers.file.filename=/dynamic/dynamic-configuration.yml"
 
       # Certificate Resolvers (Let's Encrypt)
       - "--certificatesresolvers.letsencrypt.acme.email=bertrand.gorge@neayi.com"
@@ -45,7 +49,11 @@ services:
       - "--log.level=WARN"
       # - "--accesslog=true"
       # - "--accesslog.filePath=/logs/access.log"
-            
+
+      # Plugins
+      - "--experimental.plugins.geoblock.moduleName=github.com/PascalMinder/geoblock"
+      - "--experimental.plugins.geoblock.version=v0.3.3"
+
     labels:
       # Enable self-routing
       - "traefik.enable=true"
@@ -77,10 +85,12 @@ services:
       - 'traefik.http.services.web.loadbalancer.server.port=80'
 
       # Redirect middleware for old URLs
-      - 'traefik.http.middlewares.redirect-old-urls.redirectregex.regex=^https?://(pratiques\.)?tripleperformance\.fr/(.*)'
+      - 'traefik.http.middlewares.redirect-old-urls.redirectregex.regex=^https?://(pratiques\.)?tripleperformance\.(fr|ag)/(.*)'
       - 'traefik.http.middlewares.redirect-old-urls.redirectregex.replacement=https://wiki.tripleperformance.fr/$${2}'
       - 'traefik.http.middlewares.redirect-old-urls.redirectregex.permanent=true'
       - 'traefik.http.routers.web.middlewares=redirect-old-urls@docker'
+
+      - "traefik.http.routers.web.middlewares=geoblock-ch@file"      
     networks:
       default:
         aliases:
@@ -145,6 +155,7 @@ services:
       - 'traefik.http.routers.web_preprod.tls=true'
       - 'traefik.http.routers.web_preprod.tls.certresolver=letsencrypt'
       - 'traefik.http.services.web_preprod.loadbalancer.server.port=80'
+      - 'traefik.http.routers.web_preprod.middlewares=geoblock-ch@file'
     networks:
       traefik:
       default:

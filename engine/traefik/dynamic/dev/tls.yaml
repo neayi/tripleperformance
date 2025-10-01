@@ -1,0 +1,25 @@
+
+tls:
+  certificates:        
+    - certFile: "/etc/ssl/_wildcard.dev.tripleperformance.fr.pem"
+      keyFile: "/etc/ssl/_wildcard.dev.tripleperformance.fr-key.pem"
+
+
+http:
+  middlewares:
+    geoblock-ch:
+      plugin:
+        geoblock:
+          silentStartUp: false
+          allowLocalRequests: true
+          logLocalRequests: false
+          logAllowedRequests: false
+          logApiRequests: true
+          api: "https://get.geojs.io/v1/ip/country/{ip}"
+          apiTimeoutMs: 750                                 # optional
+          cacheSize: 15
+          forceMonthlyUpdate: true
+          allowUnknownCountries: true
+          unknownCountryApiResponse: "nil"
+          countries:
+            - CH
