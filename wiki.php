@@ -527,7 +527,7 @@ function getScriptPath($script)
         case 'view.php' :
         case 'wrapOldPasswords.php' :
             // Regular MW scripts:
-            return "php /var/www/html/maintenance/$script";
+            return "php /var/www/html/maintenance/$script --memory-limit=512M";
 
         case 'disposeOutdatedEntities.php' :
         case 'dumpRDF.php' :
@@ -547,7 +547,7 @@ function getScriptPath($script)
         case 'updateEntityCountMap.php' :
         case 'updateQueryDependencies.php' :
             // Semantic MediaWiki
-            return "php /var/www/html/extensions/SemanticMediaWiki/maintenance/$script";
+            return "php /var/www/html/extensions/SemanticMediaWiki/maintenance/$script --memory-limit=512M";
 
         case 'removeSpamAccounts.php' :
         case 'buildSitemap.php':
@@ -559,11 +559,11 @@ function getScriptPath($script)
 
         case 'updateExternalLinks.php' :
             // RottenLinks
-            return "php /var/www/html/extensions/RottenLinks/maintenance/$script";
+            return "php /var/www/html/extensions/RottenLinks/maintenance/$script --memory-limit=512M";
 
         case 'linktitles-cli.php' :
             // linktitles
-            return "php /var/www/html/extensions/LinkTitles/$script";
+            return "php /var/www/html/extensions/LinkTitles/$script --memory-limit=512M";
 
         case 'mysql':
             return '/usr/bin/mysql';
