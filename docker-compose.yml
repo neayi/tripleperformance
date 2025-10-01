@@ -65,7 +65,7 @@ services:
       - "traefik.http.routers.web.entrypoints=websecure"
       - "traefik.http.routers.web.tls=true"
       - "traefik.http.services.web.loadbalancer.server.port=80"     
-      - "traefik.http.routers.web.middlewares=geoblock-ch@file"
+      - "traefik.http.routers.web.middlewares=geoblock-china@file"
     networks:
       default:
         aliases:

@@ -78,19 +78,19 @@ services:
       - ./.data/images:/var/www/html/images
     labels:
       - 'traefik.enable=true'
-      - 'traefik.http.routers.web.rule=Host(`wiki.tripleperformance.fr`) || Host(`3perf.fr`) || Host(`tripleperformance.fr`) || Host(`www.tripleperformance.fr`) || Host(`demo.tripleperformance.fr`) || Host(`fr.tripleperformance.ag`) || Host(`ar.tripleperformance.ag`) || Host(`en.tripleperformance.ag`) || Host(`de.tripleperformance.ag`) || Host(`es.tripleperformance.ag`) || Host(`fi.tripleperformance.ag`) || Host(`pt.tripleperformance.ag`) || Host(`it.tripleperformance.ag`) || Host(`el.tripleperformance.ag`) || Host(`hu.tripleperformance.ag`) || Host(`pl.tripleperformance.ag`) || Host(`nl.tripleperformance.ag`)'
+      - 'traefik.http.routers.web.rule=Host(`wiki.tripleperformance.fr`) || Host(`3perf.fr`) || Host(`tripleperformance.fr`)|| Host(`tripleperformance.ag`) || Host(`www.tripleperformance.fr`) || Host(`demo.tripleperformance.fr`) || Host(`fr.tripleperformance.ag`) || Host(`ar.tripleperformance.ag`) || Host(`en.tripleperformance.ag`) || Host(`de.tripleperformance.ag`) || Host(`es.tripleperformance.ag`) || Host(`fi.tripleperformance.ag`) || Host(`pt.tripleperformance.ag`) || Host(`it.tripleperformance.ag`) || Host(`el.tripleperformance.ag`) || Host(`hu.tripleperformance.ag`) || Host(`pl.tripleperformance.ag`) || Host(`nl.tripleperformance.ag`)'
       - 'traefik.http.routers.web.entrypoints=websecure'
       - 'traefik.http.routers.web.tls=true'
       - "traefik.http.routers.web.tls.certresolver=letsencrypt"
       - 'traefik.http.services.web.loadbalancer.server.port=80'
 
       # Redirect middleware for old URLs
-      - 'traefik.http.middlewares.redirect-old-urls.redirectregex.regex=^https?://(pratiques\.)?tripleperformance\.(fr|ag)/(.*)'
+      - 'traefik.http.middlewares.redirect-old-urls.redirectregex.regex=^https?://(pratiques\.)?tripleperformance\.fr/(.*)'
       - 'traefik.http.middlewares.redirect-old-urls.redirectregex.replacement=https://wiki.tripleperformance.fr/$${2}'
       - 'traefik.http.middlewares.redirect-old-urls.redirectregex.permanent=true'
       - 'traefik.http.routers.web.middlewares=redirect-old-urls@docker'
 
-      - "traefik.http.routers.web.middlewares=geoblock-ch@file"      
+      - "traefik.http.routers.web.middlewares=geoblock-china@file"      
     networks:
       default:
         aliases:
@@ -155,7 +155,7 @@ services:
       - 'traefik.http.routers.web_preprod.tls=true'
       - 'traefik.http.routers.web_preprod.tls.certresolver=letsencrypt'
       - 'traefik.http.services.web_preprod.loadbalancer.server.port=80'
-      - 'traefik.http.routers.web_preprod.middlewares=geoblock-ch@file'
+      - 'traefik.http.routers.web_preprod.middlewares=geoblock-china@file'
     networks:
       traefik:
       default:

@@ -7,7 +7,7 @@ tls:
 
 http:
   middlewares:
-    geoblock-ch:
+    geoblock-china:
       plugin:
         geoblock:
           silentStartUp: false
@@ -20,6 +20,7 @@ http:
           cacheSize: 15
           forceMonthlyUpdate: true
           allowUnknownCountries: true
+          blackListMode: true
           unknownCountryApiResponse: "nil"
           countries:
-            - CH
+            - CN
