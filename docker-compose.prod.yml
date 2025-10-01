@@ -88,9 +88,8 @@ services:
       - 'traefik.http.middlewares.redirect-old-urls.redirectregex.regex=^https?://(pratiques\.)?tripleperformance\.fr/(.*)'
       - 'traefik.http.middlewares.redirect-old-urls.redirectregex.replacement=https://wiki.tripleperformance.fr/$${2}'
       - 'traefik.http.middlewares.redirect-old-urls.redirectregex.permanent=true'
-      - 'traefik.http.routers.web.middlewares=redirect-old-urls@docker'
+      - 'traefik.http.routers.web.middlewares=redirect-old-urls@docker,geoblock-china@file'
 
-      - "traefik.http.routers.web.middlewares=geoblock-china@file"      
     networks:
       default:
         aliases:
@@ -123,7 +122,7 @@ services:
           - hu.tripleperformance.ag
           - fi.tripleperformance.ag
           - pt.tripleperformance.ag
-          - ar.tripleperformance.ag   
+          - ar.tripleperformance.ag  
 
   insights:
     image: ghcr.io/neayi/insights/insights:$INSIGHTS_VERSION_PROD
