@@ -204,7 +204,8 @@ function getWikiComponents()
 	$components[] = array(	'composer' => 'mediawiki/iframe-tag "^1.1.1"' ); // https://packagist.org/packages/mediawiki/iframe-tag
 	$components[] = array(	'composer' => 'mediawiki/page-forms "^6.0.1"' ); // https://packagist.org/packages/mediawiki/page-forms
 	$components[] = array(	'composer' => 'ongr/elasticsearch-dsl "^7.2"' ); // See https://github.com/Open-CSP/WikiSearch/pull/63
-	$components[] = array(	'composer' => 'open-csp/wiki-search "^8.1"' ); // https://packagist.org/packages/open-csp/wiki-search
+//	$components[] = array(	'composer' => 'open-csp/wiki-search "^8.1"' ); // https://packagist.org/packages/open-csp/wiki-search
+	$components[] = array(	'composer' => 'wikibase-solutions/wiki-search-front "^3.3"' ); // https://packagist.org/packages/wikibase-solutions/wiki-search-front
 
 	// Regular Mediawiki extensions
 
@@ -274,16 +275,6 @@ function getWikiComponents()
 							'git' => 'https://github.com/wikimedia/mediawiki-extensions-HidePrefix.git',
 							'branch' => $wiki_version);
 
-	// WikiSearch
-	// $components[] = array(	'dest' => $wiki_extensions_dir . '/WikiSearch',
-	// 						'git' => 'https://github.com/Open-CSP/WikiSearch.git',
-	// 						'postinstall' => 'composer',
-	// 						'branch' => 'v8.1.2');
-
-	$components[] = array(	'dest' => $wiki_extensions_dir . '/WikiSearchFront',
-							'git' => 'https://github.com/neayi/WikiSearchFront.git',
-							'branch' => 'Neayi.v3.2.2');							
-
 	// Other extensions
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Realnames',
 							'git' => 'https://github.com/ofbeaton/mediawiki-realnames.git');
@@ -333,6 +324,10 @@ function getWikiComponents()
 							'branch' => $wiki_version);
 
 	// Neayi extensions and forks
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/WikiSearch',
+							'git' => 'https://github.com/neayi/WikiSearch.git',
+							'branch' => 'temporary-fix-66-from-v8.1.2');
+
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/PDFEmbed',
 	                        'git' => 'https://github.com/neayi/PDFEmbed.git'); // Forked from https://github.com/miraheze/PDFEmbed.git to remove the check on users
 
