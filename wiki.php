@@ -114,7 +114,7 @@ try {
     {
         foreach ($targetLanguages as $targetLanguage)
         {
-            $commandLines[] = getCronCommandLine($targetEnv, $targetLanguage, getScriptPath('generateSitemap.php') . ' --memory-limit=50M --fspath=html/images/'.$targetLanguage.'/sitemap/ --identifier='.$targetLanguage.' --urlpath=/images/'.$targetLanguage.'/sitemap/ --compress=no --skip-redirects');
+            $commandLines[] = getCronCommandLine($targetEnv, $targetLanguage, getScriptPath('generateSitemap.php') . ' --fspath=html/images/'.$targetLanguage.'/sitemap/ --identifier='.$targetLanguage.' --urlpath=/images/'.$targetLanguage.'/sitemap/ --compress=no --skip-redirects');
         }
 
         $commandLines[] = getExecCommandLine($targetEnv, getScriptPath('buildSitemap.php'), true);
@@ -122,7 +122,7 @@ try {
     else if ($script == 'frequent_jobs')
     {
         foreach ($targetLanguages as $targetLanguage)
-            $commandLines[] = getCronCommandLine($targetEnv, $targetLanguage, getScriptPath('runJobs.php') . ' --maxtime=1000 --memory-limit=256M');
+            $commandLines[] = getCronCommandLine($targetEnv, $targetLanguage, getScriptPath('runJobs.php') . ' --maxtime=1000');
 
         $commandLines[] = getMatomoCommandLine($targetEnv, 'php /var/www/html/console core:archive --url=http://matomo.tripleperformance.fr/', true, true);
     }
@@ -130,7 +130,7 @@ try {
     {
         foreach ($targetLanguages as $targetLanguage)
         {
-            $commandLines[] = getCronCommandLine($targetEnv, $targetLanguage, getScriptPath('generateSitemap.php') . ' --memory-limit=50M --fspath=html/images/'.$targetLanguage.'/sitemap/ --identifier='.$targetLanguage.' --urlpath=/images/'.$targetLanguage.'/sitemap/ --compress=no --skip-redirects');
+            $commandLines[] = getCronCommandLine($targetEnv, $targetLanguage, getScriptPath('generateSitemap.php') . ' --fspath=html/images/'.$targetLanguage.'/sitemap/ --identifier='.$targetLanguage.' --urlpath=/images/'.$targetLanguage.'/sitemap/ --compress=no --skip-redirects');
             $commandLines[] = getCronCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildData.php') . ' --quiet --shallow-update');
             $commandLines[] = getCronCommandLine($targetEnv, $targetLanguage, getScriptPath('disposeOutdatedEntities.php') . ' --quiet');
             $commandLines[] = getCronCommandLine($targetEnv, $targetLanguage, getScriptPath('rebuildPropertyStatistics.php') . ' --quiet');
