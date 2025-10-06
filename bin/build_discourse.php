@@ -10,7 +10,7 @@ $discourse_yml_template = __DIR__ . '/discourse/forum.yml';
 if ($argc < 2) {
     echo "Usage: php build_discourse.php <output_file>\n";
     exit(1);
-}  
+}
 
 $output_file = $argv[1];
 if (!is_writable(dirname($output_file))) {
@@ -34,7 +34,7 @@ if ($env['ENV'] !== 'dev' && $env['ENV'] !== 'prod') {
 if ($env['ENV'] === 'dev') {
     $hosts = ['forum.dev.tripleperformance.fr', 'forum.en.dev.tripleperformance.ag'];
 
-} else { 
+} else {
     $hosts = ['forum.tripleperformance.fr', 'en.forum.tripleperformance.ag'];
 }
 
@@ -53,6 +53,8 @@ $replacements = [
 if ($env['ENV'] !== 'dev') {
     $replacements['@TRAEFIK_LETSENCRYPT@'] = 'traefik.http.routers.forum.tls.certresolver: letsencrypt';
 }
+else
+    $replacements['@TRAEFIK_LETSENCRYPT@'] = '';
 
 $replacements['@OTHER_LANGUAGES@'] = '';
 foreach (['en'] as $k => $langCode) {
