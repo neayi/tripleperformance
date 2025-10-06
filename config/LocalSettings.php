@@ -108,13 +108,13 @@ function getWikiLanguage()
             case 'en':
             case 'es':
             case 'it':
-            case 'ar':                
+            case 'ar':
             case 'nl':
             case 'pl':
             case 'el':
             case 'hu':
             case 'fi':
-            case 'pt':                
+            case 'pt':
                 return $chunk;
         }
     }
@@ -524,7 +524,7 @@ else
 
 
 if ('dev' === $env) {
-    
+
     switch (getWikiLanguage()) {
         case 'en':
             $matomoSiteId = 2;
@@ -534,7 +534,7 @@ if ('dev' === $env) {
             $matomoSiteId = 1;
             break;
     }
-    
+
     $wgHeadScriptCode .= <<<START_END_MARKER
     <!-- Matomo -->
     <script>
@@ -774,7 +774,7 @@ $wgUploadWizardConfig = array(
         'en' => 'English',
         'de' => 'Deutsch',
         'pl' => 'Polski',
-        'ar' => 'الدارجة',        
+        'ar' => 'الدارجة',
         'nl' => 'Nederlands',
         'it' => 'Italiano',
         'es' => 'Español',
@@ -911,6 +911,8 @@ wfLoadExtension( 'NeayiRelatedPages' );
 
 wfLoadExtension( 'Math' );
 
+wfLoadExtension( 'WikiSearchMapsLink' );
+
 // Debug and error reporting :
 
 if ($debug) {
@@ -927,5 +929,5 @@ if ($debug) {
 
     $wgShowErrors = true;
     $wgDevelopmentWarnings = true;
-    
+
 }

@@ -43,14 +43,21 @@ Ajouter ce dossier au PATH pour pouvoir l’exécuter depuis n’importe où :
 Installer le CA local (une seule fois) :
 
     rm -rf .cache/ssl && mkdir .cache/ssl
-
+    cd .cache/ssl
     /mnt/c/mkcert/mkcert.exe -install
     /mnt/c/mkcert/mkcert.exe "*.dev.tripleperformance.fr"
 
+NB : le fait d'utiliser la version Windows de mkcert permet l'installation automatique des certificats dans les navigateurs Chrome, Edge, etc...
 
 Attention : après avoir créé les certificats, il faut absolument recréer le container de Traefik, qui monte ces certificats dans un volume :
 
     docker compose up -d --force-recreate traefik
+
+### Installation de geoblock
+
+    mkdir geoip
+    cd geoip
+    git clone https://github.com/PascalMinder/geoblock.git
 
 ### Lancement de docker
 * Dev, prod et preprod : `docker compose up --build -d`
