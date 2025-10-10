@@ -329,6 +329,11 @@ function getWikiComponents()
 							'branch' => 'temporary-fix-66-from-v8.1.2',
 							'postinstall' => 'composer');
 
+							
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/WikiSearchMapsLink',
+							'git' => 'https://github.com/neayi/WikiSearchMapsLink.git');
+
+
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/PDFEmbed',
 	                        'git' => 'https://github.com/neayi/PDFEmbed.git'); // Forked from https://github.com/miraheze/PDFEmbed.git to remove the check on users
 
