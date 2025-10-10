@@ -136,7 +136,9 @@ services:
       - ./.data/images:/var/www/html/images
     networks:
       default:
-
+    profiles:
+      - tools
+      
   insights:
     image: ghcr.io/neayi/insights/insights:$INSIGHTS_VERSION_PROD
     env_file: insights/.env
