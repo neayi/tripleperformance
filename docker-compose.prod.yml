@@ -126,10 +126,7 @@ services:
 
   web_maintenance:
     image: ghcr.io/neayi/tripleperformance/wiki:$WIKI_VERSION_PROD
-    deploy:
-      resources:
-        limits:
-          cpus: '3.0'
+    cpus: 3.0
     restart: no
     env_file: .env
     volumes:
@@ -138,7 +135,7 @@ services:
       default:
     profiles:
       - tools
-      
+
   insights:
     image: ghcr.io/neayi/insights/insights:$INSIGHTS_VERSION_PROD
     env_file: insights/.env
@@ -187,10 +184,7 @@ services:
           - fi.preprod.tripleperformance.ag
           - pt.preprod.tripleperformance.ag          
           - ar.preprod.tripleperformance.ag          
-    deploy:
-      resources:
-        limits:
-          cpus: '0.50'
+    cpus: 0.5
 
   insights_preprod:
     image: ghcr.io/neayi/insights/insights:$INSIGHTS_VERSION_PREPROD
