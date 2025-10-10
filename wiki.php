@@ -609,13 +609,13 @@ function getCommandLine($targetEnv, $targetLanguage, $script, $volume = '', $bUs
 
     switch ($targetEnv) {
         case 'dev':
-            return 'docker compose -f '.$dir.'docker-compose.yml -f '.$dir.'docker-compose.workers.yml run --cpus="3.0" '. $runOptions.' web sh -c "'.$script.'"';
+            return 'docker compose -f '.$dir.'docker-compose.yml run '. $runOptions.' web sh -c "'.$script.'"';
 
         case 'preprod':
-            return 'docker compose -f '.$dir.'docker-compose.prod.yml -f '.$dir.'docker-compose.preprod.yml -f '.$dir.'docker-compose.workers.yml run --cpus="3.0" '.$runOptions.' web_preprod sh -c "'.$script.'"';
+            return 'docker compose -f '.$dir.'docker-compose.prod.yml run '.$runOptions.' web_preprod sh -c "'.$script.'"';
 
         case 'prod':
-            return 'docker compose -f '.$dir.'docker-compose.prod.yml -f '.$dir.'docker-compose.workers.yml run --cpus="3.0" '.$runOptions.' web sh -c "'.$script.'"';
+            return 'docker compose -f '.$dir.'docker-compose.prod.yml run '.$runOptions.' web_maintenance sh -c "'.$script.'"';
     }
 }
 
@@ -636,10 +636,10 @@ function getMatomoCommandLine($targetEnv, $script, $bUseWwwData = true, $bCronMo
 
     switch ($targetEnv) {
         case 'dev':
-            return 'docker compose -f '.$dir.'docker-compose.yml -f '.$dir.'docker-compose.workers.yml run --cpus="3.0" '. $runOptions.' matomo sh -c "'.$script.'"';
+            return 'docker compose -f '.$dir.'docker-compose.yml run '. $runOptions.' matomo sh -c "'.$script.'"';
 
         case 'prod':
-            return 'docker compose -f '.$dir.'docker-compose.prod.yml -f '.$dir.'docker-compose.workers.yml  run --cpus="3.0" '.$runOptions.' matomo sh -c "'.$script.'"';
+            return 'docker compose -f '.$dir.'docker-compose.prod.yml run '.$runOptions.' matomo sh -c "'.$script.'"';
     }
 }
 
@@ -657,13 +657,13 @@ function getExecCommandLine($targetEnv, $script, $bCronMode = false)
 
     switch ($targetEnv) {
         case 'dev':
-            return 'docker compose -f '.$dir.'docker-compose.yml -f '.$dir.'docker-compose.workers.yml exec '. $runOptions.' web sh -c "'.$script.'"';
+            return 'docker compose -f '.$dir.'docker-compose.yml exec '. $runOptions.' web sh -c "'.$script.'"';
 
         case 'preprod':
-            return 'docker compose -f '.$dir.'docker-compose.prod.yml -f '.$dir.'docker-compose.preprod.yml -f '.$dir.'docker-compose.workers.yml exec '.$runOptions.' web_preprod sh -c "'.$script.'"';
+            return 'docker compose -f '.$dir.'docker-compose.prod.yml exec '.$runOptions.' web_preprod sh -c "'.$script.'"';
 
         case 'prod':
-            return 'docker compose -f '.$dir.'docker-compose.prod.yml -f '.$dir.'docker-compose.workers.yml  exec '.$runOptions.' web sh -c "'.$script.'"';
+            return 'docker compose -f '.$dir.'docker-compose.prod.yml exec '.$runOptions.' web sh -c "'.$script.'"';
     }
 }
 
@@ -713,13 +713,13 @@ function getMysqlCommandLine($targetEnv, $targetLanguage, $script, $sqlBatchFile
     $volume = __DIR__ . '/backup:/backup';
     switch ($targetEnv) {
         case 'dev':
-            return "docker compose run --cpus=\"3.0\" --rm -v $volume db sh -c \"$script --defaults-extra-file=/backup/.mysql.cnf $extraParams -P 3306 -h db -u root $dbname $sqlBatchFile\"";
+            return "docker compose run --rm -v $volume db sh -c \"$script --defaults-extra-file=/backup/.mysql.cnf $extraParams -P 3306 -h db -u root $dbname $sqlBatchFile\"";
 
         case 'preprod':
-            return "docker compose -f '.$dir.'docker-compose.prod.yml -f '.$dir.'docker-compose.preprod.yml run --cpus=\"3.0\" --rm -v $volume db sh -c \"$script --defaults-extra-file=/backup/.mysql.cnf $extraParams -P 3306 -h db -u root ".$dbname."_preprod $sqlBatchFile\"";
+            return "docker compose -f '.$dir.'docker-compose.prod.yml -f '.$dir.'docker-compose.preprod.yml run --rm -v $volume db sh -c \"$script --defaults-extra-file=/backup/.mysql.cnf $extraParams -P 3306 -h db -u root ".$dbname."_preprod $sqlBatchFile\"";
 
         case 'prod':
-            return "docker compose -f '.$dir.'docker-compose.prod.yml run --cpus=\"3.0\" --rm -v $volume db sh -c \"$script --defaults-extra-file=/backup/.mysql.cnf $extraParams -P 3306 -h db -u root ".$dbname."_prod $sqlBatchFile\"";
+            return "docker compose -f '.$dir.'docker-compose.prod.yml run --rm -v $volume db sh -c \"$script --defaults-extra-file=/backup/.mysql.cnf $extraParams -P 3306 -h db -u root ".$dbname."_prod $sqlBatchFile\"";
     }
 }
 

@@ -124,6 +124,19 @@ services:
           - pt.tripleperformance.ag
           - ar.tripleperformance.ag  
 
+  web_maintenance:
+    image: ghcr.io/neayi/tripleperformance/wiki:$WIKI_VERSION_PROD
+    deploy:
+      resources:
+        limits:
+          cpus: '3.0'
+    restart: no
+    env_file: .env
+    volumes:
+      - ./.data/images:/var/www/html/images
+    networks:
+      default:
+
   insights:
     image: ghcr.io/neayi/insights/insights:$INSIGHTS_VERSION_PROD
     env_file: insights/.env

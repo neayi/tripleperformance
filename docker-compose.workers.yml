@@ -1,6 +1,0 @@
-services:
-  web:
-    deploy:
-      resources:
-        limits:
-          cpus: '3'
