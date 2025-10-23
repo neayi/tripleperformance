@@ -109,7 +109,8 @@ services:
         - DEBUG_TOOLS=true
     user: "${UID:-1000}:${GID:-1000}"
     networks:
-      - default
+      traefik:
+      default:
     volumes:
       - ./insights:/var/www/html
       - ./.cache/composer:/.composer
