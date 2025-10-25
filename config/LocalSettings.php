@@ -913,6 +913,9 @@ wfLoadExtension( 'Math' );
 
 wfLoadExtension( 'WikiSearchMapsLink' );
 
+wfLoadExtension( 'SemanticAPI' );
+
+
 // Debug and error reporting :
 
 if ($debug) {
