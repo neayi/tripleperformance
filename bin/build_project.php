@@ -197,7 +197,7 @@ function getWikiComponents()
 	$components[] = array(	'composer' => 'elasticsearch/elasticsearch "^7.17"' );
 	$components[] = array(	'composer' => 'mediawiki/chameleon-skin "^5.0.1"' ); // https://packagist.org/packages/mediawiki/chameleon-skin
 	$components[] = array(	'composer' => 'mediawiki/semantic-media-wiki "^6.0.1"' ); // https://packagist.org/packages/mediawiki/semantic-media-wiki
-	$components[] = array(	'composer' => 'mediawiki/maps "^12.0"' ); // https://packagist.org/packages/mediawiki/maps
+//  $components[] = array(	'composer' => 'mediawiki/maps "^12.0"' ); // https://packagist.org/packages/mediawiki/maps (commented until fix #829 is merged)
 	$components[] = array(	'composer' => 'mediawiki/semantic-result-formats "^5.1.0"' ); // https://packagist.org/packages/mediawiki/semantic-result-formats
 	$components[] = array(	'composer' => 'mediawiki/semantic-scribunto "^2.3.3"' ); // https://packagist.org/packages/mediawiki/semantic-scribunto
 	$components[] = array(	'composer' => 'mediawiki/semantic-extra-special-properties "^4.0"' ); // https://packagist.org/packages/mediawiki/semantic-extra-special-properties
@@ -329,6 +329,11 @@ function getWikiComponents()
 							'branch' => 'temporary-fix-66-from-v8.1.2',
 							'postinstall' => 'composer');
 						
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/Maps',
+							'git' => 'https://github.com/neayi/Maps.git',
+							'branch' => 'fix/829-Parser-not-properly-initialised',
+							'postinstall' => 'composer');
+
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/WikiSearchMapsLink',
 							'git' => 'https://github.com/neayi/WikiSearchMapsLink.git');
 
