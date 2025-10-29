@@ -727,8 +727,9 @@ wfLoadExtension( 'Parsoid', "$IP/vendor/wikimedia/parsoid/extension.json" );
 
 // VisualEditor
 wfLoadExtension( 'VisualEditor' );
-$wgVisualEditorTabMessages['editsource'] = null;
-$wgVisualEditorTabMessages['createsource'] = null;
+$wgVisualEditorTabMessages['edit'] = 'edit';
+// $wgVisualEditorTabMessages['editsource'] = null;
+// $wgVisualEditorTabMessages['createsource'] = null;
 
 // Enable by default for everybody
 $wgDefaultUserOptions['visualeditor-enable'] = 1;
