@@ -406,7 +406,6 @@ function getScriptPath($script)
         case 'generateJsonI18n.php' :
         case 'generateLocalAutoload.php' :
         case 'generateSchemaSql.php' :
-        case 'generateSitemap.php' :
         case 'getConfiguration.php' :
         case 'getLagTimes.php' :
         case 'getReplicaServer.php' :
@@ -551,6 +550,7 @@ function getScriptPath($script)
 
         case 'removeSpamAccounts.php' :
         case 'buildSitemap.php':
+        case 'generateSitemap.php':
 	        // NeayiAuth
             return "php /var/www/html/extensions/NeayiAuth/maintenance/$script";
 
