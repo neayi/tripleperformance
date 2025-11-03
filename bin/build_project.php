@@ -345,7 +345,7 @@ function getWikiComponents()
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/HitCounters',
 							'git' => 'https://github.com/neayi/mediawiki-extensions-HitCounters.git',
-							'branch' => 'Neayi1_39',
+							'branch' => 'Neayi1_43',
 							'postinstall' => 'composer');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Link_Attributes',
