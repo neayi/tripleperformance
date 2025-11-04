@@ -390,6 +390,33 @@ services:
       - default
       - traefik
 
+  bugsink:
+    image: bugsink/bugsink:latest
+    environment:
+      - SECRET_KEY=${BUGSINK_SECRET_KEY}
+      - ALLOWED_HOSTS=bugsink.tripleperformance.fr,localhost,bugsink
+      - DEBUG=false
+      - EMAIL_HOST=${N8N_SMTP_HOST}
+      - EMAIL_PORT=${N8N_SMTP_PORT}
+      - EMAIL_HOST_USER=${N8N_SMTP_USER}
+      - EMAIL_HOST_PASSWORD=${N8N_SMTP_PASS}
+      - EMAIL_USE_TLS=false
+      - EMAIL_USE_SSL=false
+      - DEFAULT_FROM_EMAIL=${N8N_SMTP_SENDER}
+      - SERVER_EMAIL=${N8N_SMTP_SENDER}
+      - DEBUG_CSRF=True
+      - BEHIND_HTTPS_PROXY=True
+    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.bugsink.rule=Host(`bugsink.tripleperformance.fr`)"
+      - "traefik.http.routers.bugsink.entrypoints=websecure"
+      - "traefik.http.routers.bugsink.tls=true"
+      - "traefik.http.services.bugsink.loadbalancer.server.port=8000"
+    networks:
+      - default
+      - traefik  
+
 networks:
   default: ~
   traefik:
