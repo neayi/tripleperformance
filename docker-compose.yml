@@ -325,29 +325,6 @@ services:
       - "traefik.http.routers.itkinfo.tls=true"
       - "traefik.http.services.itkinfo.loadbalancer.server.port=3000"
 
-  bugsink:
-    image: bugsink/bugsink:latest
-    depends_on:
-      - mysql
-      - mailcatcher
-    environment:
-      - DATABASE_URL=mysql://enoria:enoriapwd@mysql:3306/bugsink
-      - SECRET_KEY=${BUGSINK_SECRET_KEY}
-      - ALLOWED_HOSTS=bugsink.local.association-enoria.org,localhost,bugsink
-      - DEBUG=false
-      - EMAIL_HOST=${BUGSINK_EMAIL_HOST}
-      - EMAIL_PORT=${BUGSINK_EMAIL_PORT}
-      - EMAIL_USE_TLS=false
-      - EMAIL_USE_SSL=false
-      - DEFAULT_FROM_EMAIL=${BUGSINK_EMAIL_FROM}
-      - SERVER_EMAIL=${BUGSINK_EMAIL_FROM}
-    labels:
-      - 'traefik.enable=true'
-      - 'traefik.port=8000'
-      - 'traefik.frontend.rule=Host:bugsink.local.association-enoria.org'
-    links:
-      - 'mailcatcher:mailcatcher'
-
 networks:
   default: ~
   traefik:
