@@ -323,6 +323,13 @@ function getWikiComponents()
 							'git' => 'https://github.com/wikimedia/mediawiki-extensions-NativeSvgHandler.git',
 							'branch' => $wiki_version);
 
+	// $components[] = array(	'dest' => $wiki_extensions_dir . '/WSSemanticParsedText',
+	// 						'git' => 'https://gitlab.wikibase.nl/community/wssemanticparsedtext.git',
+	// 						'postinstall' => 'composer');
+
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/CrawlerProtection',
+							'git' => 'https://github.com/mywikis/CrawlerProtection.git');
+
 	// Neayi extensions and forks
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/WikiSearch',
 							'git' => 'https://github.com/neayi/WikiSearch.git',

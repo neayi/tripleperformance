@@ -882,6 +882,9 @@ $wgWikiSearchAPIRequiredRights = ["read", "wssearch-execute-api"];
 
 wfLoadExtension( 'WikiSearchFront' );
 
+// wfLoadExtension( 'WSSemanticParsedText' );
+// $smwgElasticsearchConfig["indexer"]["raw.text"] = true;
+
 // https://github.com/neayi/mw-WikiSearchLink
 wfLoadExtension( 'WikiSearchLink' );
 
@@ -915,6 +918,8 @@ wfLoadExtension( 'Math' );
 wfLoadExtension( 'WikiSearchMapsLink' );
 
 wfLoadExtension( 'SemanticAPI' );
+
+wfLoadExtension( 'CrawlerProtection' );
 
 
 // Debug and error reporting :
