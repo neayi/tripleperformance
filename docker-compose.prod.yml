@@ -412,6 +412,7 @@ services:
       - "traefik.http.routers.bugsink.rule=Host(`bugsink.tripleperformance.fr`)"
       - "traefik.http.routers.bugsink.entrypoints=websecure"
       - "traefik.http.routers.bugsink.tls=true"
+      - 'traefik.http.routers.itk-info.tls.certresolver=letsencrypt'
       - "traefik.http.services.bugsink.loadbalancer.server.port=8000"
     networks:
       - default
