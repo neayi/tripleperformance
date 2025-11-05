@@ -1,0 +1,62 @@
+[mysqld]
+# --------------------------
+# PERFORMANCE OPTIMIZATION FOR MEDIAWIKI (10GB RAM)
+# --------------------------
+
+# Basic
+user = mysql
+skip-name-resolve = 1
+sql_mode = STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION
+
+# --------------------------
+# InnoDB SETTINGS
+# --------------------------
+innodb_buffer_pool_size = 8G
+innodb_buffer_pool_instances = 4
+innodb_log_file_size = 1G
+innodb_log_buffer_size = 256M
+innodb_file_per_table = 1
+innodb_flush_method = O_DIRECT
+innodb_flush_log_at_trx_commit = 2
+innodb_io_capacity = 2000
+innodb_io_capacity_max = 4000
+
+# --------------------------
+# CONNECTIONS & THREADS
+# --------------------------
+max_connections = 200
+thread_cache_size = 100
+table_open_cache = 4000
+open_files_limit = 20000
+
+# --------------------------
+# TEMP TABLES / MEMORY TABLES
+# --------------------------
+tmp_table_size = 256M
+max_heap_table_size = 256M
+
+# --------------------------
+# QUERY CACHE (OPTIONAL)
+# --------------------------
+query_cache_type = 1
+query_cache_size = 64M
+query_cache_limit = 2M
+
+# --------------------------
+# LOGGING & DIAGNOSTICS
+# --------------------------
+# slow_query_log = 1
+# slow_query_log_file = /var/lib/mysql/slow.log
+# long_query_time = 0.5
+# log_queries_not_using_indexes = 1
+
+# --------------------------
+# PERFORMANCE SCHEMA
+# --------------------------
+# performance_schema = ON
+
+# --------------------------
+# CHARACTER SET (MediaWiki-friendly)
+# --------------------------
+character-set-server = utf8mb4
+collation-server = utf8mb4_unicode_ci

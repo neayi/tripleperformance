@@ -210,6 +210,7 @@ services:
     env_file: .env
     volumes:
       - ./.data/mysql:/var/lib/mysql
+      - ./engine/mysql/prod.cnf:/etc/mysql/conf.d/prod.cnf:ro
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
