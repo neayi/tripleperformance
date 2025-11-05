@@ -166,7 +166,8 @@ services:
       - 'traefik.http.routers.web_preprod.tls=true'
       - 'traefik.http.routers.web_preprod.tls.certresolver=letsencrypt'
       - 'traefik.http.services.web_preprod.loadbalancer.server.port=80'
-      - 'traefik.http.routers.web_preprod.middlewares=geoblock-china@file'
+      - 'traefik.http.routers.web_preprod.middlewares=admin-whitelist@docker'
+      - 'traefik.http.middlewares.admin-whitelist.ipwhitelist.sourcerange=82.67.168.223/32'
     networks:
       traefik:
       default:
@@ -222,6 +223,8 @@ services:
       - 'traefik.http.routers.phpmyadmin.tls=true'
       - 'traefik.http.routers.phpmyadmin.tls.certresolver=letsencrypt'
       - 'traefik.http.services.phpmyadmin.loadbalancer.server.port=80'
+      - 'traefik.http.routers.phpmyadmin.middlewares=admin-whitelist@docker'
+      - 'traefik.http.middlewares.admin-whitelist.ipwhitelist.sourcerange=82.67.168.223/32'
     networks:
       - default
       - traefik
@@ -235,7 +238,7 @@ services:
       - 'traefik.http.routers.portainer.entrypoints=websecure'
       - 'traefik.http.routers.portainer.tls=true'
       - 'traefik.http.routers.portainer.tls.certresolver=letsencrypt'
-      - 'traefik.http.services.portainer.loadbalancer.server.port=9000'
+      - 'traefik.http.services.portainer.loadbalancer.server.port=9000'      
     volumes:
       - portainer_data:/data
       - /var/run/docker.sock:/var/run/docker.sock
@@ -282,6 +285,8 @@ services:
       - 'traefik.http.routers.elasticvue.tls=true'
       - 'traefik.http.routers.elasticvue.tls.certresolver=letsencrypt'
       - 'traefik.http.services.elasticvue.loadbalancer.server.port=8080'
+      - 'traefik.http.routers.phpmyadmin.middlewares=admin-whitelist@docker'
+      - 'traefik.http.middlewares.admin-whitelist.ipwhitelist.sourcerange=82.67.168.223/32'      
     networks:
       - default
       - traefik
