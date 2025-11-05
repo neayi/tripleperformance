@@ -285,7 +285,7 @@ services:
       - 'traefik.http.routers.elasticvue.tls=true'
       - 'traefik.http.routers.elasticvue.tls.certresolver=letsencrypt'
       - 'traefik.http.services.elasticvue.loadbalancer.server.port=8080'
-      - 'traefik.http.routers.phpmyadmin.middlewares=admin-whitelist@docker'
+      - 'traefik.http.routers.elasticvue.middlewares=admin-whitelist@docker'
       - 'traefik.http.middlewares.admin-whitelist.ipwhitelist.sourcerange=82.67.168.223/32'      
     networks:
       - default
