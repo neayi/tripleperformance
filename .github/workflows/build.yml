@@ -18,8 +18,8 @@ jobs:
             -   name: Define variables
                 id: vars
                 run: |
-                    echo ::set-output name=CI_COMMIT_REF_SLUG::${GITHUB_REF#refs/*/}
-                    echo ::set-output name=CI_REGISTRY_IMAGE::docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME
+                    echo "CI_COMMIT_REF_SLUG=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+                    echo "CI_REGISTRY_IMAGE=docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME" >> $GITHUB_OUTPUT
 
             -   name: Log into registry
                 run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin

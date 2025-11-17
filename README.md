@@ -45,7 +45,7 @@ Installer le CA local (une seule fois) :
     rm -rf .cache/ssl && mkdir .cache/ssl
     cd .cache/ssl
     /mnt/c/mkcert/mkcert.exe -install
-    /mnt/c/mkcert/mkcert.exe "*.dev.tripleperformance.fr"
+    /mnt/c/mkcert/mkcert.exe "*.dev.tripleperformance.fr" "*.dev.tripleperformance.ag"
 
 NB : le fait d'utiliser la version Windows de mkcert permet l'installation automatique des certificats dans les navigateurs Chrome, Edge, etc...
 
