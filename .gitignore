@@ -32,3 +32,4 @@ backup/locales_config.sql
 bin/discourse/forum.prod.yml
 bin/discourse/test.yml
 bin/discourse/forum copy.yml
+geoip/GeoLite2-Country.mmdb

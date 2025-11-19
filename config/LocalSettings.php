@@ -185,6 +185,9 @@ $wgObjectCaches['redis'] = [
 ## To enable image uploads, make sure the 'images' directory
 ## is writable, then set this to true:
 $wgEnableUploads = true;
+$wgUploadSizeWarning = 10 * 1024 * 1024; // 10MB warning
+$wgMaxUploadSize = 10 * 1024 * 1024;     // 10MB max
+
 $wgUseImageMagick = true; // disable on OVH https://www.mediawiki.org/wiki/Topic:Uysful50s28egg8a
 $wgImageMagickConvertCommand = "/usr/bin/convert";
 $wgFileExtensions[] = 'svg';

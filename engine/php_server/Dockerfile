@@ -77,6 +77,13 @@ COPY engine/php_server/apache/mpm_prefork.conf /etc/apache2/mods-enabled/mpm_pre
 
 RUN a2enconf z-app
 
+COPY <<EOF /usr/local/etc/php/conf.d/uploads.ini
+upload_max_filesize = 10M
+post_max_size = 10M
+memory_limit = 256M
+max_execution_time = 300
+EOF
+
 COPY <<EOF /usr/local/etc/php/conf.d/sendmail.ini
 sendmail_path = /usr/bin/msmtp -t
 EOF
