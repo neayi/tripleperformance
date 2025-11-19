@@ -31,7 +31,10 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends msmtp \
     && apt-get install -y --no-install-recommends ssh \
     && apt-get install -y --no-install-recommends pandoc \
+    && apt-get install -y --no-install-recommends python3 \
+    && apt-get install -y --no-install-recommends python3-pip \
     && rm -rf /var/lib/apt/lists/* \
+    && pip3 install --no-cache-dir --quiet --break-system-packages pdf2docx \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd \
     && docker-php-ext-install pdo_mysql \
