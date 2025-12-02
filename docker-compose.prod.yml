@@ -1,6 +1,6 @@
 services:
   traefik:
-    image: traefik:3.5
+    image: traefik:3.6
     restart: always
     ports:
       - '80:80'
@@ -88,7 +88,8 @@ services:
       - 'traefik.http.middlewares.redirect-old-urls.redirectregex.regex=^https?://(pratiques\.)?tripleperformance\.fr/(.*)'
       - 'traefik.http.middlewares.redirect-old-urls.redirectregex.replacement=https://wiki.tripleperformance.fr/$${2}'
       - 'traefik.http.middlewares.redirect-old-urls.redirectregex.permanent=true'
-      - 'traefik.http.routers.web.middlewares=redirect-old-urls@docker,geoblock-china@file'
+      - 'traefik.http.routers.web.middlewares=redirect-old-urls@docker'
+      # - 'traefik.http.routers.web.middlewares=redirect-old-urls@docker,geoblock-china@file'
 
     networks:
       default:
