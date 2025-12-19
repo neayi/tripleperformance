@@ -36,7 +36,7 @@ services:
       # Plugins
       # - "--experimental.plugins.geoblock.moduleName=github.com/PascalMinder/geoblock"
       # - "--experimental.plugins.geoblock.version=v0.3.3"
-      - "--experimental.localPlugins.geoblock.moduleName=github.com/PascalMinder/geoblock"
+      # - "--experimental.localPlugins.geoblock.moduleName=github.com/PascalMinder/geoblock"
     labels:
       # Enable self-routing
       - "traefik.enable=true"
@@ -65,7 +65,7 @@ services:
       - "traefik.http.routers.web.entrypoints=websecure"
       - "traefik.http.routers.web.tls=true"
       - "traefik.http.services.web.loadbalancer.server.port=80"     
-      - "traefik.http.routers.web.middlewares=geoblock-china@file"
+      # - "traefik.http.routers.web.middlewares=geoblock-china@file"
     networks:
       default:
         aliases:

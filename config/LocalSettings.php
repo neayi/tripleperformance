@@ -462,9 +462,18 @@ if('prod' === $env) {
     // $wgGroupPermissions['bureaucrat']['gtag-exempt'] = true;
 
     switch (getWikiLanguage()) {
-        case 'en':
-            $matomoSiteId = 2;
-            break;
+        case 'en': $matomoSiteId = 2; break;
+        case 'es': $matomoSiteId = 5; break;
+        case 'de': $matomoSiteId = 6; break;
+        case 'pt': $matomoSiteId = 7; break;
+        case 'nl': $matomoSiteId = 8; break;
+        case 'el': $matomoSiteId = 9; break;
+        case 'fi': $matomoSiteId = 10; break;
+        case 'hu': $matomoSiteId = 11; break;
+        case 'it': $matomoSiteId = 12; break;
+        case 'pl': $matomoSiteId = 13; break;
+        case 'ar': $matomoSiteId = 14; break;
+
         case 'fr':
         default:
             $matomoSiteId = 1;
