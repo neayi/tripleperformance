@@ -933,7 +933,7 @@ wfLoadExtension( 'WikiSearchMapsLink' );
 wfLoadExtension( 'SemanticAPI' );
 
 wfLoadExtension( 'CrawlerProtection' );
-
+$wgCrawlerProtectionUse418 = true;
 
 // Debug and error reporting :
 
