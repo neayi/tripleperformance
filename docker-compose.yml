@@ -23,14 +23,14 @@ services:
       - "--entrypoints.websecure.http.tls=true"
       # Attach the static configuration tls.yaml file that contains the tls configuration settings
       - "--providers.file.filename=/dynamic/tls.yaml"
-      # Providers 
+      # Providers
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--providers.docker.network=traefik"
-      # API & Dashboard 
+      # API & Dashboard
       - "--api.dashboard=true"
       - "--api.insecure=false"
-      # Observability 
+      # Observability
       - "--log.level=INFO"
       - "--accesslog=false"
       # Plugins
@@ -48,7 +48,7 @@ services:
       # Basic‑auth middleware
       - "traefik.http.middlewares.dashboard-auth.basicauth.users=$TRAEFIKUSER:$TRAEFIKPASSWORD"
       - "traefik.http.routers.dashboard.middlewares=dashboard-auth@docker"
-      
+
   web:
     build:
       context: .
@@ -64,7 +64,7 @@ services:
       - "traefik.http.routers.web.rule=Host(`wiki.dev.tripleperformance.fr`) || Host(`demo.dev.tripleperformance.fr`) || Host(`fr.dev.tripleperformance.ag`) || Host(`ar.dev.tripleperformance.ag`) || Host(`en.dev.tripleperformance.ag`) || Host(`de.dev.tripleperformance.ag`) || Host(`es.dev.tripleperformance.ag`) || Host(`fi.dev.tripleperformance.ag`) || Host(`pt.dev.tripleperformance.ag`) || Host(`it.dev.tripleperformance.ag`) || Host(`el.dev.tripleperformance.ag`) || Host(`hu.dev.tripleperformance.ag`) || Host(`pl.dev.tripleperformance.ag`) || Host(`nl.dev.tripleperformance.ag`)"
       - "traefik.http.routers.web.entrypoints=websecure"
       - "traefik.http.routers.web.tls=true"
-      - "traefik.http.services.web.loadbalancer.server.port=80"     
+      - "traefik.http.services.web.loadbalancer.server.port=80"
       # - "traefik.http.routers.web.middlewares=geoblock-china@file"
     networks:
       default:
@@ -174,7 +174,7 @@ services:
         hard: -1
     networks:
       - default
-      - traefik  
+      - traefik
     volumes:
       - data01:/usr/share/elasticsearch/data
     labels:
@@ -233,7 +233,7 @@ services:
       - "traefik.http.routers.piwigo.rule=Host(`photos.dev.tripleperformance.fr`)"
       - "traefik.http.routers.piwigo.entrypoints=websecure"
       - "traefik.http.routers.piwigo.tls=true"
-      - "traefik.http.services.piwigo.loadbalancer.server.port=80"        
+      - "traefik.http.services.piwigo.loadbalancer.server.port=80"
     networks:
       traefik:
       default:
@@ -249,13 +249,13 @@ services:
       - matomo:/var/www/html:z
     networks:
       - default
-      - traefik      
+      - traefik
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.matomo.rule=Host(`matomo.dev.tripleperformance.fr`)"
       - "traefik.http.routers.matomo.entrypoints=websecure"
       - "traefik.http.routers.matomo.tls=true"
-      - "traefik.http.services.matomo.loadbalancer.server.port=80"        
+      - "traefik.http.services.matomo.loadbalancer.server.port=80"
 
   n8n:
     image: docker.n8n.io/n8nio/n8n
@@ -268,7 +268,7 @@ services:
       - "traefik.http.services.n8n.loadbalancer.server.port=5678"
     networks:
       - default
-      - traefik      
+      - traefik
     environment:
       - N8N_HOST=n8n.dev.tripleperformance.fr
       - N8N_PORT=5678
@@ -283,7 +283,7 @@ services:
       - N8N_SMTP_SENDER
       - N8N_SMTP_PORT
       - N8N_SMTP_SSL
-      - N8N_SMTP_TLS      
+      - N8N_SMTP_TLS
     volumes:
       - n8n_data:/home/node/.n8n
       - ./backup/n8n:/files
@@ -314,8 +314,6 @@ services:
 
   itk-info:
     image: ghcr.io/neayi/itk-info:latest
-    ports:
-      - "3000:3000"
     environment:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - PORT=3000
@@ -326,6 +324,50 @@ services:
       - "traefik.http.routers.itkinfo.entrypoints=websecure"
       - "traefik.http.routers.itkinfo.tls=true"
       - "traefik.http.services.itkinfo.loadbalancer.server.port=3000"
+    networks:
+      - default
+      - traefik
+
+
+  itinera:
+    image: ghcr.io/neayi/itinera:latest
+    environment:
+      - NODE_ENV=development
+      - DB_HOST=${MYSQL_HOST:-db}
+      - DB_PORT=3306
+      - DB_USER=${MYSQL_USER:-itinera_user}
+      - DB_PASSWORD=${MYSQL_PASSWORD:-itinera_password}
+      - DB_NAME=${DB_NAME:-itinera_db}
+      - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL:-https://dev.itinera.ag}
+      - DISCOURSE_SSO_URL=${DISCOURSE_SSO_URL}
+      - DISCOURSE_SSO_SECRET=${DISCOURSE_SSO_SECRET}
+      - SESSION_SECRET=${SESSION_SECRET:-itinera_session_secret_change_in_production}
+      - WATCHPACK_POLLING=true
+      - CHOKIDAR_USEPOLLING=true
+      - CHOKIDAR_INTERVAL=1000
+      # Force Turbopack to use polling for file watching in Docker
+      - TURBOPACK_USE_POLLING=true
+      # OpenAI Configuration
+      - OPENAI_API_KEY=${ITINERA_OPENAI_API_KEY}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o-mini}
+      - OPENAI_MAX_TOKENS=${OPENAI_MAX_TOKENS:-2000}
+      - OPENAI_TEMPERATURE=${OPENAI_TEMPERATURE:-0.3}
+      # Feature Flags
+      - AI_ASSISTANT_ENABLED=${AI_ASSISTANT_ENABLED:-true}
+      - NEXT_PUBLIC_AI_ASSISTANT_ENABLED=${NEXT_PUBLIC_AI_ASSISTANT_ENABLED:-true}
+      - AI_AUTO_CALCULATE=${AI_AUTO_CALCULATE:-false}
+      - AI_MAX_CONVERSATIONS_LENGTH=${AI_MAX_CONVERSATIONS_LENGTH:-10}
+    depends_on:
+      - db
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.itinera.rule=Host(`dev.itinera.ag`)"
+      - "traefik.http.routers.itinera.entrypoints=websecure"
+      - "traefik.http.routers.itinera.tls=true"
+      - "traefik.http.services.itinera.loadbalancer.server.port=3000"
+      - "traefik.http.middlewares.itinera-headers.headers.customrequestheaders.X-Forwarded-Proto=https"
+      - "traefik.http.middlewares.itinera-headers.headers.customrequestheaders.X-Forwarded-Host=dev.itinera.ag"
     networks:
       - default
       - traefik
@@ -346,7 +388,7 @@ services:
       - SERVER_EMAIL=${N8N_SMTP_SENDER}
       - DEBUG_CSRF=True
       - BEHIND_HTTPS_PROXY=True
-    restart: unless-stopped      
+    restart: unless-stopped
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.bugsink.rule=Host(`bugsink.dev.tripleperformance.fr`)"
@@ -355,7 +397,7 @@ services:
       - "traefik.http.services.bugsink.loadbalancer.server.port=8000"
     networks:
       - default
-      - traefik  
+      - traefik
 
 networks:
   default: ~

@@ -1,8 +1,10 @@
 
 tls:
-  certificates:        
+  certificates:
     - certFile: "/etc/ssl/_wildcard.dev.tripleperformance.fr.pem"
       keyFile: "/etc/ssl/_wildcard.dev.tripleperformance.fr-key.pem"
+    - certFile: "/etc/ssl/dev.itinera.ag.pem"
+      keyFile: "/etc/ssl/dev.itinera.ag-key.pem"
 
 
 http:
