@@ -335,9 +335,9 @@ services:
       - NODE_ENV=development
       - DB_HOST=${MYSQL_HOST:-db}
       - DB_PORT=3306
-      - DB_USER=${MYSQL_USER:-itinera_user}
-      - DB_PASSWORD=${MYSQL_PASSWORD:-itinera_password}
-      - DB_NAME=${DB_NAME:-itinera_db}
+      - DB_USER=${ITINERA_MYSQL_USER:-itinera_user}
+      - DB_PASSWORD=${ITINERA_MYSQL_PASSWORD:-itinera_password}
+      - DB_NAME=${ITINERA_DB_NAME:-itinera_db}
       - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL:-https://dev.itinera.ag}
       - DISCOURSE_SSO_URL=${DISCOURSE_SSO_URL}
       - DISCOURSE_SSO_SECRET=${DISCOURSE_SSO_SECRET}

@@ -397,6 +397,50 @@ services:
       - default
       - traefik
 
+  itinera:
+    image: ghcr.io/neayi/itinera:latest
+    environment:
+      - NODE_ENV=production
+      - DB_HOST=${MYSQL_HOST:-db}
+      - DB_PORT=3306
+      - DB_USER=${ITINERA_MYSQL_USER:-itinera_user}
+      - DB_PASSWORD=${ITINERA_MYSQL_PASSWORD:-itinera_password}
+      - DB_NAME=${ITINERA_DB_NAME:-itinera_db}
+      - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL:-https://app.itinera.ag}
+      - DISCOURSE_SSO_URL=${DISCOURSE_SSO_URL}
+      - DISCOURSE_SSO_SECRET=${DISCOURSE_SSO_SECRET}
+      - SESSION_SECRET=${SESSION_SECRET:-itinera_session_secret_change_in_production}
+      - WATCHPACK_POLLING=true
+      - CHOKIDAR_USEPOLLING=true
+      - CHOKIDAR_INTERVAL=1000
+      # Force Turbopack to use polling for file watching in Docker
+      - TURBOPACK_USE_POLLING=true
+      # OpenAI Configuration
+      - OPENAI_API_KEY=${ITINERA_OPENAI_API_KEY}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o-mini}
+      - OPENAI_MAX_TOKENS=${OPENAI_MAX_TOKENS:-2000}
+      - OPENAI_TEMPERATURE=${OPENAI_TEMPERATURE:-0.3}
+      # Feature Flags
+      - AI_ASSISTANT_ENABLED=${AI_ASSISTANT_ENABLED:-true}
+      - NEXT_PUBLIC_AI_ASSISTANT_ENABLED=${NEXT_PUBLIC_AI_ASSISTANT_ENABLED:-true}
+      - AI_AUTO_CALCULATE=${AI_AUTO_CALCULATE:-false}
+      - AI_MAX_CONVERSATIONS_LENGTH=${AI_MAX_CONVERSATIONS_LENGTH:-10}
+    depends_on:
+      - db
+    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.itinera.rule=Host(`app.itinera.ag`)"
+      - "traefik.http.routers.itinera.entrypoints=websecure"
+      - 'traefik.http.routers.itinera.tls=true'
+      - 'traefik.http.routers.itinera.tls.certresolver=letsencrypt'
+      - "traefik.http.services.itinera.loadbalancer.server.port=3000"
+      - "traefik.http.middlewares.itinera-headers.headers.customrequestheaders.X-Forwarded-Proto=https"
+      - "traefik.http.middlewares.itinera-headers.headers.customrequestheaders.X-Forwarded-Host=app.itinera.ag"
+    networks:
+      - default
+      - traefik
+
   bugsink:
     image: bugsink/bugsink:latest
     environment:
