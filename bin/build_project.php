@@ -335,7 +335,7 @@ function getWikiComponents()
 							'git' => 'https://github.com/neayi/WikiSearch.git',
 							'branch' => 'temporary-fix-66-from-v8.1.2',
 							'postinstall' => 'composer');
-						
+
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Maps',
 							'git' => 'https://github.com/neayi/Maps.git',
 							'branch' => 'fix/829-Parser-not-properly-initialised',
@@ -372,7 +372,7 @@ function getWikiComponents()
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/ConvertPDF2Wiki',
 							'git' => 'https://github.com/neayi/mw-convertPDF2Wiki.git');
-							
+
 	// TODO: Create a new repo and get rid of CommentStreams
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/DiscourseIntegration',
 							'git' => 'https://github.com/neayi/mw-DiscourseIntegration.git',
@@ -393,7 +393,7 @@ function getWikiComponents()
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/NeayiIntroJS',
 							'git' => 'https://github.com/neayi/mw-NeayiIntroJS.git');
-					
+
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/NeayiRelatedPages',
 							'git' => 'https://github.com/neayi/mw-NeayiRelatedPages.git');
 
@@ -412,6 +412,9 @@ function getWikiComponents()
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/FleurAgroecologie',
 							'git' => 'https://github.com/neayi/mw-fleur-agroecologie.git');
+
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/NeayiSpecialProperties',
+							'git' => 'https://github.com/neayi/mw-NeayiSpecialProperties.git');
 
 	return $components;
 }
