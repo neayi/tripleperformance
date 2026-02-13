@@ -1,0 +1,27 @@
+name: Cleanup old Docker images
+
+on:
+  workflow_run:
+    workflows: ["build"]
+    types:
+      - completed
+  schedule:
+    # Exécute chaque dimanche à 3h du matin
+    - cron: '0 3 * * 0'
+  workflow_dispatch: # Permet de déclencher manuellement
+
+permissions:
+  packages: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
+    steps:
+      - name: Delete old package versions
+        uses: actions/delete-package-versions@v5
+        with:
+          package-name: 'tripleperformance/wiki'
+          package-type: 'container'
+          min-versions-to-keep: 5
+          delete-only-untagged-versions: 'false'
