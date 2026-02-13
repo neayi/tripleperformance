@@ -174,7 +174,7 @@ Modifier les fichiers .env, et en particulier vérifier la version des images à
 
 Configurer les fichiers .env, puis :
 
-    docker login -u bertrand.gorge@neayi.com -p $PAT docker.pkg.github.com
+    docker login -u bertrand.gorge@neayi.com -p $PAT ghcr.io
     docker compose -f docker-compose.prod.yml up -d
 
 Avec `$PAT` un [Personal Access Token](https://github.com/settings/tokens) ayant les droits de lecture sur les packages github.

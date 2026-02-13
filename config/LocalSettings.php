@@ -864,6 +864,8 @@ $wgLinkTitlesMaximumTitleLength = 25;
 $wgLinkTitlesEnableNoTargetMagicWord = true;
 $wgLinkTitlesCheckRedirect = false;
 $wgLinkTitlesPreferShortTitles = false;
+$wgGroupPermissions ['bureaucrat']['linktitles-batch'] = true;
+
 
 // https://github.com/neayi/mw-Piwigo
 wfLoadExtension( 'Piwigo' );
