@@ -115,6 +115,87 @@ services:
       - ./insights:/var/www/html
       - ./.cache/composer:/.composer
 
+  # mcp:
+  #   build:
+  #     context: mcp
+  #     dockerfile: Dockerfile
+  #   restart: unless-stopped
+  #   environment:
+  #     - ELASTICSEARCH_URL=http://elasticsearch:9200
+  #   depends_on:
+  #     elasticsearch:
+  #       condition: service_healthy
+  #   labels:
+  #     - traefik.enable=true
+  #     - traefik.http.routers.mcp.rule=Host(`mcp.dev.tripleperformance.fr`)
+  #     - traefik.http.routers.mcp.entrypoints=websecure
+  #     - traefik.http.routers.mcp.tls=true
+  #     - traefik.http.services.mcp.loadbalancer.server.port=3000
+  #   networks:
+  #     - traefik
+  #     - default
+
+  itinera:
+    build:
+      context: ${ITINERA_PROJECT_DIR:-.}
+      dockerfile: Dockerfile.dev
+    environment:
+      - NODE_ENV=development
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USER=${DB_USER:-itinera_user}
+      - DB_PASSWORD=${DB_PASSWORD:-itinera_password}
+      - DB_NAME=${DB_NAME:-itinera_db}
+      - NEXT_PUBLIC_APP_URL=https://itinera.dev.tripleperformance.fr
+      - APP_URL=http://localhost:3000
+      - DISCOURSE_SSO_URL=${DISCOURSE_SSO_URL}
+      - DISCOURSE_SSO_SECRET=${DISCOURSE_SSO_SECRET}
+      - SESSION_SECRET=${SESSION_SECRET:-itinera_session_secret_change_in_production}
+      - WATCHPACK_POLLING=true
+      - CHOKIDAR_USEPOLLING=true
+      - CHOKIDAR_INTERVAL=1000
+      # Force Turbopack to use polling for file watching in Docker
+      - TURBOPACK_USE_POLLING=true
+      # OpenAI Configuration
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o-mini}
+      - OPENAI_MAX_TOKENS=${OPENAI_MAX_TOKENS:-2000}
+      - OPENAI_TEMPERATURE=${OPENAI_TEMPERATURE:-0.3}
+      # Feature Flags
+      - AI_ASSISTANT_ENABLED=${AI_ASSISTANT_ENABLED:-true}
+      - NEXT_PUBLIC_AI_ASSISTANT_ENABLED=${NEXT_PUBLIC_AI_ASSISTANT_ENABLED:-true}
+      - AI_AUTO_CALCULATE=${AI_AUTO_CALCULATE:-false}
+      - AI_MAX_CONVERSATIONS_LENGTH=${AI_MAX_CONVERSATIONS_LENGTH:-10}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.itinera.rule=Host(`itinera.dev.tripleperformance.fr`)"
+      - "traefik.http.routers.itinera.entrypoints=websecure"
+      - "traefik.http.routers.itinera.tls=true"
+      - "traefik.http.services.itinera.loadbalancer.server.port=3000"
+      - "traefik.http.middlewares.itinera-headers.headers.customrequestheaders.X-Forwarded-Proto=https"
+      - "traefik.http.middlewares.itinera-headers.headers.customrequestheaders.X-Forwarded-Host=itinera.dev.tripleperformance.fr"
+    networks:
+      - default
+      - traefik
+    restart: unless-stopped
+    volumes:
+      # Mount source code for hot reload
+      - ${ITINERA_PROJECT_DIR:-.}/app:/app/app
+      - ${ITINERA_PROJECT_DIR:-.}/components:/app/components
+      - ${ITINERA_PROJECT_DIR:-.}/lib:/app/lib
+      - ${ITINERA_PROJECT_DIR:-.}/shared:/app/shared
+      - ${ITINERA_PROJECT_DIR:-.}/public:/app/public
+      - ${ITINERA_PROJECT_DIR:-.}/styles:/app/styles
+      - ${ITINERA_PROJECT_DIR:-.}/next.config.js:/app/next.config.js
+      - ${ITINERA_PROJECT_DIR:-.}/tsconfig.json:/app/tsconfig.json
+      - ${ITINERA_PROJECT_DIR:-.}/postcss.config.js:/app/postcss.config.js
+      - ${ITINERA_PROJECT_DIR:-.}/tailwind.config.js:/app/tailwind.config.js
+      - ${ITINERA_PROJECT_DIR:-.}/proxy.ts:/app/proxy.ts
+      # Exclude node_modules and .next from host
+      - /app/node_modules
+      - /app/.next
+
+
   insights:
     image: nginx:1.28
     volumes:
@@ -328,50 +409,6 @@ services:
       - default
       - traefik
 
-
-  itinera:
-    image: ghcr.io/neayi/itinera:latest
-    environment:
-      - NODE_ENV=development
-      - DB_HOST=${MYSQL_HOST:-db}
-      - DB_PORT=3306
-      - DB_USER=${ITINERA_MYSQL_USER:-itinera_user}
-      - DB_PASSWORD=${ITINERA_MYSQL_PASSWORD:-itinera_password}
-      - DB_NAME=${ITINERA_DB_NAME:-itinera_db}
-      - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL:-https://dev.itinera.ag}
-      - DISCOURSE_SSO_URL=${DISCOURSE_SSO_URL}
-      - DISCOURSE_SSO_SECRET=${DISCOURSE_SSO_SECRET}
-      - SESSION_SECRET=${SESSION_SECRET:-itinera_session_secret_change_in_production}
-      - WATCHPACK_POLLING=true
-      - CHOKIDAR_USEPOLLING=true
-      - CHOKIDAR_INTERVAL=1000
-      # Force Turbopack to use polling for file watching in Docker
-      - TURBOPACK_USE_POLLING=true
-      # OpenAI Configuration
-      - OPENAI_API_KEY=${ITINERA_OPENAI_API_KEY}
-      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o-mini}
-      - OPENAI_MAX_TOKENS=${OPENAI_MAX_TOKENS:-2000}
-      - OPENAI_TEMPERATURE=${OPENAI_TEMPERATURE:-0.3}
-      # Feature Flags
-      - AI_ASSISTANT_ENABLED=${AI_ASSISTANT_ENABLED:-true}
-      - NEXT_PUBLIC_AI_ASSISTANT_ENABLED=${NEXT_PUBLIC_AI_ASSISTANT_ENABLED:-true}
-      - AI_AUTO_CALCULATE=${AI_AUTO_CALCULATE:-false}
-      - AI_MAX_CONVERSATIONS_LENGTH=${AI_MAX_CONVERSATIONS_LENGTH:-10}
-    depends_on:
-      - db
-    restart: unless-stopped
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.itinera.rule=Host(`dev.itinera.ag`)"
-      - "traefik.http.routers.itinera.entrypoints=websecure"
-      - "traefik.http.routers.itinera.tls=true"
-      - "traefik.http.services.itinera.loadbalancer.server.port=3000"
-      - "traefik.http.middlewares.itinera-headers.headers.customrequestheaders.X-Forwarded-Proto=https"
-      - "traefik.http.middlewares.itinera-headers.headers.customrequestheaders.X-Forwarded-Host=dev.itinera.ag"
-    networks:
-      - default
-      - traefik
-
   bugsink:
     image: bugsink/bugsink:latest
     environment:
@@ -398,6 +435,61 @@ services:
     networks:
       - default
       - traefik
+
+  mediawiki-mcp:
+    # build: .
+    image: ghcr.io/olgasafonova/mediawiki-mcp-server:latest
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.mediawiki-mcp.rule=Host(`mediawiki-mcp.dev.tripleperformance.fr`)"
+      - "traefik.http.routers.mediawiki-mcp.entrypoints=websecure"
+      - "traefik.http.routers.mediawiki-mcp.tls=true"
+      - "traefik.http.services.mediawiki-mcp.loadbalancer.server.port=8080"
+    environment:
+      - MEDIAWIKI_URL=${MEDIAWIKI_URL:-https://wiki.tripleperformance.fr/api.php}
+
+      # Optional: For editing (create at Special:BotPasswords)
+      - MEDIAWIKI_USERNAME=toto
+      - MEDIAWIKI_PASSWORD=toto
+
+      # Optional: Bearer token for HTTP auth
+      - MCP_AUTH_TOKEN=${MCP_AUTH_TOKEN:-}
+
+      # Optional: Request timeout
+      - MEDIAWIKI_TIMEOUT=${MEDIAWIKI_TIMEOUT:-30s}
+    networks:
+      - default
+      - traefik
+
+    # Resource limits (adjust as needed)
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 128M
+        reservations:
+          cpus: '0.1'
+          memory: 32M
+
+    # Health check
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+
+    # Restart policy
+    restart: unless-stopped
+
+    # Security
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp
+
+
 
 networks:
   default: ~
