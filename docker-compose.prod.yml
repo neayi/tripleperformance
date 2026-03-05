@@ -417,7 +417,10 @@ services:
       - TURBOPACK_USE_POLLING=true
       # OpenAI Configuration
       - OPENAI_API_KEY=${ITINERA_OPENAI_API_KEY}
-      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o-mini}
+      - CLAUDE_API_KEY=${CLAUDE_API_KEY}      
+      - LLM_PROVIDER=${LLM_PROVIDER:-openai}
+      - LLM_INDICATOR_MODEL=${LLM_INDICATOR_MODEL:-gpt-4o-mini}
+      - LLM_SYSTEM_MODEL=${LLM_SYSTEM_MODEL:-gpt-4o}
       - OPENAI_MAX_TOKENS=${OPENAI_MAX_TOKENS:-2000}
       - OPENAI_TEMPERATURE=${OPENAI_TEMPERATURE:-0.3}
       # Feature Flags

@@ -158,9 +158,12 @@ services:
       - TURBOPACK_USE_POLLING=true
       # OpenAI Configuration
       - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o-mini}
+      - CLAUDE_API_KEY=${CLAUDE_API_KEY}      
       - OPENAI_MAX_TOKENS=${OPENAI_MAX_TOKENS:-2000}
       - OPENAI_TEMPERATURE=${OPENAI_TEMPERATURE:-0.3}
+      - LLM_PROVIDER=${LLM_PROVIDER:-openai}
+      - LLM_INDICATOR_MODEL=${LLM_INDICATOR_MODEL:-gpt-4o-mini}
+      - LLM_SYSTEM_MODEL=${LLM_SYSTEM_MODEL:-gpt-4o}      
       # Feature Flags
       - AI_ASSISTANT_ENABLED=${AI_ASSISTANT_ENABLED:-true}
       - NEXT_PUBLIC_AI_ASSISTANT_ENABLED=${NEXT_PUBLIC_AI_ASSISTANT_ENABLED:-true}
@@ -191,9 +194,8 @@ services:
       - ${ITINERA_PROJECT_DIR:-.}/postcss.config.js:/app/postcss.config.js
       - ${ITINERA_PROJECT_DIR:-.}/tailwind.config.js:/app/tailwind.config.js
       - ${ITINERA_PROJECT_DIR:-.}/proxy.ts:/app/proxy.ts
-      # Exclude node_modules and .next from host
-      - /app/node_modules
-      - /app/.next
+      # node_modules monté depuis l'hôte — npm install en local suffit, pas besoin de rebuild
+      - ${ITINERA_PROJECT_DIR:-.}/node_modules:/app/node_modules
 
 
   insights:
