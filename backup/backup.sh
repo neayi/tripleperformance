@@ -16,8 +16,8 @@ rsync -va $DIR/../.data/insights_prod_storage neayi.com:~/backup
 rsync -va /var/www/discourse/shared/standalone/backups neayi.com:~/discourse_backup/
 rsync -va /var/www/discourse/containers neayi.com:~/discourse_backup/
 rsync -va /var/www/tripleperformance_docker/piwigo/config/www/_data/i/upload neayi.com:~/piwigo_backup/
-scp $DIR/.env $DIR/.env.preprod neayi.com:~/backup/
-scp $DIR/insights/.env neayi.com:~/backup/.env.insights
+scp $DIR/../.env $DIR/../.env.preprod neayi.com:~/backup/
+scp $DIR/../insights/.env neayi.com:~/backup/.env.insights
 
 docker exec tripleperformance_prod-n8n-1 sh -c "n8n export:workflow --backup --output=/files/workflows/"
 docker exec tripleperformance_prod-n8n-1 sh -c "n8n export:credentials --backup --output=/files/credentials/"
