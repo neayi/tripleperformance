@@ -33,10 +33,10 @@ services:
       # Observability
       - "--log.level=INFO"
       - "--accesslog=false"
-      # Plugins
-      # - "--experimental.plugins.geoblock.moduleName=github.com/PascalMinder/geoblock"
-      # - "--experimental.plugins.geoblock.version=v0.3.3"
-      # - "--experimental.localPlugins.geoblock.moduleName=github.com/PascalMinder/geoblock"
+    # Plugins
+    # - "--experimental.plugins.geoblock.moduleName=github.com/PascalMinder/geoblock"
+    # - "--experimental.plugins.geoblock.version=v0.3.3"
+    # - "--experimental.localPlugins.geoblock.moduleName=github.com/PascalMinder/geoblock"
     labels:
       # Enable self-routing
       - "traefik.enable=true"
@@ -65,7 +65,7 @@ services:
       - "traefik.http.routers.web.entrypoints=websecure"
       - "traefik.http.routers.web.tls=true"
       - "traefik.http.services.web.loadbalancer.server.port=80"
-      # - "traefik.http.routers.web.middlewares=geoblock-china@file"
+    # - "traefik.http.routers.web.middlewares=geoblock-china@file"
     networks:
       default:
         aliases:
@@ -164,11 +164,11 @@ services:
       - LLM_PROVIDER=${LLM_PROVIDER:-openai}
       - LLM_INDICATOR_MODEL=${LLM_INDICATOR_MODEL:-gpt-4o-mini}
       - LLM_SYSTEM_MODEL=${LLM_SYSTEM_MODEL:-gpt-4o}      
-      # Feature Flags
-      - AI_ASSISTANT_ENABLED=${AI_ASSISTANT_ENABLED:-true}
-      - NEXT_PUBLIC_AI_ASSISTANT_ENABLED=${NEXT_PUBLIC_AI_ASSISTANT_ENABLED:-true}
-      - AI_AUTO_CALCULATE=${AI_AUTO_CALCULATE:-false}
-      - AI_MAX_CONVERSATIONS_LENGTH=${AI_MAX_CONVERSATIONS_LENGTH:-10}
+      # Stripe Configuration
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - STRIPE_PUBLISHABLE_KEY=${STRIPE_PUBLISHABLE_KEY}
+      - NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}
+      - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.itinera.rule=Host(`itinera.dev.tripleperformance.fr`)"
@@ -177,6 +177,7 @@ services:
       - "traefik.http.services.itinera.loadbalancer.server.port=3000"
       - "traefik.http.middlewares.itinera-headers.headers.customrequestheaders.X-Forwarded-Proto=https"
       - "traefik.http.middlewares.itinera-headers.headers.customrequestheaders.X-Forwarded-Host=itinera.dev.tripleperformance.fr"
+      - "traefik.http.routers.itinera.middlewares=itinera-headers@docker"
     networks:
       - default
       - traefik
