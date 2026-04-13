@@ -197,6 +197,7 @@ services:
       - ${ITINERA_PROJECT_DIR:-.}/shared:/app/shared
       - ${ITINERA_PROJECT_DIR:-.}/public:/app/public
       - ${ITINERA_PROJECT_DIR:-.}/styles:/app/styles
+      - ${ITINERA_PROJECT_DIR:-.}/maintenance:/app/maintenance
       - ${ITINERA_PROJECT_DIR:-.}/next.config.js:/app/next.config.js
       - ${ITINERA_PROJECT_DIR:-.}/tsconfig.json:/app/tsconfig.json
       - ${ITINERA_PROJECT_DIR:-.}/postcss.config.js:/app/postcss.config.js
