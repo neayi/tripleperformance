@@ -107,7 +107,7 @@ services:
           - hu.tripleperformance.ag
           - fi.tripleperformance.ag
           - pt.tripleperformance.ag
-          - ar.tripleperformance.ag          
+          - ar.tripleperformance.ag
       traefik:
         aliases:
           - wiki.tripleperformance.fr
@@ -123,7 +123,7 @@ services:
           - hu.tripleperformance.ag
           - fi.tripleperformance.ag
           - pt.tripleperformance.ag
-          - ar.tripleperformance.ag  
+          - ar.tripleperformance.ag
 
   web_maintenance:
     image: ghcr.io/neayi/tripleperformance/wiki:$WIKI_VERSION_PROD
@@ -184,8 +184,8 @@ services:
           - el.preprod.tripleperformance.ag
           - hu.preprod.tripleperformance.ag
           - fi.preprod.tripleperformance.ag
-          - pt.preprod.tripleperformance.ag          
-          - ar.preprod.tripleperformance.ag          
+          - pt.preprod.tripleperformance.ag
+          - ar.preprod.tripleperformance.ag
     cpus: 0.5
 
   insights_preprod:
@@ -239,7 +239,7 @@ services:
       - 'traefik.http.routers.portainer.entrypoints=websecure'
       - 'traefik.http.routers.portainer.tls=true'
       - 'traefik.http.routers.portainer.tls.certresolver=letsencrypt'
-      - 'traefik.http.services.portainer.loadbalancer.server.port=9000'      
+      - 'traefik.http.services.portainer.loadbalancer.server.port=9000'
     volumes:
       - portainer_data:/data
       - /var/run/docker.sock:/var/run/docker.sock
@@ -259,14 +259,14 @@ services:
       xpack.security.enabled: "true"
       http.cors.enabled: "true"
       http.cors.allow-origin: "https://elasticvue.tripleperformance.fr"
-      http.cors.allow-headers: X-Requested-With,Content-Type,Content-Length,Authorization      
+      http.cors.allow-headers: X-Requested-With,Content-Type,Content-Length,Authorization
     ulimits:
       memlock:
         soft: -1
         hard: -1
     networks:
       - default
-      - traefik  
+      - traefik
     volumes:
       - ./.data/elasticsearch:/usr/share/elasticsearch/data
     labels:
@@ -274,7 +274,7 @@ services:
       - "traefik.http.routers.elasticsearch.rule=Host(`elasticsearch.tripleperformance.fr`)"
       - "traefik.http.routers.elasticsearch.entrypoints=websecure"
       - "traefik.http.routers.elasticsearch.tls=true"
-      - "traefik.http.services.elasticsearch.loadbalancer.server.port=9200"      
+      - "traefik.http.services.elasticsearch.loadbalancer.server.port=9200"
 
   elasticvue:
     image: cars10/elasticvue
@@ -287,7 +287,7 @@ services:
       - 'traefik.http.routers.elasticvue.tls.certresolver=letsencrypt'
       - 'traefik.http.services.elasticvue.loadbalancer.server.port=8080'
       - 'traefik.http.routers.elasticvue.middlewares=admin-whitelist@docker'
-      - 'traefik.http.middlewares.admin-whitelist.ipwhitelist.sourcerange=82.67.168.223/32'      
+      - 'traefik.http.middlewares.admin-whitelist.ipwhitelist.sourcerange=82.67.168.223/32'
     networks:
       - default
       - traefik
@@ -308,7 +308,7 @@ services:
       - "traefik.http.routers.piwigo.entrypoints=websecure"
       - "traefik.http.routers.piwigo.tls=true"
       - "traefik.http.routers.piwigo.tls.certresolver=letsencrypt"
-      - "traefik.http.services.piwigo.loadbalancer.server.port=80"      
+      - "traefik.http.services.piwigo.loadbalancer.server.port=80"
     networks:
       traefik:
       default:
@@ -367,6 +367,17 @@ services:
       - n8n_data:/home/node/.n8n
       - ./backup/n8n:/files
 
+  qdrant:
+    image: qdrant/qdrant:latest
+    restart: always
+    volumes:
+      - qdrant_data:/qdrant/storage
+    ports:
+      - "127.0.0.1:6333:6333"
+    networks:
+      - default
+    # Pas de labels Traefik : qdrant n'est pas exposé en prod
+
   pdf-to-image:
     restart: always
     image: joanfabregat/pdf2img
@@ -417,7 +428,7 @@ services:
       - TURBOPACK_USE_POLLING=true
       # OpenAI Configuration
       - OPENAI_API_KEY=${ITINERA_OPENAI_API_KEY}
-      - CLAUDE_API_KEY=${CLAUDE_API_KEY}      
+      - CLAUDE_API_KEY=${CLAUDE_API_KEY}
       - LLM_PROVIDER=${LLM_PROVIDER:-openai}
       - LLM_INDICATOR_MODEL=${LLM_INDICATOR_MODEL:-gpt-4o-mini}
       - LLM_SYSTEM_MODEL=${LLM_SYSTEM_MODEL:-gpt-4o}
@@ -436,7 +447,7 @@ services:
       - SMTP_SECURE=${SMTP_SECURE:-false}
       - SMTP_USER=${N8N_SMTP_USER}
       - SMTP_PASS=${N8N_SMTP_PASS}
-      - SMTP_FROM=${N8N_SMTP_SENDER:-noreply@itinera.ag}     
+      - SMTP_FROM=${N8N_SMTP_SENDER:-noreply@itinera.ag}
     depends_on:
       - db
     restart: always
@@ -479,7 +490,7 @@ services:
       - "traefik.http.services.bugsink.loadbalancer.server.port=8000"
     networks:
       - default
-      - traefik  
+      - traefik
 
 networks:
   default: ~
@@ -494,3 +505,4 @@ volumes:
     driver: local
   n8n_data:
     driver: local
+  qdrant_data:
