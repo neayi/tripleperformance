@@ -448,6 +448,7 @@ services:
       - SMTP_USER=${N8N_SMTP_USER}
       - SMTP_PASS=${N8N_SMTP_PASS}
       - SMTP_FROM=${N8N_SMTP_SENDER:-noreply@itinera.ag}
+      - SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN}      
     depends_on:
       - db
     restart: always

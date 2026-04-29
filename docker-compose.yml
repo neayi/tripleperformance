@@ -176,6 +176,8 @@ services:
       - SMTP_USER=${N8N_SMTP_USER}
       - SMTP_PASS=${N8N_SMTP_PASS}
       - SMTP_FROM=${N8N_SMTP_SENDER:-noreply@itinera.ag}
+      # Sentry
+      - SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN}
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.itinera.rule=Host(`itinera.dev.tripleperformance.fr`)"
@@ -203,6 +205,10 @@ services:
       - ${ITINERA_PROJECT_DIR:-.}/postcss.config.js:/app/postcss.config.js
       - ${ITINERA_PROJECT_DIR:-.}/tailwind.config.js:/app/tailwind.config.js
       - ${ITINERA_PROJECT_DIR:-.}/proxy.ts:/app/proxy.ts
+      - ${ITINERA_PROJECT_DIR:-.}/instrumentation.ts:/app/instrumentation.ts
+      - ${ITINERA_PROJECT_DIR:-.}/instrumentation-client.ts:/app/instrumentation-client.ts
+      - ${ITINERA_PROJECT_DIR:-.}/sentry.server.config.ts:/app/sentry.server.config.ts
+      - ${ITINERA_PROJECT_DIR:-.}/sentry.edge.config.ts:/app/sentry.edge.config.ts
       # node_modules monté depuis l'hôte — npm install en local suffit, pas besoin de rebuild
       - ${ITINERA_PROJECT_DIR:-.}/node_modules:/app/node_modules
 
@@ -469,56 +475,56 @@ services:
       - default
       - traefik
 
-  # mediawiki-mcp:
-  #   # build: .
-  #   image: ghcr.io/olgasafonova/mediawiki-mcp-server:latest
-  #   labels:
-  #     - "traefik.enable=true"
-  #     - "traefik.http.routers.mediawiki-mcp.rule=Host(`mediawiki-mcp.dev.tripleperformance.fr`)"
-  #     - "traefik.http.routers.mediawiki-mcp.entrypoints=websecure"
-  #     - "traefik.http.routers.mediawiki-mcp.tls=true"
-  #     - "traefik.http.services.mediawiki-mcp.loadbalancer.server.port=8080"
-  #   environment:
-  #     - MEDIAWIKI_URL=${MEDIAWIKI_URL:-https://wiki.tripleperformance.fr/api.php}
+# mediawiki-mcp:
+#   # build: .
+#   image: ghcr.io/olgasafonova/mediawiki-mcp-server:latest
+#   labels:
+#     - "traefik.enable=true"
+#     - "traefik.http.routers.mediawiki-mcp.rule=Host(`mediawiki-mcp.dev.tripleperformance.fr`)"
+#     - "traefik.http.routers.mediawiki-mcp.entrypoints=websecure"
+#     - "traefik.http.routers.mediawiki-mcp.tls=true"
+#     - "traefik.http.services.mediawiki-mcp.loadbalancer.server.port=8080"
+#   environment:
+#     - MEDIAWIKI_URL=${MEDIAWIKI_URL:-https://wiki.tripleperformance.fr/api.php}
 
-  #     # Optional: For editing (create at Special:BotPasswords)
-  #     - MEDIAWIKI_USERNAME=toto
-  #     - MEDIAWIKI_PASSWORD=toto
+#     # Optional: For editing (create at Special:BotPasswords)
+#     - MEDIAWIKI_USERNAME=toto
+#     - MEDIAWIKI_PASSWORD=toto
 
-  #     # Optional: Bearer token for HTTP auth
-  #     - MCP_AUTH_TOKEN=${MCP_AUTH_TOKEN:-}
+#     # Optional: Bearer token for HTTP auth
+#     - MCP_AUTH_TOKEN=${MCP_AUTH_TOKEN:-}
 
-  #     # Optional: Request timeout
-  #     - MEDIAWIKI_TIMEOUT=${MEDIAWIKI_TIMEOUT:-30s}
-  #   networks:
-  #     - default
-  #     - traefik
-  # # Resource limits (adjust as needed)
-  # deploy:
-  #   resources:
-  #     limits:
-  #       cpus: '0.5'
-  #       memory: 128M
-  #     reservations:
-  #       cpus: '0.1'
-  #       memory: 32M
-  # # Health check
-  # healthcheck:
-  #   test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/health"]
-  #   interval: 30s
-  #   timeout: 10s
-  #   retries: 3
-  #   start_period: 5s
+#     # Optional: Request timeout
+#     - MEDIAWIKI_TIMEOUT=${MEDIAWIKI_TIMEOUT:-30s}
+#   networks:
+#     - default
+#     - traefik
+# # Resource limits (adjust as needed)
+# deploy:
+#   resources:
+#     limits:
+#       cpus: '0.5'
+#       memory: 128M
+#     reservations:
+#       cpus: '0.1'
+#       memory: 32M
+# # Health check
+# healthcheck:
+#   test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/health"]
+#   interval: 30s
+#   timeout: 10s
+#   retries: 3
+#   start_period: 5s
 
-  # # Restart policy
-  # restart: unless-stopped
+# # Restart policy
+# restart: unless-stopped
 
-  # # Security
-  # security_opt:
-  #   - no-new-privileges:true
-  # read_only: true
-  # tmpfs:
-  #   - /tmp
+# # Security
+# security_opt:
+#   - no-new-privileges:true
+# read_only: true
+# tmpfs:
+#   - /tmp
 
 networks:
   default: ~
