@@ -408,6 +408,21 @@ services:
       - default
       - traefik
 
+  youtube-api-mcp:
+    image: ghcr.io/nchekwa/youtube-api-mcp
+    restart: unless-stopped
+    environment:
+      - PORT=8000
+    # labels:
+    #   - "traefik.enable=true"
+    #   - "traefik.http.routers.youtube-mcp.rule=Host(`youtube-mcp.tripleperformance.fr`)"
+    #   - "traefik.http.routers.youtube-mcp.entrypoints=websecure"
+    #   - "traefik.http.routers.youtube-mcp.tls=true"
+    #   - "traefik.http.services.youtube-mcp.loadbalancer.server.port=8000"
+    networks:
+      - default
+      - traefik
+
   itinera:
     image: ghcr.io/neayi/itinera:latest
     environment:
