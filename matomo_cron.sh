@@ -1,0 +1,1 @@
+docker compose -p tripleperformance_prod -f /var/www/tripleperformance_docker/docker-compose.prod.yml exec -T matomo sh -c "/usr/local/bin/php /var/www/html/console core:archive --url=http://matomo.tripleperformance.fr/ > /dev/null"
