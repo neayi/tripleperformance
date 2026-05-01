@@ -19,9 +19,14 @@ rsync -va /var/www/tripleperformance_docker/piwigo/config/www/_data/i/upload nea
 scp $DIR/../.env $DIR/../.env.preprod neayi.com:~/backup/
 scp $DIR/../insights/.env neayi.com:~/backup/.env.insights
 
-docker exec tripleperformance_prod-n8n-1 sh -c "n8n export:workflow --backup --output=/files/workflows/"
-docker exec tripleperformance_prod-n8n-1 sh -c "n8n export:credentials --backup --output=/files/credentials/"
+docker exec tripleperformance_prod-n8n-1 sh -c "n8n export:entities  --backup --outputDir=/files/entities/"
 rsync -va $DIR/n8n neayi.com:~/backup/n8n
+
+# Backup PostgreSQL
+for DB in $(docker exec tripleperformance_prod-postgres-1 psql -U n8n -t -c "SELECT datname FROM pg_database WHERE datistemplate = false AND datname != 'postgres';" | tr -d ' '); do
+    docker exec tripleperformance_prod-postgres-1 pg_dump -U n8n "$DB" | gzip > $DIR/DBs/pg-$DB-$(date +%Y%m%d).sql.gz
+done
+rsync -va $DIR/DBs/pg-*-$(date +%Y%m%d).sql.gz neayi.com:~/backup
 
 # Snapshot Qdrant
 QDRANT_SNAPSHOT_DIR=$DIR/qdrant_snapshots

@@ -214,22 +214,6 @@ services:
       - ./.data/mysql:/var/lib/mysql
       - ./engine/mysql/prod.cnf:/etc/mysql/conf.d/prod.cnf:ro
 
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    restart: always
-    labels:
-      - 'traefik.enable=true'
-      - 'traefik.http.routers.phpmyadmin.rule=Host(`phpmyadmin.tripleperformance.fr`)'
-      - 'traefik.http.routers.phpmyadmin.entrypoints=websecure'
-      - 'traefik.http.routers.phpmyadmin.tls=true'
-      - 'traefik.http.routers.phpmyadmin.tls.certresolver=letsencrypt'
-      - 'traefik.http.services.phpmyadmin.loadbalancer.server.port=80'
-      - 'traefik.http.routers.phpmyadmin.middlewares=admin-whitelist@docker'
-      - 'traefik.http.middlewares.admin-whitelist.ipwhitelist.sourcerange=82.67.168.223/32'
-    networks:
-      - default
-      - traefik
-
   portainer:
     image: portainer/portainer-ce
     restart: always
@@ -363,6 +347,18 @@ services:
       - N8N_SMTP_PORT
       - N8N_SMTP_SSL
       - N8N_SMTP_TLS
+      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_HOST=postgres
+      - DB_POSTGRESDB_DATABASE=n8n
+      - DB_POSTGRESDB_USER=${PG_USER:?PG_USER is required}
+      - DB_POSTGRESDB_PASSWORD=${PG_PASSWORD:?PG_PASSWORD is required}
+      - DB_POSTGRESDB_PORT=5432  
+      - EXECUTIONS_DATA_PRUNE=true
+      - EXECUTIONS_DATA_MAX_AGE=168        # 7 jours
+      - EXECUTIONS_DATA_SAVE_ON_SUCCESS=none
+      - EXECUTIONS_DATA_SAVE_ON_ERROR=all
+      - DB_SQLITE_VACUUM_ON_STARTUP=true      
     volumes:
       - n8n_data:/home/node/.n8n
       - ./backup/n8n:/files
@@ -493,6 +489,49 @@ services:
       - default
       - traefik
 
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: ${PG_USER:?PG_USER is required}
+      POSTGRES_PASSWORD: ${PG_PASSWORD:?PG_PASSWORD is required}
+      # POSTGRES_DB: n8n
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  dbgate:
+    image: dbgate/dbgate:latest
+    environment:
+      - LOGIN=${DBGATE_USER:-admin}
+      - PASSWORD=${DBGATE_PASSWORD:?DBGate password is required}
+      - CONNECTIONS=con1,con2
+
+      - LABEL_con1=MySql
+      - SERVER_con1=db
+      - USER_con1=${MYSQL_ROOT_USER:?MYSQL_ROOT_USER is required}
+      - PASSWORD_con1=${MYSQL_ROOT_PASSWORD:?MYSQL_ROOT_PASSWORD is required}
+      - PORT_con1=3306
+      - ENGINE_con1=mysql@dbgate-plugin-mysql
+
+      - LABEL_con2=Postgres
+      - SERVER_con2=postgres
+      - USER_con2=${PG_USER:?PG_USER is required}
+      - PASSWORD_con2=${PG_PASSWORD:?PG_PASSWORD is required}
+      - PORT_con2=5432
+      - ENGINE_con2=postgres@dbgate-plugin-postgres
+    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dbgate.rule=Host(`phpmyadmin.tripleperformance.fr`) || Host(`dbgate.tripleperformance.fr`)"
+      - "traefik.http.routers.dbgate.entrypoints=websecure"
+      - 'traefik.http.routers.dbgate.tls.certresolver=letsencrypt'
+      - "traefik.http.routers.dbgate.tls=true"
+      - "traefik.http.services.dbgate.loadbalancer.server.port=3000"
+    networks:
+      - default
+      - traefik   
+    volumes:
+      - dbgate-data:/root/.dbgate
+
 networks:
   default: ~
   traefik:
@@ -507,3 +546,8 @@ volumes:
   n8n_data:
     driver: local
   qdrant_data:
+    driver: local
+  pgdata:
+    driver: local
+  dbgate-data:
+    driver: local
