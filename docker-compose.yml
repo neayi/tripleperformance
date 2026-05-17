@@ -117,23 +117,23 @@ services:
 
     # mcp:
     #   build:
-    #     context: mcp
-    #     dockerfile: Dockerfile
+    #   context: mcp
+    #   dockerfile: Dockerfile
     #   restart: unless-stopped
     #   environment:
-    #     - ELASTICSEARCH_URL=http://elasticsearch:9200
+    #   - ELASTICSEARCH_URL=http://elasticsearch:9200
     #   depends_on:
-    #     elasticsearch:
-    #       condition: service_healthy
+    #   elasticsearch:
+    #   condition: service_healthy
     #   labels:
-    #     - traefik.enable=true
-    #     - traefik.http.routers.mcp.rule=Host(`mcp.dev.tripleperformance.fr`)
-    #     - traefik.http.routers.mcp.entrypoints=websecure
-    #     - traefik.http.routers.mcp.tls=true
-    #     - traefik.http.services.mcp.loadbalancer.server.port=3000
+    #   - traefik.enable=true
+    #   - traefik.http.routers.mcp.rule=Host(`mcp.dev.tripleperformance.fr`)
+    #   - traefik.http.routers.mcp.entrypoints=websecure
+    #   - traefik.http.routers.mcp.tls=true
+    #   - traefik.http.services.mcp.loadbalancer.server.port=3000
     #   networks:
-    #     - traefik
-    #     - default
+    #   - traefik
+    #   - default
 
     itinera:
         build:
@@ -196,21 +196,21 @@ services:
             - ${ITINERA_PROJECT_DIR:-.}/app:/app/app
             - ${ITINERA_PROJECT_DIR:-.}/components:/app/components
             - ${ITINERA_PROJECT_DIR:-.}/lib:/app/lib
-            - ${ITINERA_PROJECT_DIR:-.}/shared:/app/shared
-            - ${ITINERA_PROJECT_DIR:-.}/public:/app/public
-            - ${ITINERA_PROJECT_DIR:-.}/styles:/app/styles
             - ${ITINERA_PROJECT_DIR:-.}/maintenance:/app/maintenance
-            - ${ITINERA_PROJECT_DIR:-.}/next.config.js:/app/next.config.js
-            - ${ITINERA_PROJECT_DIR:-.}/tsconfig.json:/app/tsconfig.json
-            - ${ITINERA_PROJECT_DIR:-.}/postcss.config.js:/app/postcss.config.js
-            - ${ITINERA_PROJECT_DIR:-.}/tailwind.config.js:/app/tailwind.config.js
-            - ${ITINERA_PROJECT_DIR:-.}/proxy.ts:/app/proxy.ts
-            - ${ITINERA_PROJECT_DIR:-.}/instrumentation.ts:/app/instrumentation.ts
-            - ${ITINERA_PROJECT_DIR:-.}/instrumentation-client.ts:/app/instrumentation-client.ts
-            - ${ITINERA_PROJECT_DIR:-.}/sentry.server.config.ts:/app/sentry.server.config.ts
-            - ${ITINERA_PROJECT_DIR:-.}/sentry.edge.config.ts:/app/sentry.edge.config.ts
-            # node_modules monté depuis l'hôte — npm install en local suffit, pas besoin de rebuild
             - ${ITINERA_PROJECT_DIR:-.}/node_modules:/app/node_modules
+            - ${ITINERA_PROJECT_DIR:-.}/public:/app/public
+            - ${ITINERA_PROJECT_DIR:-.}/shared:/app/shared
+            - ${ITINERA_PROJECT_DIR:-.}/styles:/app/styles
+            - ${ITINERA_PROJECT_DIR:-.}/templates:/app/templates
+            - ${ITINERA_PROJECT_DIR:-.}/instrumentation-client.ts:/app/instrumentation-client.ts
+            - ${ITINERA_PROJECT_DIR:-.}/instrumentation.ts:/app/instrumentation.ts
+            - ${ITINERA_PROJECT_DIR:-.}/next.config.js:/app/next.config.js
+            - ${ITINERA_PROJECT_DIR:-.}/postcss.config.js:/app/postcss.config.js
+            - ${ITINERA_PROJECT_DIR:-.}/proxy.ts:/app/proxy.ts
+            - ${ITINERA_PROJECT_DIR:-.}/sentry.edge.config.ts:/app/sentry.edge.config.ts
+            - ${ITINERA_PROJECT_DIR:-.}/sentry.server.config.ts:/app/sentry.server.config.ts
+            - ${ITINERA_PROJECT_DIR:-.}/tailwind.config.js:/app/tailwind.config.js
+            - ${ITINERA_PROJECT_DIR:-.}/tsconfig.json:/app/tsconfig.json
 
     insights:
         image: nginx:1.28
@@ -442,63 +442,63 @@ services:
     # bugsink:
     #   image: bugsink/bugsink:latest
     #   environment:
-    #     - SECRET_KEY=${BUGSINK_SECRET_KEY}
-    #     - ALLOWED_HOSTS=bugsink.tripleperformance.fr,bugsink.dev.tripleperformance.fr,localhost,bugsink
-    #     - DEBUG=false
-    #     - EMAIL_HOST=${N8N_SMTP_HOST}
-    #     - EMAIL_PORT=${N8N_SMTP_PORT}
-    #     - EMAIL_HOST_USER=${N8N_SMTP_USER}
-    #     - EMAIL_HOST_PASSWORD=${N8N_SMTP_PASS}
-    #     - EMAIL_USE_TLS=false
-    #     - EMAIL_USE_SSL=false
-    #     - DEFAULT_FROM_EMAIL=${N8N_SMTP_SENDER}
-    #     - SERVER_EMAIL=${N8N_SMTP_SENDER}
-    #     - DEBUG_CSRF=True
-    #     - BEHIND_HTTPS_PROXY=True
+    #   - SECRET_KEY=${BUGSINK_SECRET_KEY}
+    #   - ALLOWED_HOSTS=bugsink.tripleperformance.fr,bugsink.dev.tripleperformance.fr,localhost,bugsink
+    #   - DEBUG=false
+    #   - EMAIL_HOST=${N8N_SMTP_HOST}
+    #   - EMAIL_PORT=${N8N_SMTP_PORT}
+    #   - EMAIL_HOST_USER=${N8N_SMTP_USER}
+    #   - EMAIL_HOST_PASSWORD=${N8N_SMTP_PASS}
+    #   - EMAIL_USE_TLS=false
+    #   - EMAIL_USE_SSL=false
+    #   - DEFAULT_FROM_EMAIL=${N8N_SMTP_SENDER}
+    #   - SERVER_EMAIL=${N8N_SMTP_SENDER}
+    #   - DEBUG_CSRF=True
+    #   - BEHIND_HTTPS_PROXY=True
     #   restart: unless-stopped
     #   labels:
-    #     - "traefik.enable=true"
-    #     - "traefik.http.routers.bugsink.rule=Host(`bugsink.dev.tripleperformance.fr`)"
-    #     - "traefik.http.routers.bugsink.entrypoints=websecure"
-    #     - "traefik.http.routers.bugsink.tls=true"
-    #     - "traefik.http.services.bugsink.loadbalancer.server.port=8000"
+    #   - "traefik.enable=true"
+    #   - "traefik.http.routers.bugsink.rule=Host(`bugsink.dev.tripleperformance.fr`)"
+    #   - "traefik.http.routers.bugsink.entrypoints=websecure"
+    #   - "traefik.http.routers.bugsink.tls=true"
+    #   - "traefik.http.services.bugsink.loadbalancer.server.port=8000"
     #   networks:
-    #     - default
-    #     - traefik
+    #   - default
+    #   - traefik
 
     # mediawiki-mcp:
     #   # build: .
     #   image: ghcr.io/olgasafonova/mediawiki-mcp-server:latest
     #   labels:
-    #     - "traefik.enable=true"
-    #     - "traefik.http.routers.mediawiki-mcp.rule=Host(`mediawiki-mcp.dev.tripleperformance.fr`)"
-    #     - "traefik.http.routers.mediawiki-mcp.entrypoints=websecure"
-    #     - "traefik.http.routers.mediawiki-mcp.tls=true"
-    #     - "traefik.http.services.mediawiki-mcp.loadbalancer.server.port=8080"
+    #   - "traefik.enable=true"
+    #   - "traefik.http.routers.mediawiki-mcp.rule=Host(`mediawiki-mcp.dev.tripleperformance.fr`)"
+    #   - "traefik.http.routers.mediawiki-mcp.entrypoints=websecure"
+    #   - "traefik.http.routers.mediawiki-mcp.tls=true"
+    #   - "traefik.http.services.mediawiki-mcp.loadbalancer.server.port=8080"
     #   environment:
-    #     - MEDIAWIKI_URL=${MEDIAWIKI_URL:-https://wiki.tripleperformance.fr/api.php}
+    #   - MEDIAWIKI_URL=${MEDIAWIKI_URL:-https://wiki.tripleperformance.fr/api.php}
 
-    #     # Optional: For editing (create at Special:BotPasswords)
-    #     - MEDIAWIKI_USERNAME=toto
-    #     - MEDIAWIKI_PASSWORD=toto
+    #   # Optional: For editing (create at Special:BotPasswords)
+    #   - MEDIAWIKI_USERNAME=toto
+    #   - MEDIAWIKI_PASSWORD=toto
 
-    #     # Optional: Bearer token for HTTP auth
-    #     - MCP_AUTH_TOKEN=${MCP_AUTH_TOKEN:-}
+    #   # Optional: Bearer token for HTTP auth
+    #   - MCP_AUTH_TOKEN=${MCP_AUTH_TOKEN:-}
 
-    #     # Optional: Request timeout
-    #     - MEDIAWIKI_TIMEOUT=${MEDIAWIKI_TIMEOUT:-30s}
+    #   # Optional: Request timeout
+    #   - MEDIAWIKI_TIMEOUT=${MEDIAWIKI_TIMEOUT:-30s}
     #   networks:
-    #     - default
-    #     - traefik
+    #   - default
+    #   - traefik
     # # Resource limits (adjust as needed)
     # deploy:
     #   resources:
-    #     limits:
-    #       cpus: '0.5'
-    #       memory: 128M
-    #     reservations:
-    #       cpus: '0.1'
-    #       memory: 32M
+    #   limits:
+    #   cpus: '0.5'
+    #   memory: 128M
+    #   reservations:
+    #   cpus: '0.1'
+    #   memory: 32M
     # # Health check
     # healthcheck:
     #   test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/health"]
@@ -550,7 +550,7 @@ services:
         restart: always
         labels:
             - "traefik.enable=true"
-            - "traefik.http.routers.dbgate.rule=Host(`dbgate.dev.tripleperformance.fr`)"
+            - "traefik.http.routers.dbgate.rule=Host(`dbgate.dev.tripleperformance.fr`) || Host(`phpmyadmin.dev.tripleperformance.fr`)"
             - "traefik.http.routers.dbgate.entrypoints=websecure"
             - "traefik.http.routers.dbgate.tls=true"
             - "traefik.http.services.dbgate.loadbalancer.server.port=3000"
