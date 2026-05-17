@@ -1,583 +1,582 @@
 services:
-  traefik:
-    image: traefik:3.6
-    ports:
-      - "80:80"
-      - "443:443"
-      - "8080:8080"
-    networks:
-      - traefik
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./engine/traefik/dynamic/dev:/dynamic:ro
-      - ./.cache/ssl:/etc/ssl:ro
-      - ./geoip:/plugins/geoip:ro   # dossier contenant GeoLite2-Country.mmdb
-      - ./geoip/geoblock:/plugins-local/src/github.com/PascalMinder/geoblock:ro
-    command:
-      #entrypoints
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
-      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
-      - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
-      - "--entrypoints.websecure.address=:443"
-      - "--entrypoints.websecure.http.tls=true"
-      # Attach the static configuration tls.yaml file that contains the tls configuration settings
-      - "--providers.file.filename=/dynamic/tls.yaml"
-      # Providers
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--providers.docker.network=traefik"
-      # API & Dashboard
-      - "--api.dashboard=true"
-      - "--api.insecure=false"
-      # Observability
-      - "--log.level=INFO"
-      - "--accesslog=false"
-    # Plugins
-    # - "--experimental.plugins.geoblock.moduleName=github.com/PascalMinder/geoblock"
-    # - "--experimental.plugins.geoblock.version=v0.3.3"
-    # - "--experimental.localPlugins.geoblock.moduleName=github.com/PascalMinder/geoblock"
-    labels:
-      # Enable self-routing
-      - "traefik.enable=true"
-      # Dashboard router
-      - "traefik.http.routers.dashboard.rule=Host(`traefik.dev.tripleperformance.fr`)"
-      - "traefik.http.routers.dashboard.entrypoints=websecure"
-      - "traefik.http.routers.dashboard.service=api@internal"
-      - "traefik.http.routers.dashboard.tls=true"
-      # Basic‑auth middleware
-      - "traefik.http.middlewares.dashboard-auth.basicauth.users=$TRAEFIKUSER:$TRAEFIKPASSWORD"
-      - "traefik.http.routers.dashboard.middlewares=dashboard-auth@docker"
+    traefik:
+        image: traefik:3.6
+        ports:
+            - "80:80"
+            - "443:443"
+            - "8080:8080"
+        networks:
+            - traefik
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+            - ./engine/traefik/dynamic/dev:/dynamic:ro
+            - ./.cache/ssl:/etc/ssl:ro
+            - ./geoip:/plugins/geoip:ro # dossier contenant GeoLite2-Country.mmdb
+            - ./geoip/geoblock:/plugins-local/src/github.com/PascalMinder/geoblock:ro
+        command:
+            #entrypoints
+            - "--entrypoints.web.address=:80"
+            - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+            - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+            - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
+            - "--entrypoints.websecure.address=:443"
+            - "--entrypoints.websecure.http.tls=true"
+            # Attach the static configuration tls.yaml file that contains the tls configuration settings
+            - "--providers.file.filename=/dynamic/tls.yaml"
+            # Providers
+            - "--providers.docker=true"
+            - "--providers.docker.exposedbydefault=false"
+            - "--providers.docker.network=traefik"
+            # API & Dashboard
+            - "--api.dashboard=true"
+            - "--api.insecure=false"
+            # Observability
+            - "--log.level=INFO"
+            - "--accesslog=false"
+        # Plugins
+        # - "--experimental.plugins.geoblock.moduleName=github.com/PascalMinder/geoblock"
+        # - "--experimental.plugins.geoblock.version=v0.3.3"
+        # - "--experimental.localPlugins.geoblock.moduleName=github.com/PascalMinder/geoblock"
+        labels:
+            # Enable self-routing
+            - "traefik.enable=true"
+            # Dashboard router
+            - "traefik.http.routers.dashboard.rule=Host(`traefik.dev.tripleperformance.fr`)"
+            - "traefik.http.routers.dashboard.entrypoints=websecure"
+            - "traefik.http.routers.dashboard.service=api@internal"
+            - "traefik.http.routers.dashboard.tls=true"
+            # Basic‑auth middleware
+            - "traefik.http.middlewares.dashboard-auth.basicauth.users=$TRAEFIKUSER:$TRAEFIKPASSWORD"
+            - "traefik.http.routers.dashboard.middlewares=dashboard-auth@docker"
 
-  web:
-    build:
-      context: .
-      dockerfile: engine/php_server/Dockerfile
-      target: base
-      args:
-        - DEBUG_TOOLS=true
-    env_file: .env
-    volumes:
-      - ./:/var/www
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.web.rule=Host(`wiki.dev.tripleperformance.fr`) || Host(`demo.dev.tripleperformance.fr`) || Host(`fr.dev.tripleperformance.ag`) || Host(`ar.dev.tripleperformance.ag`) || Host(`en.dev.tripleperformance.ag`) || Host(`de.dev.tripleperformance.ag`) || Host(`es.dev.tripleperformance.ag`) || Host(`fi.dev.tripleperformance.ag`) || Host(`pt.dev.tripleperformance.ag`) || Host(`it.dev.tripleperformance.ag`) || Host(`el.dev.tripleperformance.ag`) || Host(`hu.dev.tripleperformance.ag`) || Host(`pl.dev.tripleperformance.ag`) || Host(`nl.dev.tripleperformance.ag`)"
-      - "traefik.http.routers.web.entrypoints=websecure"
-      - "traefik.http.routers.web.tls=true"
-      - "traefik.http.services.web.loadbalancer.server.port=80"
-    # - "traefik.http.routers.web.middlewares=geoblock-china@file"
-    networks:
-      default:
-        aliases:
-          - wiki.dev.tripleperformance.fr
-          - demo.dev.tripleperformance.fr
-          - de.dev.tripleperformance.ag
-          - en.dev.tripleperformance.ag
-          - es.dev.tripleperformance.ag
-          - fr.dev.tripleperformance.ag
-          - it.dev.tripleperformance.ag
-          - nl.dev.tripleperformance.ag
-          - pl.dev.tripleperformance.ag
-          - el.dev.tripleperformance.ag
-          - ar.dev.tripleperformance.ag
-          - hu.dev.tripleperformance.ag
-          - fi.dev.tripleperformance.ag
-          - pt.dev.tripleperformance.ag
-      traefik:
-        aliases:
-          - wiki.dev.tripleperformance.fr
-          - demo.dev.tripleperformance.fr
-          - de.dev.tripleperformance.ag
-          - en.dev.tripleperformance.ag
-          - es.dev.tripleperformance.ag
-          - fr.dev.tripleperformance.ag
-          - it.dev.tripleperformance.ag
-          - ar.dev.tripleperformance.ag
-          - nl.dev.tripleperformance.ag
-          - pl.dev.tripleperformance.ag
-          - el.dev.tripleperformance.ag
-          - hu.dev.tripleperformance.ag
-          - fi.dev.tripleperformance.ag
-          - pt.dev.tripleperformance.ag
+    web:
+        build:
+            context: .
+            dockerfile: engine/php_server/Dockerfile
+            target: base
+            args:
+                - DEBUG_TOOLS=true
+        env_file: .env
+        volumes:
+            - ./:/var/www
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.web.rule=Host(`wiki.dev.tripleperformance.fr`) || Host(`demo.dev.tripleperformance.fr`) || Host(`fr.dev.tripleperformance.ag`) || Host(`ar.dev.tripleperformance.ag`) || Host(`en.dev.tripleperformance.ag`) || Host(`de.dev.tripleperformance.ag`) || Host(`es.dev.tripleperformance.ag`) || Host(`fi.dev.tripleperformance.ag`) || Host(`pt.dev.tripleperformance.ag`) || Host(`it.dev.tripleperformance.ag`) || Host(`el.dev.tripleperformance.ag`) || Host(`hu.dev.tripleperformance.ag`) || Host(`pl.dev.tripleperformance.ag`) || Host(`nl.dev.tripleperformance.ag`)"
+            - "traefik.http.routers.web.entrypoints=websecure"
+            - "traefik.http.routers.web.tls=true"
+            - "traefik.http.services.web.loadbalancer.server.port=80"
+        # - "traefik.http.routers.web.middlewares=geoblock-china@file"
+        networks:
+            default:
+                aliases:
+                    - wiki.dev.tripleperformance.fr
+                    - demo.dev.tripleperformance.fr
+                    - de.dev.tripleperformance.ag
+                    - en.dev.tripleperformance.ag
+                    - es.dev.tripleperformance.ag
+                    - fr.dev.tripleperformance.ag
+                    - it.dev.tripleperformance.ag
+                    - nl.dev.tripleperformance.ag
+                    - pl.dev.tripleperformance.ag
+                    - el.dev.tripleperformance.ag
+                    - ar.dev.tripleperformance.ag
+                    - hu.dev.tripleperformance.ag
+                    - fi.dev.tripleperformance.ag
+                    - pt.dev.tripleperformance.ag
+            traefik:
+                aliases:
+                    - wiki.dev.tripleperformance.fr
+                    - demo.dev.tripleperformance.fr
+                    - de.dev.tripleperformance.ag
+                    - en.dev.tripleperformance.ag
+                    - es.dev.tripleperformance.ag
+                    - fr.dev.tripleperformance.ag
+                    - it.dev.tripleperformance.ag
+                    - ar.dev.tripleperformance.ag
+                    - nl.dev.tripleperformance.ag
+                    - pl.dev.tripleperformance.ag
+                    - el.dev.tripleperformance.ag
+                    - hu.dev.tripleperformance.ag
+                    - fi.dev.tripleperformance.ag
+                    - pt.dev.tripleperformance.ag
 
-  insights_php:
-    build:
-      context: insights
-      dockerfile: dockerfiles/php/Dockerfile
-      target: base
-      args:
-        - DEBUG_TOOLS=true
-    user: "${UID:-1000}:${GID:-1000}"
-    networks:
-      traefik:
-      default:
-    volumes:
-      - ./insights:/var/www/html
-      - ./.cache/composer:/.composer
+    insights_php:
+        build:
+            context: insights
+            dockerfile: dockerfiles/php/Dockerfile
+            target: base
+            args:
+                - DEBUG_TOOLS=true
+        user: "${UID:-1000}:${GID:-1000}"
+        networks:
+            traefik:
+            default:
+        volumes:
+            - ./insights:/var/www/html
+            - ./.cache/composer:/.composer
 
-  # mcp:
-  #   build:
-  #     context: mcp
-  #     dockerfile: Dockerfile
-  #   restart: unless-stopped
-  #   environment:
-  #     - ELASTICSEARCH_URL=http://elasticsearch:9200
-  #   depends_on:
-  #     elasticsearch:
-  #       condition: service_healthy
-  #   labels:
-  #     - traefik.enable=true
-  #     - traefik.http.routers.mcp.rule=Host(`mcp.dev.tripleperformance.fr`)
-  #     - traefik.http.routers.mcp.entrypoints=websecure
-  #     - traefik.http.routers.mcp.tls=true
-  #     - traefik.http.services.mcp.loadbalancer.server.port=3000
-  #   networks:
-  #     - traefik
-  #     - default
+    # mcp:
+    #   build:
+    #     context: mcp
+    #     dockerfile: Dockerfile
+    #   restart: unless-stopped
+    #   environment:
+    #     - ELASTICSEARCH_URL=http://elasticsearch:9200
+    #   depends_on:
+    #     elasticsearch:
+    #       condition: service_healthy
+    #   labels:
+    #     - traefik.enable=true
+    #     - traefik.http.routers.mcp.rule=Host(`mcp.dev.tripleperformance.fr`)
+    #     - traefik.http.routers.mcp.entrypoints=websecure
+    #     - traefik.http.routers.mcp.tls=true
+    #     - traefik.http.services.mcp.loadbalancer.server.port=3000
+    #   networks:
+    #     - traefik
+    #     - default
 
-  itinera:
-    build:
-      context: ${ITINERA_PROJECT_DIR:-.}
-      dockerfile: Dockerfile.dev
-    environment:
-      - NODE_ENV=development
-      - DB_HOST=db
-      - DB_PORT=3306
-      - DB_USER=${DB_USER:-itinera_user}
-      - DB_PASSWORD=${DB_PASSWORD:-itinera_password}
-      - DB_NAME=${DB_NAME:-itinera_db}
-      - NEXT_PUBLIC_APP_URL=https://itinera.dev.tripleperformance.fr
-      - APP_URL=http://localhost:3000
-      - DISCOURSE_SSO_URL=${DISCOURSE_SSO_URL}
-      - DISCOURSE_SSO_SECRET=${DISCOURSE_SSO_SECRET}
-      - SESSION_SECRET=${SESSION_SECRET:-itinera_session_secret_change_in_production}
-      - WATCHPACK_POLLING=true
-      - CHOKIDAR_USEPOLLING=true
-      - CHOKIDAR_INTERVAL=1000
-      # Force Turbopack to use polling for file watching in Docker
-      - TURBOPACK_USE_POLLING=true
-      # OpenAI Configuration
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - CLAUDE_API_KEY=${CLAUDE_API_KEY}
-      - OPENAI_MAX_TOKENS=${OPENAI_MAX_TOKENS:-2000}
-      - OPENAI_TEMPERATURE=${OPENAI_TEMPERATURE:-0.3}
-      - LLM_PROVIDER=${LLM_PROVIDER:-openai}
-      - LLM_INDICATOR_MODEL=${LLM_INDICATOR_MODEL:-gpt-4o-mini}
-      - LLM_SYSTEM_MODEL=${LLM_SYSTEM_MODEL:-gpt-4o}
-      # Stripe Configuration
-      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
-      - STRIPE_PUBLISHABLE_KEY=${STRIPE_PUBLISHABLE_KEY}
-      - NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}
-      - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
-      # Email Configuration (SMTP)
-      - SMTP_HOST=${N8N_SMTP_HOST}
-      - SMTP_PORT=${N8N_SMTP_PORT:-587}
-      - SMTP_SECURE=${SMTP_SECURE:-false}
-      - SMTP_USER=${N8N_SMTP_USER}
-      - SMTP_PASS=${N8N_SMTP_PASS}
-      - SMTP_FROM=${N8N_SMTP_SENDER:-noreply@itinera.ag}
-      # Sentry
-      - SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN}
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.itinera.rule=Host(`itinera.dev.tripleperformance.fr`)"
-      - "traefik.http.routers.itinera.entrypoints=websecure"
-      - "traefik.http.routers.itinera.tls=true"
-      - "traefik.http.services.itinera.loadbalancer.server.port=3000"
-      - "traefik.http.middlewares.itinera-headers.headers.customrequestheaders.X-Forwarded-Proto=https"
-      - "traefik.http.middlewares.itinera-headers.headers.customrequestheaders.X-Forwarded-Host=itinera.dev.tripleperformance.fr"
-      - "traefik.http.routers.itinera.middlewares=itinera-headers@docker"
-    networks:
-      - default
-      - traefik
-    restart: unless-stopped
-    volumes:
-      # Mount source code for hot reload
-      - ${ITINERA_PROJECT_DIR:-.}/app:/app/app
-      - ${ITINERA_PROJECT_DIR:-.}/components:/app/components
-      - ${ITINERA_PROJECT_DIR:-.}/lib:/app/lib
-      - ${ITINERA_PROJECT_DIR:-.}/shared:/app/shared
-      - ${ITINERA_PROJECT_DIR:-.}/public:/app/public
-      - ${ITINERA_PROJECT_DIR:-.}/styles:/app/styles
-      - ${ITINERA_PROJECT_DIR:-.}/maintenance:/app/maintenance
-      - ${ITINERA_PROJECT_DIR:-.}/next.config.js:/app/next.config.js
-      - ${ITINERA_PROJECT_DIR:-.}/tsconfig.json:/app/tsconfig.json
-      - ${ITINERA_PROJECT_DIR:-.}/postcss.config.js:/app/postcss.config.js
-      - ${ITINERA_PROJECT_DIR:-.}/tailwind.config.js:/app/tailwind.config.js
-      - ${ITINERA_PROJECT_DIR:-.}/proxy.ts:/app/proxy.ts
-      - ${ITINERA_PROJECT_DIR:-.}/instrumentation.ts:/app/instrumentation.ts
-      - ${ITINERA_PROJECT_DIR:-.}/instrumentation-client.ts:/app/instrumentation-client.ts
-      - ${ITINERA_PROJECT_DIR:-.}/sentry.server.config.ts:/app/sentry.server.config.ts
-      - ${ITINERA_PROJECT_DIR:-.}/sentry.edge.config.ts:/app/sentry.edge.config.ts
-      # node_modules monté depuis l'hôte — npm install en local suffit, pas besoin de rebuild
-      - ${ITINERA_PROJECT_DIR:-.}/node_modules:/app/node_modules
+    itinera:
+        build:
+            context: ${ITINERA_PROJECT_DIR:-.}
+            dockerfile: Dockerfile.dev
+        environment:
+            - NODE_ENV=development
+            - DB_HOST=db
+            - DB_PORT=3306
+            - DB_USER=${DB_USER:-itinera_user}
+            - DB_PASSWORD=${DB_PASSWORD:-itinera_password}
+            - DB_NAME=${DB_NAME:-itinera_db}
+            - NEXT_PUBLIC_APP_URL=https://itinera.dev.tripleperformance.fr
+            - APP_URL=http://localhost:3000
+            - DISCOURSE_SSO_URL=${DISCOURSE_SSO_URL}
+            - DISCOURSE_SSO_SECRET=${DISCOURSE_SSO_SECRET}
+            - SESSION_SECRET=${SESSION_SECRET:-itinera_session_secret_change_in_production}
+            - WATCHPACK_POLLING=true
+            - CHOKIDAR_USEPOLLING=true
+            - CHOKIDAR_INTERVAL=1000
+            # Force Turbopack to use polling for file watching in Docker
+            - TURBOPACK_USE_POLLING=true
+            # OpenAI Configuration
+            - OPENAI_API_KEY=${OPENAI_API_KEY}
+            - CLAUDE_API_KEY=${CLAUDE_API_KEY}
+            - OPENAI_MAX_TOKENS=${OPENAI_MAX_TOKENS:-2000}
+            - OPENAI_TEMPERATURE=${OPENAI_TEMPERATURE:-0.3}
+            - LLM_PROVIDER=${LLM_PROVIDER:-openai}
+            - LLM_INDICATOR_MODEL=${LLM_INDICATOR_MODEL:-gpt-4o-mini}
+            - LLM_SYSTEM_MODEL=${LLM_SYSTEM_MODEL:-gpt-4o}
+            # Stripe Configuration
+            - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+            - STRIPE_PUBLISHABLE_KEY=${STRIPE_PUBLISHABLE_KEY}
+            - NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}
+            - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
+            # Email Configuration (SMTP)
+            - SMTP_HOST=${N8N_SMTP_HOST}
+            - SMTP_PORT=${N8N_SMTP_PORT:-587}
+            - SMTP_SECURE=${SMTP_SECURE:-false}
+            - SMTP_USER=${N8N_SMTP_USER}
+            - SMTP_PASS=${N8N_SMTP_PASS}
+            - SMTP_FROM=${N8N_SMTP_SENDER:-noreply@itinera.ag}
+            # Sentry
+            - SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN}
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.itinera.rule=Host(`itinera.dev.tripleperformance.fr`)"
+            - "traefik.http.routers.itinera.entrypoints=websecure"
+            - "traefik.http.routers.itinera.tls=true"
+            - "traefik.http.services.itinera.loadbalancer.server.port=3000"
+            - "traefik.http.middlewares.itinera-headers.headers.customrequestheaders.X-Forwarded-Proto=https"
+            - "traefik.http.middlewares.itinera-headers.headers.customrequestheaders.X-Forwarded-Host=itinera.dev.tripleperformance.fr"
+            - "traefik.http.routers.itinera.middlewares=itinera-headers@docker"
+        networks:
+            - default
+            - traefik
+        restart: unless-stopped
+        volumes:
+            # Mount source code for hot reload
+            - ${ITINERA_PROJECT_DIR:-.}/app:/app/app
+            - ${ITINERA_PROJECT_DIR:-.}/components:/app/components
+            - ${ITINERA_PROJECT_DIR:-.}/lib:/app/lib
+            - ${ITINERA_PROJECT_DIR:-.}/shared:/app/shared
+            - ${ITINERA_PROJECT_DIR:-.}/public:/app/public
+            - ${ITINERA_PROJECT_DIR:-.}/styles:/app/styles
+            - ${ITINERA_PROJECT_DIR:-.}/maintenance:/app/maintenance
+            - ${ITINERA_PROJECT_DIR:-.}/next.config.js:/app/next.config.js
+            - ${ITINERA_PROJECT_DIR:-.}/tsconfig.json:/app/tsconfig.json
+            - ${ITINERA_PROJECT_DIR:-.}/postcss.config.js:/app/postcss.config.js
+            - ${ITINERA_PROJECT_DIR:-.}/tailwind.config.js:/app/tailwind.config.js
+            - ${ITINERA_PROJECT_DIR:-.}/proxy.ts:/app/proxy.ts
+            - ${ITINERA_PROJECT_DIR:-.}/instrumentation.ts:/app/instrumentation.ts
+            - ${ITINERA_PROJECT_DIR:-.}/instrumentation-client.ts:/app/instrumentation-client.ts
+            - ${ITINERA_PROJECT_DIR:-.}/sentry.server.config.ts:/app/sentry.server.config.ts
+            - ${ITINERA_PROJECT_DIR:-.}/sentry.edge.config.ts:/app/sentry.edge.config.ts
+            # node_modules monté depuis l'hôte — npm install en local suffit, pas besoin de rebuild
+            - ${ITINERA_PROJECT_DIR:-.}/node_modules:/app/node_modules
 
+    insights:
+        image: nginx:1.28
+        volumes:
+            - ./insights:/var/www/html
+            - ./insights/dockerfiles/php/cnpg.conf:/etc/nginx/conf.d/default.conf
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.insights.rule=Host(`insights.dev.tripleperformance.fr`)"
+            - "traefik.http.routers.insights.entrypoints=websecure"
+            - "traefik.http.routers.insights.tls=true"
+            - "traefik.http.services.insights.loadbalancer.server.port=80"
+        networks:
+            traefik:
+            default:
+                aliases:
+                    - insights.dev.tripleperformance.fr
 
-  insights:
-    image: nginx:1.28
-    volumes:
-      - ./insights:/var/www/html
-      - ./insights/dockerfiles/php/cnpg.conf:/etc/nginx/conf.d/default.conf
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.insights.rule=Host(`insights.dev.tripleperformance.fr`)"
-      - "traefik.http.routers.insights.entrypoints=websecure"
-      - "traefik.http.routers.insights.tls=true"
-      - "traefik.http.services.insights.loadbalancer.server.port=80"
-    networks:
-      traefik:
-      default:
-        aliases:
-          - insights.dev.tripleperformance.fr
+    db:
+        image: mysql:5.7
+        command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --max_allowed_packet=64M
+        environment:
+            - MYSQL_USERNAME=root
+            - MYSQL_ROOT_PASSWORD=root
+            - MYSQL_DATABASE=wiki
+            - MYSQL_USER=wiki
+            - MYSQL_PASSWORD=wiki
+        volumes:
+            - data-mysql:/var/lib/mysql
+            - ./bin/sql:/var/sql
 
-  db:
-    image: mysql:5.7
-    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --max_allowed_packet=64M
-    environment:
-      - MYSQL_USERNAME=root
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=wiki
-      - MYSQL_USER=wiki
-      - MYSQL_PASSWORD=wiki
-    volumes:
-      - data-mysql:/var/lib/mysql
-      - ./bin/sql:/var/sql
+    redis:
+        image: redis
 
-  redis:
-    image: redis
+    elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
+        environment:
+            discovery.type: single-node
+            xpack.security.enabled: "true"
+            http.cors.enabled: "true"
+            http.cors.allow-origin: "https://elasticvue.dev.tripleperformance.fr"
+            http.cors.allow-headers: X-Requested-With,Content-Type,Content-Length,Authorization
+        ulimits:
+            memlock:
+                soft: -1
+                hard: -1
+        networks:
+            - default
+            - traefik
+        volumes:
+            - data01:/usr/share/elasticsearch/data
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.elasticsearch.rule=Host(`elasticsearch.dev.tripleperformance.fr`)"
+            - "traefik.http.routers.elasticsearch.entrypoints=websecure"
+            - "traefik.http.routers.elasticsearch.tls=true"
+            - "traefik.http.services.elasticsearch.loadbalancer.server.port=9200"
 
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
-    environment:
-      discovery.type: single-node
-      xpack.security.enabled: "true"
-      http.cors.enabled: "true"
-      http.cors.allow-origin: "https://elasticvue.dev.tripleperformance.fr"
-      http.cors.allow-headers: X-Requested-With,Content-Type,Content-Length,Authorization
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    networks:
-      - default
-      - traefik
-    volumes:
-      - data01:/usr/share/elasticsearch/data
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.elasticsearch.rule=Host(`elasticsearch.dev.tripleperformance.fr`)"
-      - "traefik.http.routers.elasticsearch.entrypoints=websecure"
-      - "traefik.http.routers.elasticsearch.tls=true"
-      - "traefik.http.services.elasticsearch.loadbalancer.server.port=9200"
+    elasticvue:
+        image: cars10/elasticvue
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.elasticvue.rule=Host(`elasticvue.dev.tripleperformance.fr`)"
+            - "traefik.http.routers.elasticvue.entrypoints=websecure"
+            - "traefik.http.routers.elasticvue.tls=true"
+            - "traefik.http.services.elasticvue.loadbalancer.server.port=8080"
+        networks:
+            - default
+            - traefik
 
-  elasticvue:
-    image: cars10/elasticvue
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.elasticvue.rule=Host(`elasticvue.dev.tripleperformance.fr`)"
-      - "traefik.http.routers.elasticvue.entrypoints=websecure"
-      - "traefik.http.routers.elasticvue.tls=true"
-      - "traefik.http.services.elasticvue.loadbalancer.server.port=8080"
-    networks:
-      - default
-      - traefik
+    wordpress:
+        image: wordpress
+        environment:
+            WORDPRESS_DB_HOST: db
+            WORDPRESS_DB_USER: wordpressuser
+            WORDPRESS_DB_PASSWORD: examplepass
+            WORDPRESS_DB_NAME: wordpress
+        restart: unless-stopped
+        volumes:
+            - ./wordpress:/var/www/html
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.wordpress.rule=Host(`wordpress.dev.tripleperformance.fr`)"
+            - "traefik.http.routers.wordpress.entrypoints=websecure"
+            - "traefik.http.routers.wordpress.tls=true"
+            - "traefik.http.services.wordpress.loadbalancer.server.port=80"
+        profiles:
+            - wordpress
+        networks:
+            - default
+            - traefik
 
-  wordpress:
-    image: wordpress
-    environment:
-      WORDPRESS_DB_HOST: db
-      WORDPRESS_DB_USER: wordpressuser
-      WORDPRESS_DB_PASSWORD: examplepass
-      WORDPRESS_DB_NAME: wordpress
-    restart: unless-stopped
-    volumes:
-      - ./wordpress:/var/www/html
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.wordpress.rule=Host(`wordpress.dev.tripleperformance.fr`)"
-      - "traefik.http.routers.wordpress.entrypoints=websecure"
-      - "traefik.http.routers.wordpress.tls=true"
-      - "traefik.http.services.wordpress.loadbalancer.server.port=80"
-    profiles:
-      - wordpress
-    networks:
-      - default
-      - traefik
+    piwigo:
+        image: lscr.io/linuxserver/piwigo:latest
+        environment:
+            - PUID=1000
+            - PGID=1000
+            - TZ=Europe/Paris
+        volumes:
+            - ./piwigo/config:/config
+            - ./piwigo/gallery:/gallery
+        restart: unless-stopped
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.piwigo.rule=Host(`photos.dev.tripleperformance.fr`)"
+            - "traefik.http.routers.piwigo.entrypoints=websecure"
+            - "traefik.http.routers.piwigo.tls=true"
+            - "traefik.http.services.piwigo.loadbalancer.server.port=80"
+        networks:
+            traefik:
+            default:
+                aliases:
+                    - photos.dev.tripleperformance.fr
 
-  piwigo:
-    image: lscr.io/linuxserver/piwigo:latest
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Europe/Paris
-    volumes:
-      - ./piwigo/config:/config
-      - ./piwigo/gallery:/gallery
-    restart: unless-stopped
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.piwigo.rule=Host(`photos.dev.tripleperformance.fr`)"
-      - "traefik.http.routers.piwigo.entrypoints=websecure"
-      - "traefik.http.routers.piwigo.tls=true"
-      - "traefik.http.services.piwigo.loadbalancer.server.port=80"
-    networks:
-      traefik:
-      default:
-        aliases:
-          - photos.dev.tripleperformance.fr
+    matomo:
+        image: matomo
+        restart: unless-stopped
+        environment:
+            - MATOMO_DATABASE_HOST=db
+        volumes:
+            - matomo:/var/www/html:z
+        networks:
+            - default
+            - traefik
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.matomo.rule=Host(`matomo.dev.tripleperformance.fr`)"
+            - "traefik.http.routers.matomo.entrypoints=websecure"
+            - "traefik.http.routers.matomo.tls=true"
+            - "traefik.http.services.matomo.loadbalancer.server.port=80"
 
-  matomo:
-    image: matomo
-    restart: unless-stopped
-    environment:
-      - MATOMO_DATABASE_HOST=db
-    volumes:
-      - matomo:/var/www/html:z
-    networks:
-      - default
-      - traefik
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.matomo.rule=Host(`matomo.dev.tripleperformance.fr`)"
-      - "traefik.http.routers.matomo.entrypoints=websecure"
-      - "traefik.http.routers.matomo.tls=true"
-      - "traefik.http.services.matomo.loadbalancer.server.port=80"
+    n8n:
+        image: docker.n8n.io/n8nio/n8n
+        restart: unless-stopped
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.n8n.rule=Host(`n8n.dev.tripleperformance.fr`)"
+            - "traefik.http.routers.n8n.entrypoints=websecure"
+            - "traefik.http.routers.n8n.tls=true"
+            - "traefik.http.services.n8n.loadbalancer.server.port=5678"
+        networks:
+            - default
+            - traefik
+        environment:
+            - N8N_HOST=n8n.dev.tripleperformance.fr
+            - N8N_PORT=5678
+            - N8N_PROTOCOL=https
+            - NODE_ENV=production
+            - WEBHOOK_URL=https://n8n.dev.tripleperformance.fr/
+            - GENERIC_TIMEZONE=Europe/Paris
+            - N8N_CUSTOM_EXTENSIONS=/data/custom-nodes
+            - N8N_EMAIL_MODE
+            - N8N_SMTP_HOST
+            - N8N_SMTP_USER
+            - N8N_SMTP_PASS
+            - N8N_SMTP_SENDER
+            - N8N_SMTP_PORT
+            - N8N_SMTP_SSL
+            - N8N_SMTP_TLS
+            - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
+            - DB_TYPE=postgresdb
+            - DB_POSTGRESDB_HOST=postgres
+            - DB_POSTGRESDB_DATABASE=n8n
+            - DB_POSTGRESDB_USER=n8n
+            - DB_POSTGRESDB_PASSWORD=n8n
+            - DB_POSTGRESDB_PORT=5432
+        volumes:
+            - n8n_data:/home/node/.n8n
+            - ./backup/n8n:/files
+            - "./downloads:/downloads"
+            - "/home/bertrand/n8n/n8n_mediawiki:/data/custom-nodes/n8n-nodes-mediawiki:ro"
 
-  n8n:
-    image: docker.n8n.io/n8nio/n8n
-    restart: unless-stopped
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.n8n.rule=Host(`n8n.dev.tripleperformance.fr`)"
-      - "traefik.http.routers.n8n.entrypoints=websecure"
-      - "traefik.http.routers.n8n.tls=true"
-      - "traefik.http.services.n8n.loadbalancer.server.port=5678"
-    networks:
-      - default
-      - traefik
-    environment:
-      - N8N_HOST=n8n.dev.tripleperformance.fr
-      - N8N_PORT=5678
-      - N8N_PROTOCOL=https
-      - NODE_ENV=production
-      - WEBHOOK_URL=https://n8n.dev.tripleperformance.fr/
-      - GENERIC_TIMEZONE=Europe/Paris
-      - N8N_CUSTOM_EXTENSIONS=/data/custom-nodes
-      - N8N_EMAIL_MODE
-      - N8N_SMTP_HOST
-      - N8N_SMTP_USER
-      - N8N_SMTP_PASS
-      - N8N_SMTP_SENDER
-      - N8N_SMTP_PORT
-      - N8N_SMTP_SSL
-      - N8N_SMTP_TLS
-      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
-      - DB_TYPE=postgresdb
-      - DB_POSTGRESDB_HOST=postgres
-      - DB_POSTGRESDB_DATABASE=n8n
-      - DB_POSTGRESDB_USER=n8n
-      - DB_POSTGRESDB_PASSWORD=n8n
-      - DB_POSTGRESDB_PORT=5432      
-    volumes:
-      - n8n_data:/home/node/.n8n
-      - ./backup/n8n:/files
-      - './downloads:/downloads'
-      - '/home/bertrand/n8n/n8n_mediawiki:/data/custom-nodes/n8n-nodes-mediawiki:ro'
+    qdrant:
+        image: qdrant/qdrant:latest
+        restart: unless-stopped
+        volumes:
+            - qdrant_data:/qdrant/storage
+        networks:
+            - default
+            - traefik
+        labels:
+            - "traefik.enable=true"
+            # Dashboard (port 6333, chemin /dashboard)
+            - "traefik.http.routers.qdrant-dashboard.rule=Host(`qdrant-dashboard.dev.tripleperformance.fr`)"
+            - "traefik.http.routers.qdrant-dashboard.entrypoints=websecure"
+            - "traefik.http.routers.qdrant-dashboard.tls=true"
+            - "traefik.http.services.qdrant-dashboard.loadbalancer.server.port=6333"
+            - "traefik.http.routers.qdrant-dashboard.service=qdrant-dashboard"
 
-  qdrant:
-    image: qdrant/qdrant:latest
-    restart: unless-stopped
-    volumes:
-      - qdrant_data:/qdrant/storage
-    networks:
-      - default
-      - traefik
-    labels:
-      - "traefik.enable=true"
-      # Dashboard (port 6333, chemin /dashboard)
-      - "traefik.http.routers.qdrant-dashboard.rule=Host(`qdrant-dashboard.dev.tripleperformance.fr`)"
-      - "traefik.http.routers.qdrant-dashboard.entrypoints=websecure"
-      - "traefik.http.routers.qdrant-dashboard.tls=true"
-      - "traefik.http.services.qdrant-dashboard.loadbalancer.server.port=6333"
-      - "traefik.http.routers.qdrant-dashboard.service=qdrant-dashboard"
+    yt-dlp:
+        command: yt-dlp-webui
+        image: ghcr.io/alexta69/metube
+        restart: unless-stopped
+        environment:
+            - 'YTDL_OPTIONS={"format":"bestaudio[ext=m4a]", "postprocessors":[{"key":"Exec","exec_cmd":"sh /downloads/compress-audio.sh","when":"after_move"}]}'
+            - "OUTPUT_TEMPLATE=%(id)S.%(ext)s"
+        volumes:
+            - "./backup/n8n:/downloads"
+        ports:
+            - "8081:8081"
 
-  yt-dlp:
-    command: yt-dlp-webui
-    image: ghcr.io/alexta69/metube
-    restart: unless-stopped
-    environment:
-      - 'YTDL_OPTIONS={"format":"bestaudio[ext=m4a]", "postprocessors":[{"key":"Exec","exec_cmd":"sh /downloads/compress-audio.sh","when":"after_move"}]}'
-      - 'OUTPUT_TEMPLATE=%(id)S.%(ext)s'
-    volumes:
-      - './backup/n8n:/downloads'
-    ports:
-      - "8081:8081"
+    pdf-to-image:
+        restart: unless-stopped
+        image: joanfabregat/pdf2img
 
-  pdf-to-image:
-    restart: unless-stopped
-    image: joanfabregat/pdf2img
+    chrome-headless:
+        image: ghcr.io/browserless/chromium
+        restart: unless-stopped
+        environment:
+            - CONCURRENT=10
+            - TOKEN=6R0W53R135510
 
-  chrome-headless:
-    image: ghcr.io/browserless/chromium
-    restart: unless-stopped
-    environment:
-      - CONCURRENT=10
-      - TOKEN=6R0W53R135510
+    itk-info:
+        image: ghcr.io/neayi/itk-info:latest
+        environment:
+            - OPENAI_API_KEY=${OPENAI_API_KEY}
+            - PORT=3000
+        restart: unless-stopped
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.itkinfo.rule=Host(`itk-info.dev.tripleperformance.fr`)"
+            - "traefik.http.routers.itkinfo.entrypoints=websecure"
+            - "traefik.http.routers.itkinfo.tls=true"
+            - "traefik.http.services.itkinfo.loadbalancer.server.port=3000"
+        networks:
+            - default
+            - traefik
 
-  itk-info:
-    image: ghcr.io/neayi/itk-info:latest
-    environment:
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - PORT=3000
-    restart: unless-stopped
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.itkinfo.rule=Host(`itk-info.dev.tripleperformance.fr`)"
-      - "traefik.http.routers.itkinfo.entrypoints=websecure"
-      - "traefik.http.routers.itkinfo.tls=true"
-      - "traefik.http.services.itkinfo.loadbalancer.server.port=3000"
-    networks:
-      - default
-      - traefik
+    # bugsink:
+    #   image: bugsink/bugsink:latest
+    #   environment:
+    #     - SECRET_KEY=${BUGSINK_SECRET_KEY}
+    #     - ALLOWED_HOSTS=bugsink.tripleperformance.fr,bugsink.dev.tripleperformance.fr,localhost,bugsink
+    #     - DEBUG=false
+    #     - EMAIL_HOST=${N8N_SMTP_HOST}
+    #     - EMAIL_PORT=${N8N_SMTP_PORT}
+    #     - EMAIL_HOST_USER=${N8N_SMTP_USER}
+    #     - EMAIL_HOST_PASSWORD=${N8N_SMTP_PASS}
+    #     - EMAIL_USE_TLS=false
+    #     - EMAIL_USE_SSL=false
+    #     - DEFAULT_FROM_EMAIL=${N8N_SMTP_SENDER}
+    #     - SERVER_EMAIL=${N8N_SMTP_SENDER}
+    #     - DEBUG_CSRF=True
+    #     - BEHIND_HTTPS_PROXY=True
+    #   restart: unless-stopped
+    #   labels:
+    #     - "traefik.enable=true"
+    #     - "traefik.http.routers.bugsink.rule=Host(`bugsink.dev.tripleperformance.fr`)"
+    #     - "traefik.http.routers.bugsink.entrypoints=websecure"
+    #     - "traefik.http.routers.bugsink.tls=true"
+    #     - "traefik.http.services.bugsink.loadbalancer.server.port=8000"
+    #   networks:
+    #     - default
+    #     - traefik
 
-  # bugsink:
-  #   image: bugsink/bugsink:latest
-  #   environment:
-  #     - SECRET_KEY=${BUGSINK_SECRET_KEY}
-  #     - ALLOWED_HOSTS=bugsink.tripleperformance.fr,bugsink.dev.tripleperformance.fr,localhost,bugsink
-  #     - DEBUG=false
-  #     - EMAIL_HOST=${N8N_SMTP_HOST}
-  #     - EMAIL_PORT=${N8N_SMTP_PORT}
-  #     - EMAIL_HOST_USER=${N8N_SMTP_USER}
-  #     - EMAIL_HOST_PASSWORD=${N8N_SMTP_PASS}
-  #     - EMAIL_USE_TLS=false
-  #     - EMAIL_USE_SSL=false
-  #     - DEFAULT_FROM_EMAIL=${N8N_SMTP_SENDER}
-  #     - SERVER_EMAIL=${N8N_SMTP_SENDER}
-  #     - DEBUG_CSRF=True
-  #     - BEHIND_HTTPS_PROXY=True
-  #   restart: unless-stopped
-  #   labels:
-  #     - "traefik.enable=true"
-  #     - "traefik.http.routers.bugsink.rule=Host(`bugsink.dev.tripleperformance.fr`)"
-  #     - "traefik.http.routers.bugsink.entrypoints=websecure"
-  #     - "traefik.http.routers.bugsink.tls=true"
-  #     - "traefik.http.services.bugsink.loadbalancer.server.port=8000"
-  #   networks:
-  #     - default
-  #     - traefik
+    # mediawiki-mcp:
+    #   # build: .
+    #   image: ghcr.io/olgasafonova/mediawiki-mcp-server:latest
+    #   labels:
+    #     - "traefik.enable=true"
+    #     - "traefik.http.routers.mediawiki-mcp.rule=Host(`mediawiki-mcp.dev.tripleperformance.fr`)"
+    #     - "traefik.http.routers.mediawiki-mcp.entrypoints=websecure"
+    #     - "traefik.http.routers.mediawiki-mcp.tls=true"
+    #     - "traefik.http.services.mediawiki-mcp.loadbalancer.server.port=8080"
+    #   environment:
+    #     - MEDIAWIKI_URL=${MEDIAWIKI_URL:-https://wiki.tripleperformance.fr/api.php}
 
-# mediawiki-mcp:
-#   # build: .
-#   image: ghcr.io/olgasafonova/mediawiki-mcp-server:latest
-#   labels:
-#     - "traefik.enable=true"
-#     - "traefik.http.routers.mediawiki-mcp.rule=Host(`mediawiki-mcp.dev.tripleperformance.fr`)"
-#     - "traefik.http.routers.mediawiki-mcp.entrypoints=websecure"
-#     - "traefik.http.routers.mediawiki-mcp.tls=true"
-#     - "traefik.http.services.mediawiki-mcp.loadbalancer.server.port=8080"
-#   environment:
-#     - MEDIAWIKI_URL=${MEDIAWIKI_URL:-https://wiki.tripleperformance.fr/api.php}
+    #     # Optional: For editing (create at Special:BotPasswords)
+    #     - MEDIAWIKI_USERNAME=toto
+    #     - MEDIAWIKI_PASSWORD=toto
 
-#     # Optional: For editing (create at Special:BotPasswords)
-#     - MEDIAWIKI_USERNAME=toto
-#     - MEDIAWIKI_PASSWORD=toto
+    #     # Optional: Bearer token for HTTP auth
+    #     - MCP_AUTH_TOKEN=${MCP_AUTH_TOKEN:-}
 
-#     # Optional: Bearer token for HTTP auth
-#     - MCP_AUTH_TOKEN=${MCP_AUTH_TOKEN:-}
+    #     # Optional: Request timeout
+    #     - MEDIAWIKI_TIMEOUT=${MEDIAWIKI_TIMEOUT:-30s}
+    #   networks:
+    #     - default
+    #     - traefik
+    # # Resource limits (adjust as needed)
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '0.5'
+    #       memory: 128M
+    #     reservations:
+    #       cpus: '0.1'
+    #       memory: 32M
+    # # Health check
+    # healthcheck:
+    #   test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/health"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 3
+    #   start_period: 5s
 
-#     # Optional: Request timeout
-#     - MEDIAWIKI_TIMEOUT=${MEDIAWIKI_TIMEOUT:-30s}
-#   networks:
-#     - default
-#     - traefik
-# # Resource limits (adjust as needed)
-# deploy:
-#   resources:
-#     limits:
-#       cpus: '0.5'
-#       memory: 128M
-#     reservations:
-#       cpus: '0.1'
-#       memory: 32M
-# # Health check
-# healthcheck:
-#   test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/health"]
-#   interval: 30s
-#   timeout: 10s
-#   retries: 3
-#   start_period: 5s
+    # # Restart policy
+    # restart: unless-stopped
 
-# # Restart policy
-# restart: unless-stopped
+    # # Security
+    # security_opt:
+    #   - no-new-privileges:true
+    # read_only: true
+    # tmpfs:
+    #   - /tmp
 
-# # Security
-# security_opt:
-#   - no-new-privileges:true
-# read_only: true
-# tmpfs:
-#   - /tmp
+    postgres:
+        image: postgres:17
+        environment:
+            POSTGRES_USER: n8n
+            POSTGRES_PASSWORD: n8n
+            POSTGRES_DB: n8n
+        volumes:
+            - pgdata:/var/lib/postgresql/data
 
-  postgres:
-    image: postgres:17
-    environment:
-      POSTGRES_USER: n8n
-      POSTGRES_PASSWORD: n8n
-      POSTGRES_DB: n8n
-    volumes:
-      - pgdata:/var/lib/postgresql/data
+    dbgate:
+        image: dbgate/dbgate:latest
+        environment:
+            - LOGIN=${DBGATE_USER:-admin}
+            - PASSWORD=${DBGATE_PASSWORD:?DBGate password is required}
+            - CONNECTIONS=con1,con2
 
-  dbgate:
-    image: dbgate/dbgate:latest
-    environment:
-      - LOGIN=${DBGATE_USER:-admin}
-      - PASSWORD=${DBGATE_PASSWORD:?DBGate password is required}
-      - CONNECTIONS=con1,con2
+            - LABEL_con1=MySql
+            - SERVER_con1=db
+            - USER_con1=${MYSQL_ROOT_USER:?MYSQL_ROOT_USER is required}
+            - PASSWORD_con1=${MYSQL_ROOT_PASSWORD:?MYSQL_ROOT_PASSWORD is required}
+            - PORT_con1=3306
+            - ENGINE_con1=mysql@dbgate-plugin-mysql
 
-      - LABEL_con1=MySql
-      - SERVER_con1=db
-      - USER_con1=${MYSQL_ROOT_USER:?MYSQL_ROOT_USER is required}
-      - PASSWORD_con1=${MYSQL_ROOT_PASSWORD:?MYSQL_ROOT_PASSWORD is required}
-      - PORT_con1=3306
-      - ENGINE_con1=mysql@dbgate-plugin-mysql
+            - LABEL_con2=Postgres
+            - SERVER_con2=postgres
+            - USER_con2=${PG_USER:?PG_USER is required}
+            - PASSWORD_con2=${PG_PASSWORD:?PG_PASSWORD is required}
+            - PORT_con2=5432
+            - ENGINE_con2=postgres@dbgate-plugin-postgres
 
-      - LABEL_con2=Postgres
-      - SERVER_con2=postgres
-      - USER_con2=${PG_USER:?PG_USER is required}
-      - PASSWORD_con2=${PG_PASSWORD:?PG_PASSWORD is required}
-      - PORT_con2=5432
-      - ENGINE_con2=postgres@dbgate-plugin-postgres
-
-    restart: always
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.dbgate.rule=Host(`dbgate.dev.tripleperformance.fr`)"
-      - "traefik.http.routers.dbgate.entrypoints=websecure"
-      - "traefik.http.routers.dbgate.tls=true"
-      - "traefik.http.services.dbgate.loadbalancer.server.port=3000"
-    networks:
-      - default
-      - traefik   
-    volumes:
-      - dbgate-data:/root/.dbgate
+        restart: always
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.dbgate.rule=Host(`dbgate.dev.tripleperformance.fr`)"
+            - "traefik.http.routers.dbgate.entrypoints=websecure"
+            - "traefik.http.routers.dbgate.tls=true"
+            - "traefik.http.services.dbgate.loadbalancer.server.port=3000"
+        networks:
+            - default
+            - traefik
+        volumes:
+            - dbgate-data:/root/.dbgate
 
 networks:
-  default: ~
-  traefik:
-    name: traefik
+    default: ~
+    traefik:
+        name: traefik
 
 volumes:
-  matomo:
-    driver: local
-  data-mysql:
-    driver: local
-  data01:
-    driver: local
-  n8n_data:
-    driver: local
-  qdrant_data:
-    driver: local
-  pgdata:
-    driver: local
-  dbgate-data:
-    driver: local
+    matomo:
+        driver: local
+    data-mysql:
+        driver: local
+    data01:
+        driver: local
+    n8n_data:
+        driver: local
+    qdrant_data:
+        driver: local
+    pgdata:
+        driver: local
+    dbgate-data:
+        driver: local
