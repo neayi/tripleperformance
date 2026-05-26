@@ -319,7 +319,9 @@ services:
     restart: always
 
   n8n:
-    image: docker.n8n.io/n8nio/n8n
+    build:
+        context: .
+        dockerfile: engine/n8n/Dockerfile
     restart: always
     labels:
       - "traefik.enable=true"
