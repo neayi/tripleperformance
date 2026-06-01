@@ -1,7 +1,3 @@
-FROM docker.n8n.io/n8nio/n8n
-
-USER root
-
 # Download and install static pandoc binary
 # Using a multi-stage build approach with Alpine to download
 FROM alpine:latest AS downloader
