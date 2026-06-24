@@ -347,7 +347,7 @@ $wgGroupPermissions['bot']['embed_pdf'] = true;
 
 // Semantic Mediawiki
 wfLoadExtension( 'SemanticMediaWiki' );
-enableSemantics( $domainName );
+
 $smwgConfigFileDir = $wgUploadDirectory;
 $smwgNamespacesWithSemanticLinks[NS_STRUCTURE] = true;
 $smwgNamespacesWithSemanticLinks[NS_TRAINING] = true;
@@ -386,7 +386,7 @@ $sespgEnabledPropertyList = [
 ];
 
 wfLoadExtension( 'NeayiSpecialProperties' );
-include_once ('extensions/NeayiSpecialProperties/src/LoadConfig.php');
+include_once ($wgExtensionDirectory . '/NeayiSpecialProperties/src/LoadConfig.php');
 
 $sespgUseFixedTables = true;
 $sespgExcludeBotEdits = true;
@@ -875,7 +875,7 @@ $wgPiwigoGalleryLayout = 'fluid'; // one of the four: fluid (default), grid, thu
 
 // WikiSearch
 wfLoadExtension( 'WikiSearch' );
-$wgWikiSearchElasticSearchHosts	= [getenv('ELASTICSEARCH_SERVER', true)]; // ["localhost:9200"]	Sets the list of ElasticSearch hosts to use.
+$wgWikiSearchElasticSearchHosts	= ['http://' . getenv('ELASTICSEARCH_SERVER', true) . ':9200']; // ["localhost:9200"]	Sets the list of ElasticSearch hosts to use.
 $wgWikiSearchAPIRequiredRights = ["read", "wssearch-execute-api"];
 // $wgWikiSearchSearchFieldOverride = 'Search';
 

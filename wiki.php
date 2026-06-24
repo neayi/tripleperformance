@@ -238,7 +238,9 @@ function isTargetEnv($env)
 
 function getTargetEnv($env = '')
 {
-    $envData = parse_ini_file(__DIR__ . '/.env');
+    $envFile = __DIR__ . '/.env';
+    $envContents = preg_replace('/^\s*#.*$/m', '', file_get_contents($envFile));
+    $envData = parse_ini_string($envContents);
 
     if (empty($envData['ENV']))
         throw new Exception("No .env file configured. Aborting", 1);

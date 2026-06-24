@@ -194,17 +194,17 @@ function getWikiComponents()
 	$components = array();
 
 	// Composer components
-	$components[] = array(	'composer' => 'elasticsearch/elasticsearch "^7.17"' );
+	$components[] = array(	'composer' => 'elasticsearch/elasticsearch "^8.1.0"' );
 	$components[] = array(	'composer' => 'mediawiki/chameleon-skin "^5.0.1"' ); // https://packagist.org/packages/mediawiki/chameleon-skin
-	$components[] = array(	'composer' => 'mediawiki/semantic-media-wiki "^6.0.1"' ); // https://packagist.org/packages/mediawiki/semantic-media-wiki
-//  $components[] = array(	'composer' => 'mediawiki/maps "^12.0"' ); // https://packagist.org/packages/mediawiki/maps (commented until fix #829 is merged)
-	$components[] = array(	'composer' => 'mediawiki/semantic-result-formats "^5.1.0"' ); // https://packagist.org/packages/mediawiki/semantic-result-formats
-	$components[] = array(	'composer' => 'mediawiki/semantic-scribunto "^2.3.3"' ); // https://packagist.org/packages/mediawiki/semantic-scribunto
-	$components[] = array(	'composer' => 'mediawiki/semantic-extra-special-properties "^4.0"' ); // https://packagist.org/packages/mediawiki/semantic-extra-special-properties
+	// $components[] = array(	'composer' => 'mediawiki/semantic-media-wiki "^7.0.0"' ); // https://packagist.org/packages/mediawiki/semantic-media-wiki (To revert when https://github.com/SemanticMediaWiki/SemanticMediaWiki/pull/6997 is merged)
+  	$components[] = array(	'composer' => 'mediawiki/maps "^13.0.1"' ); // https://packagist.org/packages/mediawiki/maps
+	$components[] = array(	'composer' => 'mediawiki/semantic-result-formats "^5.2.0"' ); // https://packagist.org/packages/mediawiki/semantic-result-formats
+	$components[] = array(	'composer' => 'mediawiki/semantic-scribunto "^3.0.0"' ); // https://packagist.org/packages/mediawiki/semantic-scribunto
+	$components[] = array(	'composer' => 'mediawiki/semantic-extra-special-properties "^5.0"' ); // https://packagist.org/packages/mediawiki/semantic-extra-special-properties
 	$components[] = array(	'composer' => 'mediawiki/iframe-tag "dev-master"' ); // https://packagist.org/packages/mediawiki/iframe-tag
 	$components[] = array(	'composer' => 'mediawiki/page-forms "^6.0.1"' ); // https://packagist.org/packages/mediawiki/page-forms
-	$components[] = array(	'composer' => 'ongr/elasticsearch-dsl "^7.2"' ); // See https://github.com/Open-CSP/WikiSearch/pull/63
-//	$components[] = array(	'composer' => 'open-csp/wiki-search "^8.1"' ); // https://packagist.org/packages/open-csp/wiki-search
+	$components[] = array(	'composer' => 'handcraftedinthealps/elasticsearch-dsl "^8.1.0"' ); // See https://github.com/Open-CSP/WikiSearch/pull/63
+	// $components[] = array(	'composer' => 'open-csp/wiki-search "^8.1.5"' ); // https://packagist.org/packages/open-csp/wiki-search (To revert when fixes for 28, 84 and 86 are merged)
 	$components[] = array(	'composer' => 'wikibase-solutions/wiki-search-front "^3.3"' ); // https://packagist.org/packages/wikibase-solutions/wiki-search-front
 
 	// Regular Mediawiki extensions
@@ -323,22 +323,18 @@ function getWikiComponents()
 							'git' => 'https://github.com/wikimedia/mediawiki-extensions-NativeSvgHandler.git',
 							'branch' => $wiki_version);
 
-	// $components[] = array(	'dest' => $wiki_extensions_dir . '/WSSemanticParsedText',
-	// 						'git' => 'https://gitlab.wikibase.nl/community/wssemanticparsedtext.git',
-	// 						'postinstall' => 'composer');
-
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/CrawlerProtection',
 							'git' => 'https://github.com/mywikis/CrawlerProtection.git');
 
 	// Neayi extensions and forks
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/WikiSearch',
 							'git' => 'https://github.com/neayi/WikiSearch.git',
-							'branch' => 'temporary-fix-66-from-v8.1.2',
+							'branch' => 'fix28-84-86',
 							'postinstall' => 'composer');
 
-	$components[] = array(	'dest' => $wiki_extensions_dir . '/Maps',
-							'git' => 'https://github.com/neayi/Maps.git',
-							'branch' => 'fix/829-Parser-not-properly-initialised',
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/SemanticMediaWiki',
+							'git' => 'https://github.com/neayi/SemanticMediaWiki.git',
+							'branch' => 'fix6996-getting-ready-for-elasticsearch8',
 							'postinstall' => 'composer');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/WikiSearchMapsLink',
