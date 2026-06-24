@@ -198,7 +198,7 @@ function getWikiComponents()
 	$components[] = array(	'composer' => 'mediawiki/chameleon-skin "^5.0.1"' ); // https://packagist.org/packages/mediawiki/chameleon-skin
 	// $components[] = array(	'composer' => 'mediawiki/semantic-media-wiki "^7.0.0"' ); // https://packagist.org/packages/mediawiki/semantic-media-wiki (To revert when https://github.com/SemanticMediaWiki/SemanticMediaWiki/pull/6997 is merged)
   	$components[] = array(	'composer' => 'mediawiki/maps "^13.0.1"' ); // https://packagist.org/packages/mediawiki/maps
-	$components[] = array(	'composer' => 'mediawiki/semantic-result-formats "^5.2.0"' ); // https://packagist.org/packages/mediawiki/semantic-result-formats
+	$components[] = array(	'composer' => 'mediawiki/semantic-result-formats "dev-master"' ); // https://packagist.org/packages/mediawiki/semantic-result-formats (Revert to 5.3.0 when created)
 	$components[] = array(	'composer' => 'mediawiki/semantic-scribunto "^3.0.0"' ); // https://packagist.org/packages/mediawiki/semantic-scribunto
 	$components[] = array(	'composer' => 'mediawiki/semantic-extra-special-properties "^5.0"' ); // https://packagist.org/packages/mediawiki/semantic-extra-special-properties
 	$components[] = array(	'composer' => 'mediawiki/iframe-tag "dev-master"' ); // https://packagist.org/packages/mediawiki/iframe-tag
