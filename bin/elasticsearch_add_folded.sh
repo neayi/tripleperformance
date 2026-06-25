@@ -5,16 +5,19 @@
 set -e
 
 # Extract credentials from ELASTICSEARCH_SERVER env var (format: user:pass@host)
-ES_SERVER=$(grep ELASTICSEARCH_SERVER .env | cut -d= -f2-)
+# Strip surrounding quotes if present
+ES_SERVER=$(grep ELASTICSEARCH_SERVER .env | cut -d= -f2- | tr -d '"' | tr -d "'")
 ES_AUTH=$(echo "$ES_SERVER" | sed 's/@.*//')        # user:pass
 ES_HOST=$(echo "$ES_SERVER" | sed 's/.*@//')         # hostname
 
+# elasticsearch is on the Docker internal network — run curl inside the web container
 ES_URL="http://${ES_AUTH}@${ES_HOST}:9200"
+CURL="docker compose exec -T web curl -s"
 
 echo "Connecting to ElasticSearch at http://${ES_HOST}:9200"
 
 # Get all smw-data-* indices
-INDICES=$(curl -s "${ES_URL}/_cat/indices/smw-data-*?h=index" | tr -d ' ')
+INDICES=$(${CURL} "${ES_URL}/_cat/indices/smw-data-*?h=index" | tr -d ' ' | tr -d '\r')
 
 if [ -z "$INDICES" ]; then
     echo "ERROR: No smw-data-* indices found. Check credentials and connectivity."
@@ -32,11 +35,11 @@ for INDEX in $INDICES; do
 
     # 1. Close index
     echo "  [1/4] Closing index..."
-    curl -s -X POST "${ES_URL}/${INDEX}/_close" | python3 -c "import json,sys; d=json.load(sys.stdin); print('  OK' if d.get('acknowledged') else f'  WARN: {d}')"
+    ${CURL} -X POST "${ES_URL}/${INDEX}/_close" | python3 -c "import json,sys; d=json.load(sys.stdin); print('  OK' if d.get('acknowledged') else f'  WARN: {d}')"
 
     # 2. Add folded_text analyzer
     echo "  [2/4] Adding folded_text analyzer..."
-    curl -s -X PUT "${ES_URL}/${INDEX}/_settings" \
+    ${CURL} -X PUT "${ES_URL}/${INDEX}/_settings" \
       -H "Content-Type: application/json" -d '{
         "analysis": {
           "analyzer": {
@@ -51,11 +54,11 @@ for INDEX in $INDICES; do
 
     # 3. Reopen index
     echo "  [3/4] Reopening index..."
-    curl -s -X POST "${ES_URL}/${INDEX}/_open" | python3 -c "import json,sys; d=json.load(sys.stdin); print('  OK' if d.get('acknowledged') else f'  WARN: {d}')"
+    ${CURL} -X POST "${ES_URL}/${INDEX}/_open" | python3 -c "import json,sys; d=json.load(sys.stdin); print('  OK' if d.get('acknowledged') else f'  WARN: {d}')"
 
     # 4. Add .folded subfields to mapping
     echo "  [4/4] Updating mapping..."
-    curl -s -X PUT "${ES_URL}/${INDEX}/_mapping" \
+    ${CURL} -X PUT "${ES_URL}/${INDEX}/_mapping" \
       -H "Content-Type: application/json" -d '{
         "properties": {
           "subject": {
@@ -87,7 +90,7 @@ echo "=========================================="
 
 TASK_IDS=()
 for INDEX in $INDICES; do
-    TASK=$(curl -s -X POST \
+    TASK=$(${CURL} -X POST \
       "${ES_URL}/${INDEX}/_update_by_query?conflicts=proceed&wait_for_completion=false" \
       -H "Content-Type: application/json" -d '{"query":{"match_all":{}}}' \
       | python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get('task','ERROR'))")
