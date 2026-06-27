@@ -238,6 +238,7 @@ services:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.1.3
     restart: always
     environment:
+      ES_JAVA_OPTS: "-Xms4g -Xmx4g"
       discovery.type: single-node
       xpack.security.enabled: "true"
       http.cors.enabled: "true"
@@ -257,6 +258,7 @@ services:
       - "traefik.http.routers.elasticsearch.rule=Host(`elasticsearch.tripleperformance.fr`)"
       - "traefik.http.routers.elasticsearch.entrypoints=websecure"
       - "traefik.http.routers.elasticsearch.tls=true"
+      - "traefik.http.routers.elasticsearch.tls.certresolver=letsencrypt"      
       - "traefik.http.services.elasticsearch.loadbalancer.server.port=9200"
 
   elasticvue:
@@ -523,7 +525,7 @@ services:
     restart: always
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.dbgate.rule=Host(`phpmyadmin.tripleperformance.fr`) || Host(`dbgate.tripleperformance.fr`)"
+      - "traefik.http.routers.dbgate.rule=Host(`phpmyadmin.tripleperformance.fr`)"
       - "traefik.http.routers.dbgate.entrypoints=websecure"
       - "traefik.http.routers.dbgate.tls.certresolver=letsencrypt"
       - "traefik.http.routers.dbgate.tls=true"
