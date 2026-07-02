@@ -548,7 +548,7 @@ function getScriptPath($script)
         case 'updateEntityCountMap.php' :
         case 'updateQueryDependencies.php' :
             // Semantic MediaWiki
-            return "php /var/www/html/extensions/SemanticMediaWiki/maintenance/$script --memory-limit=512M";
+            return "php /var/www/html/extensions/SemanticMediaWiki/maintenance/$script --memory-limit=900M";
 
         case 'removeSpamAccounts.php' :
         case 'buildSitemap.php':

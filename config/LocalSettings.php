@@ -19,7 +19,7 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 // =================================================================
 
 $env = getenv('ENV', true) ?: 'prod'; // dev, prod, preprod
-$debug = false === getenv('DEBUG', true) ? 'dev' === $env : 'true' === strtolower((string) getenv('DEBUG', true)); // true, false
+$debug = !empty($_GET['debug']) || (false === getenv('DEBUG', true) ? 'dev' === $env : 'true' === strtolower((string) getenv('DEBUG', true))); // true, false
 $domainName = getDomainName($env);
 $useHttps = false;
 $domainUrl = ($useHttps ? 'https' : 'http') . '://' . $domainName;
@@ -930,7 +930,7 @@ if ($debug) {
     // $wgShowDebug = true;
 
     $wgShowExceptionDetails = true;
-    $wgDebugToolbar = false;
+    $wgDebugToolbar = true;
     $wgResourceLoaderDebug = true;
     $wgWikiSearchEnableDebugMode = true;
     $wgJobRunRate = 1;
