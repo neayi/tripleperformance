@@ -417,8 +417,10 @@ services:
       - DB_PASSWORD=${ITINERA_MYSQL_PASSWORD:-itinera_password}
       - DB_NAME=${ITINERA_DB_NAME:-itinera_db}
       - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL:-https://app.itinera.ag}
-      - DISCOURSE_SSO_URL=${DISCOURSE_SSO_URL}
-      - DISCOURSE_SSO_SECRET=${DISCOURSE_SSO_SECRET}
+      - ZITADEL_ISSUER=${ZITADEL_ISSUER}
+      - ZITADEL_INTERNAL_URL=http://zitadel-api:8080
+      - ZITADEL_CLIENT_ID=${ZITADEL_CLIENT_ID}
+      - ZITADEL_CLIENT_SECRET=${ZITADEL_CLIENT_SECRET}
       - SESSION_SECRET=${SESSION_SECRET:-itinera_session_secret_change_in_production}
       - WATCHPACK_POLLING=true
       - CHOKIDAR_USEPOLLING=true
@@ -501,6 +503,115 @@ services:
       # POSTGRES_DB: n8n
     volumes:
       - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${PG_USER:-postgres}"]
+      interval: 5s
+      timeout: 60s
+      retries: 10
+      start_period: 5s
+
+  zitadel-api:
+    image: ghcr.io/zitadel/zitadel:latest
+    command: 'start-from-init --masterkey "${ZITADEL_MASTERKEY:?ZITADEL_MASTERKEY is required (32 chars)}"'
+    restart: always
+    user: "0"
+    environment:
+      ZITADEL_PORT: 8080
+      ZITADEL_EXTERNALDOMAIN: auth.tripleperformance.ag
+      ZITADEL_EXTERNALPORT: "443"
+      ZITADEL_EXTERNALSECURE: "true"
+      ZITADEL_TLS_ENABLED: "false"
+      ZITADEL_DATABASE_POSTGRES_DSN: postgresql://${PG_USER:?PG_USER is required}:${PG_PASSWORD:?PG_PASSWORD is required}@postgres:5432/zitadel?sslmode=disable
+      ZITADEL_FIRSTINSTANCE_ORG_HUMAN_PASSWORDCHANGEREQUIRED: "false"
+      ZITADEL_FIRSTINSTANCE_LOGINCLIENTPATPATH: /zitadel/bootstrap/login-client.pat
+      ZITADEL_FIRSTINSTANCE_ORG_LOGINCLIENT_MACHINE_USERNAME: login-client
+      ZITADEL_FIRSTINSTANCE_ORG_LOGINCLIENT_MACHINE_NAME: Automatically Initialized IAM_LOGIN_CLIENT
+      ZITADEL_FIRSTINSTANCE_ORG_LOGINCLIENT_PAT_EXPIRATIONDATE: "2030-01-01T00:00:00Z"
+      ZITADEL_DEFAULTINSTANCE_FEATURES_LOGINV2_REQUIRED: "true"
+      ZITADEL_DEFAULTINSTANCE_FEATURES_LOGINV2_BASEURI: https://auth.tripleperformance.ag/ui/v2/login/
+      ZITADEL_OIDC_DEFAULTLOGINURLV2: https://auth.tripleperformance.ag/ui/v2/login/login?authRequest=
+      ZITADEL_OIDC_DEFAULTLOGOUTURLV2: https://auth.tripleperformance.ag/ui/v2/login/logout?post_logout_redirect=
+      ZITADEL_SAML_DEFAULTLOGINURLV2: https://auth.tripleperformance.ag/ui/v2/login/login?samlRequest=
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "/app/zitadel", "ready"]
+      interval: 10s
+      timeout: 30s
+      retries: 12
+      start_period: 20s
+    volumes:
+      - zitadel-bootstrap:/zitadel/bootstrap:rw
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik"
+      - "traefik.http.services.zitadel-api.loadbalancer.server.port=8080"
+      - "traefik.http.services.zitadel-api.loadbalancer.server.scheme=h2c"
+      # /api alias (strips prefix)
+      - "traefik.http.middlewares.zitadel-strip-api.stripprefix.prefixes=/api"
+      - "traefik.http.middlewares.zitadel-strip-api.stripprefix.forceSlash=false"
+      - "traefik.http.routers.zitadel-api-alias.rule=Host(`auth.tripleperformance.ag`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.zitadel-api-alias.entrypoints=websecure"
+      - "traefik.http.routers.zitadel-api-alias.tls=true"
+      - "traefik.http.routers.zitadel-api-alias.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.zitadel-api-alias.middlewares=zitadel-strip-api"
+      - "traefik.http.routers.zitadel-api-alias.service=zitadel-api"
+      - "traefik.http.routers.zitadel-api-alias.priority=200"
+      # catch-all for everything except /ui/v2/login, /api, /
+      - "traefik.http.routers.zitadel-canonical.rule=Host(`auth.tripleperformance.ag`) && !PathPrefix(`/ui/v2/login`) && !PathPrefix(`/api`) && !Path(`/`)"
+      - "traefik.http.routers.zitadel-canonical.entrypoints=websecure"
+      - "traefik.http.routers.zitadel-canonical.tls=true"
+      - "traefik.http.routers.zitadel-canonical.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.zitadel-canonical.service=zitadel-api"
+      - "traefik.http.routers.zitadel-canonical.priority=100"
+    networks:
+      - default
+      - traefik
+
+  zitadel-login:
+    image: ghcr.io/zitadel/zitadel-login:latest
+    restart: always
+    user: "0"
+    environment:
+      ZITADEL_API_URL: http://zitadel-api:8080
+      NEXT_PUBLIC_BASE_PATH: /ui/v2/login
+      ZITADEL_SERVICE_USER_TOKEN_FILE: /zitadel/bootstrap/login-client.pat
+      CUSTOM_REQUEST_HEADERS: Host:auth.tripleperformance.ag,X-Forwarded-Proto:https
+    depends_on:
+      zitadel-api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "/bin/sh", "-c", "node /app/healthcheck.mjs http://localhost:3000/ui/v2/login/healthy"]
+      interval: 10s
+      timeout: 30s
+      retries: 12
+      start_period: 20s
+    volumes:
+      - zitadel-bootstrap:/zitadel/bootstrap:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik"
+      - "traefik.http.services.zitadel-login.loadbalancer.server.port=3000"
+      # Redirect / to /ui/v2/login/
+      - "traefik.http.middlewares.zitadel-root-rewrite.replacepath.path=/ui/v2/login/"
+      - "traefik.http.routers.zitadel-root.rule=Host(`auth.tripleperformance.ag`) && Path(`/`)"
+      - "traefik.http.routers.zitadel-root.entrypoints=websecure"
+      - "traefik.http.routers.zitadel-root.tls=true"
+      - "traefik.http.routers.zitadel-root.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.zitadel-root.middlewares=zitadel-root-rewrite"
+      - "traefik.http.routers.zitadel-root.service=zitadel-login"
+      - "traefik.http.routers.zitadel-root.priority=400"
+      # /ui/v2/login routes
+      - "traefik.http.routers.zitadel-login.rule=Host(`auth.tripleperformance.ag`) && PathPrefix(`/ui/v2/login`)"
+      - "traefik.http.routers.zitadel-login.entrypoints=websecure"
+      - "traefik.http.routers.zitadel-login.tls=true"
+      - "traefik.http.routers.zitadel-login.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.zitadel-login.service=zitadel-login"
+      - "traefik.http.routers.zitadel-login.priority=250"
+    networks:
+      - default
+      - traefik
 
   dbgate:
     image: dbgate/dbgate:latest
@@ -554,4 +665,6 @@ volumes:
   pgdata:
     driver: local
   dbgate-data:
+    driver: local
+  zitadel-bootstrap:
     driver: local
