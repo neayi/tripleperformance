@@ -178,6 +178,15 @@ services:
             - SMTP_FROM=${N8N_SMTP_SENDER:-noreply@itinera.ag}
             # Sentry
             - SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN}
+            # Node inspector, for attaching a debugger (VSCode) to the Next.js dev server
+            - NODE_OPTIONS=--inspect=0.0.0.0:9229
+        ports:
+            # Next.js/Turbopack forks a child process for the actual dev server, which
+            # inherits NODE_OPTIONS and falls back to the next free port (9230) since the
+            # CLI wrapper process already claims 9229. 9230 is the one that matters for
+            # debugging API routes/server code; 9229 is exposed too just in case.
+            - "9229:9229"
+            - "9230:9230"
         labels:
             - "traefik.enable=true"
             - "traefik.http.routers.itinera.rule=Host(`itinera.dev.tripleperformance.fr`)"
@@ -192,25 +201,12 @@ services:
             - traefik
         restart: unless-stopped
         volumes:
-            # Mount source code for hot reload
-            - ${ITINERA_PROJECT_DIR:-.}/app:/app/app
-            - ${ITINERA_PROJECT_DIR:-.}/components:/app/components
-            - ${ITINERA_PROJECT_DIR:-.}/lib:/app/lib
-            - ${ITINERA_PROJECT_DIR:-.}/maintenance:/app/maintenance
-            - ${ITINERA_PROJECT_DIR:-.}/node_modules:/app/node_modules
-            - ${ITINERA_PROJECT_DIR:-.}/public:/app/public
-            - ${ITINERA_PROJECT_DIR:-.}/shared:/app/shared
-            - ${ITINERA_PROJECT_DIR:-.}/styles:/app/styles
-            - ${ITINERA_PROJECT_DIR:-.}/templates:/app/templates
-            - ${ITINERA_PROJECT_DIR:-.}/instrumentation-client.ts:/app/instrumentation-client.ts
-            - ${ITINERA_PROJECT_DIR:-.}/instrumentation.ts:/app/instrumentation.ts
-            - ${ITINERA_PROJECT_DIR:-.}/next.config.js:/app/next.config.js
-            - ${ITINERA_PROJECT_DIR:-.}/postcss.config.js:/app/postcss.config.js
-            - ${ITINERA_PROJECT_DIR:-.}/proxy.ts:/app/proxy.ts
-            - ${ITINERA_PROJECT_DIR:-.}/sentry.edge.config.ts:/app/sentry.edge.config.ts
-            - ${ITINERA_PROJECT_DIR:-.}/sentry.server.config.ts:/app/sentry.server.config.ts
-            - ${ITINERA_PROJECT_DIR:-.}/tailwind.config.js:/app/tailwind.config.js
-            - ${ITINERA_PROJECT_DIR:-.}/tsconfig.json:/app/tsconfig.json
+            # Mount the whole project as a single bind mount instead of one entry per
+            # top-level file/folder — the granular list had to be hand-updated every time a
+            # new source directory was added (and was the root cause of the .next/source-map
+            # debugging issue: newly generated paths not in the list are invisible to either
+            # side). node_modules keeps coming from the host, same as before.
+            - ${ITINERA_PROJECT_DIR:-.}:/app
 
     insights:
         image: nginx:1.28
