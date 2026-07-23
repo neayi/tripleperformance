@@ -419,7 +419,12 @@ services:
       - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL:-https://app.itinera.ag}
       - DISCOURSE_SSO_URL=${DISCOURSE_SSO_URL}
       - DISCOURSE_SSO_SECRET=${DISCOURSE_SSO_SECRET}
-      - SESSION_SECRET=${SESSION_SECRET:-itinera_session_secret_change_in_production}
+      # AuthJS a besoin de connaître son URL publique explicitement : derrière Traefik, le Host vu
+      # par Next.js ne reflète pas x-forwarded-host pour les redirections de connexion/erreur.
+      - AUTH_URL=https://app.itinera.ag/api/auth
+      - AUTH_SECRET=${AUTH_SECRET}
+      - GOOGLE_CLIENT_ID=${ITINERA_GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${ITINERA_GOOGLE_CLIENT_SECRET}
       - WATCHPACK_POLLING=true
       - CHOKIDAR_USEPOLLING=true
       - CHOKIDAR_INTERVAL=1000
