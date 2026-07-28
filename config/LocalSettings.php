@@ -921,6 +921,20 @@ wfLoadExtension( 'SemanticAPI' );
 wfLoadExtension( 'CrawlerProtection' );
 $wgCrawlerProtectionUse418 = true;
 
+$wgCrawlerProtectedSpecialPages[] = 'PageProperty';
+$wgCrawlerProtectedSpecialPages[] = "Concepts";
+$wgCrawlerProtectedSpecialPages[] = "ConstraintErrorList";
+$wgCrawlerProtectedSpecialPages[] = "MissingRedirectAnnotations";
+$wgCrawlerProtectedSpecialPages[] = "PendingTaskList";
+$wgCrawlerProtectedSpecialPages[] = "ProcessingErrorList";
+$wgCrawlerProtectedSpecialPages[] = "PropertyLabelSimilarity";
+$wgCrawlerProtectedSpecialPages[] = "SearchByProperty";
+$wgCrawlerProtectedSpecialPages[] = "SMWAdmin";
+$wgCrawlerProtectedSpecialPages[] = "Types";
+$wgCrawlerProtectedSpecialPages[] = "UnusedProperties";
+$wgCrawlerProtectedSpecialPages[] = "URIResolver";
+$wgCrawlerProtectedSpecialPages[] = "WantedProperties";
+
 // Debug and error reporting :
 
 if ($debug) {

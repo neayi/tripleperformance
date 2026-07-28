@@ -72,6 +72,7 @@ services:
   web:
     image: ghcr.io/neayi/tripleperformance/wiki:$WIKI_VERSION_PROD
     restart: always
+    cpus: 6.0
     env_file: .env
     volumes:
       - ./.data/images:/var/www/html/images
@@ -87,8 +88,59 @@ services:
       - 'traefik.http.middlewares.redirect-old-urls.redirectregex.regex=^https?://(pratiques\.)?tripleperformance\.fr/(.*)'
       - "traefik.http.middlewares.redirect-old-urls.redirectregex.replacement=https://wiki.tripleperformance.fr/$${2}"
       - "traefik.http.middlewares.redirect-old-urls.redirectregex.permanent=true"
-      - "traefik.http.routers.web.middlewares=redirect-old-urls@docker"
+
+      # Per-IP rate limit: generous enough for a real page load (assets included),
+      # tight enough to cap a single-source bot hammering the site.
+      - "traefik.http.middlewares.web-ratelimit.ratelimit.average=50"
+      - "traefik.http.middlewares.web-ratelimit.ratelimit.burst=100"
+
+      - "traefik.http.routers.web.middlewares=redirect-old-urls@docker,web-ratelimit@docker"
       # - 'traefik.http.routers.web.middlewares=redirect-old-urls@docker,geoblock-china@file'
+      - "traefik.http.routers.web.priority=1"
+
+      # Special:PluggableAuthLogin: a distributed, IP-rotating bot swarm hits this
+      # URL directly (no prior session), which fails instantly server-side
+      # (see PluggableAuthLogin.php's "return to URL is null" branch) but still
+      # burns PHP/session overhead. Each bot IP only sends ~2 requests, so the
+      # per-IP limit above can't catch it - rate-limit this endpoint globally
+      # per hostname instead. Real logins are rare enough that this won't be felt.
+      # The bounce-back landing page (Special:UserLogin?error=pluggableauth-fatal-error)
+      # is caught by the fixed, non-localized `error` query param - unlike `title`,
+      # which varies per wiki language (Special:UserLogin, Spécial:Connexion, ...) -
+      # without touching real visitors who land on the login page without that error.
+      # sourceCriterion keys on a header no real client ever sends, so every
+      # request (any IP, any of our ~18 hostnames) falls into the same empty-key
+      # bucket - a true global limit. requestHost alone would give each hostname
+      # its own 5 req/s bucket, and a bot spread across them adds up fast.
+      - "traefik.http.middlewares.pluggableauthlogin-ratelimit.ratelimit.average=5"
+      - "traefik.http.middlewares.pluggableauthlogin-ratelimit.ratelimit.burst=20"
+      - "traefik.http.middlewares.pluggableauthlogin-ratelimit.ratelimit.sourcecriterion.requestheadername=X-TP-Global-Bucket"
+
+      - "traefik.http.routers.web-pluggableauthlogin.rule=(Host(`wiki.tripleperformance.fr`) || Host(`3perf.fr`) || Host(`tripleperformance.fr`)|| Host(`tripleperformance.ag`) || Host(`www.tripleperformance.fr`) || Host(`demo.tripleperformance.fr`) || Host(`fr.tripleperformance.ag`) || Host(`ar.tripleperformance.ag`) || Host(`en.tripleperformance.ag`) || Host(`de.tripleperformance.ag`) || Host(`es.tripleperformance.ag`) || Host(`fi.tripleperformance.ag`) || Host(`pt.tripleperformance.ag`) || Host(`it.tripleperformance.ag`) || Host(`el.tripleperformance.ag`) || Host(`hu.tripleperformance.ag`) || Host(`pl.tripleperformance.ag`) || Host(`nl.tripleperformance.ag`)) && (Path(`/wiki/Special:PluggableAuthLogin`) || Path(`/wiki/Spécial:PluggableAuthLogin`) || Query(`error`, `pluggableauth-fatal-error`))"
+      - "traefik.http.routers.web-pluggableauthlogin.entrypoints=websecure"
+      - "traefik.http.routers.web-pluggableauthlogin.tls=true"
+      - "traefik.http.routers.web-pluggableauthlogin.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.web-pluggableauthlogin.priority=100"
+      - "traefik.http.routers.web-pluggableauthlogin.service=web@docker"
+      - "traefik.http.routers.web-pluggableauthlogin.middlewares=pluggableauthlogin-ratelimit@docker"
+
+      # /index.php?title=Special:PluggableAuthLogin is never used by the real login
+      # flow (confirmed against dev logs: it's always the pretty URL /wiki/...,
+      # or the path-info form /index.php/Special:PluggableAuthLogin for the real
+      # OAuth callback - both left untouched). Traefik has no native "deny"
+      # middleware, so this reuses ratelimit at a near-zero ceiling as a hard block.
+      - "traefik.http.middlewares.pluggableauthlogin-block.ratelimit.average=1"
+      - "traefik.http.middlewares.pluggableauthlogin-block.ratelimit.burst=1"
+      - "traefik.http.middlewares.pluggableauthlogin-block.ratelimit.period=1h"
+      - "traefik.http.middlewares.pluggableauthlogin-block.ratelimit.sourcecriterion.requestheadername=X-TP-Global-Bucket"
+
+      - "traefik.http.routers.web-pluggableauthlogin-indexphp.rule=(Host(`wiki.tripleperformance.fr`) || Host(`3perf.fr`) || Host(`tripleperformance.fr`)|| Host(`tripleperformance.ag`) || Host(`www.tripleperformance.fr`) || Host(`demo.tripleperformance.fr`) || Host(`fr.tripleperformance.ag`) || Host(`ar.tripleperformance.ag`) || Host(`en.tripleperformance.ag`) || Host(`de.tripleperformance.ag`) || Host(`es.tripleperformance.ag`) || Host(`fi.tripleperformance.ag`) || Host(`pt.tripleperformance.ag`) || Host(`it.tripleperformance.ag`) || Host(`el.tripleperformance.ag`) || Host(`hu.tripleperformance.ag`) || Host(`pl.tripleperformance.ag`) || Host(`nl.tripleperformance.ag`)) && Path(`/index.php`) && (Query(`title`, `Special:PluggableAuthLogin`) || Query(`title`, `Spécial:PluggableAuthLogin`))"
+      - "traefik.http.routers.web-pluggableauthlogin-indexphp.entrypoints=websecure"
+      - "traefik.http.routers.web-pluggableauthlogin-indexphp.tls=true"
+      - "traefik.http.routers.web-pluggableauthlogin-indexphp.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.web-pluggableauthlogin-indexphp.priority=100"
+      - "traefik.http.routers.web-pluggableauthlogin-indexphp.service=web@docker"
+      - "traefik.http.routers.web-pluggableauthlogin-indexphp.middlewares=pluggableauthlogin-block@docker"
 
     networks:
       default:

@@ -253,6 +253,7 @@ services:
         environment:
             discovery.type: single-node
             xpack.security.enabled: "true"
+            ES_JAVA_OPTS: "-Xms4g -Xmx4g"
             http.cors.enabled: "true"
             http.cors.allow-origin: "https://elasticvue.dev.tripleperformance.fr"
             http.cors.allow-headers: X-Requested-With,Content-Type,Content-Length,Authorization
