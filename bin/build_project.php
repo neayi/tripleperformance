@@ -334,7 +334,7 @@ function getWikiComponents()
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/SemanticMediaWiki',
 							'git' => 'https://github.com/neayi/SemanticMediaWiki.git',
-							'branch' => 'fix6996-getting-ready-for-elasticsearch8',
+							'branch' => 'fix6996-getting-ready-for-elasticsearch8-7.2',
 							'postinstall' => 'composer');
 
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/WikiSearchMapsLink',
