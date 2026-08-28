@@ -41,6 +41,8 @@ function create_wiki_env()
 {
 	echo "\nInstalling Wiki\n\n";
 
+	disableComposerAuditBlock();
+
 	// checkout the wiki
 	$wiki = getWiki();
     checkout_project($wiki);
@@ -92,6 +94,8 @@ function create_wiki_env()
 function update_wiki_env()
 {
 	echo "\nUpdating Wiki\n\n";
+
+	disableComposerAuditBlock();
 
 	// build the envs/project/ dir structure
 	if (!file_exists(root_web . '/html/composer.json'))
@@ -646,6 +650,42 @@ function allowComposerPlugins()
 COMPOSER;
 
 	file_put_contents($wiki_install_dir . '/composer.local.json', $composerInit);
+}
+
+/**
+ * Composer 2.9+ blocks installing/updating any package flagged by a security advisory,
+ * even when the flagged package (eg. squizlabs/php_codesniffer, a dev-only lint tool with
+ * no runtime impact) is affected across a broad range of its versions. We can't patch the
+ * composer.json of every third-party extension we don't control, so disable the block
+ * globally for this container/build instead - mirrors what MediaWiki core's own
+ * composer.json already sets for itself (see html/composer.json's "audit" config).
+ *
+ * Note: on Composer 2.9.1 the `composer config` CLI command rejects "audit.block-insecure"
+ * as an unrecognised key, even though the installer/solver does honour it when present in
+ * composer.json/config.json. So we write the global config.json directly instead of
+ * shelling out to `composer config --global`.
+ */
+function disableComposerAuditBlock()
+{
+	$composerHome = trim(shell_exec('composer config --global home 2>/dev/null'));
+	if (empty($composerHome))
+		return;
+
+	if (!is_dir($composerHome))
+		mkdir($composerHome, 0777, true);
+
+	$configFile = $composerHome . '/config.json';
+
+	$config = array();
+	if (file_exists($configFile))
+		$config = json_decode(file_get_contents($configFile), true);
+
+	if (!is_array($config))
+		$config = array();
+
+	$config['config']['audit']['block-insecure'] = false;
+
+	file_put_contents($configFile, json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . "\n");
 }
 
 
