@@ -935,6 +935,9 @@ $wgCrawlerProtectedSpecialPages[] = "UnusedProperties";
 $wgCrawlerProtectedSpecialPages[] = "URIResolver";
 $wgCrawlerProtectedSpecialPages[] = "WantedProperties";
 
+wfLoadExtension( 'ArrayFunctions' );
+
+
 // Debug and error reporting :
 
 if ($debug) {

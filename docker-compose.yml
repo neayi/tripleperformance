@@ -247,6 +247,7 @@ services:
         image: redis
         profiles:
             - full
+            - 3p
 
     elasticsearch:
         image: docker.elastic.co/elasticsearch/elasticsearch:8.1.3
@@ -274,6 +275,7 @@ services:
             - "traefik.http.services.elasticsearch.loadbalancer.server.port=9200"
         profiles:
             - full
+            - 3p
 
     elasticvue:
         image: cars10/elasticvue

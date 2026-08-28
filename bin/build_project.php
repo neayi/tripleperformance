@@ -275,6 +275,10 @@ function getWikiComponents()
 							'git' => 'https://github.com/wikimedia/mediawiki-extensions-HidePrefix.git',
 							'branch' => $wiki_version);
 
+	$components[] = array(	'dest' => $wiki_extensions_dir . '/ArrayFunctions',
+							'git' => 'https://github.com/wikimedia/mediawiki-extensions-ArrayFunctions.git',
+							'branch' => $wiki_version);
+
 	// Other extensions
 	$components[] = array(	'dest' => $wiki_extensions_dir . '/Realnames',
 							'git' => 'https://github.com/ofbeaton/mediawiki-realnames.git');
