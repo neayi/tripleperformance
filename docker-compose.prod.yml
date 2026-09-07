@@ -477,6 +477,10 @@ services:
       - AUTH_SECRET=${AUTH_SECRET}
       - GOOGLE_CLIENT_ID=${ITINERA_GOOGLE_CLIENT_ID}
       - GOOGLE_CLIENT_SECRET=${ITINERA_GOOGLE_CLIENT_SECRET}
+      # Agri-Maker (OpenID Connect) - laisser vide désactive juste le bouton "Continuer avec Agri-Maker"
+      - AGRIMAKER_ISSUER=${ITINERA_AGRIMAKER_ISSUER:-https://account.agri-maker.com}
+      - AGRIMAKER_CLIENT_ID=${ITINERA_AGRIMAKER_CLIENT_ID}
+      - AGRIMAKER_CLIENT_SECRET=${ITINERA_AGRIMAKER_CLIENT_SECRET}
       - WATCHPACK_POLLING=true
       - CHOKIDAR_USEPOLLING=true
       - CHOKIDAR_INTERVAL=1000
