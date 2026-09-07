@@ -460,7 +460,7 @@ services:
       - traefik
 
   itinera:
-    image: ghcr.io/neayi/itinera:latest
+    image: ghcr.io/neayi/itinera:${ITINERA_VERSION_PROD:-latest}
     environment:
       - NODE_ENV=production
       - DB_HOST=${MYSQL_HOST:-db}
@@ -477,6 +477,10 @@ services:
       - AUTH_SECRET=${AUTH_SECRET}
       - GOOGLE_CLIENT_ID=${ITINERA_GOOGLE_CLIENT_ID}
       - GOOGLE_CLIENT_SECRET=${ITINERA_GOOGLE_CLIENT_SECRET}
+      # Agri-Maker (OpenID Connect) - laisser vide désactive juste le bouton "Continuer avec Agri-Maker"
+      - AGRIMAKER_ISSUER=${ITINERA_AGRIMAKER_ISSUER:-https://account.agri-maker.com}
+      - AGRIMAKER_CLIENT_ID=${ITINERA_AGRIMAKER_CLIENT_ID}
+      - AGRIMAKER_CLIENT_SECRET=${ITINERA_AGRIMAKER_CLIENT_SECRET}
       - WATCHPACK_POLLING=true
       - CHOKIDAR_USEPOLLING=true
       - CHOKIDAR_INTERVAL=1000
@@ -518,6 +522,76 @@ services:
       - "traefik.http.services.itinera.loadbalancer.server.port=3000"
       - "traefik.http.middlewares.itinera-headers.headers.customrequestheaders.X-Forwarded-Proto=https"
       - "traefik.http.middlewares.itinera-headers.headers.customrequestheaders.X-Forwarded-Host=app.itinera.ag"
+    networks:
+      - default
+      - traefik
+
+  # Environnement de recette Itinera : mêmes secrets/services que la prod, mais
+  # base de données itinera_preprod et URL publique dédiée. La version de l'image
+  # est pilotée par ITINERA_VERSION_PREPROD (indépendante de ITINERA_VERSION_PROD).
+  itinera_preprod:
+    image: ghcr.io/neayi/itinera:${ITINERA_VERSION_PREPROD:-latest}
+    environment:
+      - NODE_ENV=production
+      - DB_HOST=${MYSQL_HOST:-db}
+      - DB_PORT=3306
+      - DB_USER=${ITINERA_MYSQL_USER:-itinera_user}
+      - DB_PASSWORD=${ITINERA_MYSQL_PASSWORD:-itinera_password}
+      - DB_NAME=itinera_preprod
+      - NEXT_PUBLIC_APP_URL=https://preprod.itinera.ag
+      - DISCOURSE_SSO_URL=${DISCOURSE_SSO_URL}
+      - DISCOURSE_SSO_SECRET=${DISCOURSE_SSO_SECRET}
+      # AuthJS a besoin de connaître son URL publique explicitement : derrière Traefik, le Host vu
+      # par Next.js ne reflète pas x-forwarded-host pour les redirections de connexion/erreur.
+      - AUTH_URL=https://preprod.itinera.ag/api/auth
+      - AUTH_SECRET=${AUTH_SECRET}
+      - GOOGLE_CLIENT_ID=${ITINERA_GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${ITINERA_GOOGLE_CLIENT_SECRET}
+      # Agri-Maker (OpenID Connect) - laisser vide désactive juste le bouton "Continuer avec Agri-Maker"
+      - AGRIMAKER_ISSUER=${ITINERA_AGRIMAKER_ISSUER:-https://account.agri-maker.com}
+      - AGRIMAKER_CLIENT_ID=${ITINERA_AGRIMAKER_CLIENT_ID}
+      - AGRIMAKER_CLIENT_SECRET=${ITINERA_AGRIMAKER_CLIENT_SECRET}
+      - WATCHPACK_POLLING=true
+      - CHOKIDAR_USEPOLLING=true
+      - CHOKIDAR_INTERVAL=1000
+      # Force Turbopack to use polling for file watching in Docker
+      - TURBOPACK_USE_POLLING=true
+      # OpenAI Configuration
+      - OPENAI_API_KEY=${ITINERA_OPENAI_API_KEY}
+      - CLAUDE_API_KEY=${CLAUDE_API_KEY}
+      - LLM_PROVIDER=${LLM_PROVIDER:-openai}
+      - LLM_INDICATOR_MODEL=${LLM_INDICATOR_MODEL:-gpt-4o-mini}
+      - LLM_SYSTEM_MODEL=${LLM_SYSTEM_MODEL:-gpt-4o}
+      - OPENAI_MAX_TOKENS=${OPENAI_MAX_TOKENS:-2000}
+      - OPENAI_TEMPERATURE=${OPENAI_TEMPERATURE:-0.3}
+      # Feature Flags
+      - AI_ASSISTANT_ENABLED=${AI_ASSISTANT_ENABLED:-true}
+      # Stripe Configuration
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - STRIPE_PUBLISHABLE_KEY=${STRIPE_PUBLISHABLE_KEY}
+      - NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}
+      - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
+      # Email Configuration (SMTP)
+      - SMTP_HOST=${N8N_SMTP_HOST}
+      - SMTP_PORT=${N8N_SMTP_PORT:-587}
+      - SMTP_SECURE=${SMTP_SECURE:-false}
+      - SMTP_USER=${N8N_SMTP_USER}
+      - SMTP_PASS=${N8N_SMTP_PASS}
+      - SMTP_FROM=${N8N_SMTP_SENDER:-noreply@itinera.ag}
+      - SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN}
+      - NEXT_PUBLIC_SENTRY_DSN=${NEXT_PUBLIC_SENTRY_DSN}
+    depends_on:
+      - db
+    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.itinera_preprod.rule=Host(`preprod.itinera.ag`)"
+      - "traefik.http.routers.itinera_preprod.entrypoints=websecure"
+      - "traefik.http.routers.itinera_preprod.tls=true"
+      - "traefik.http.routers.itinera_preprod.tls.certresolver=letsencrypt"
+      - "traefik.http.services.itinera_preprod.loadbalancer.server.port=3000"
+      - "traefik.http.middlewares.itinera_preprod-headers.headers.customrequestheaders.X-Forwarded-Proto=https"
+      - "traefik.http.middlewares.itinera_preprod-headers.headers.customrequestheaders.X-Forwarded-Host=preprod.itinera.ag"
     networks:
       - default
       - traefik
