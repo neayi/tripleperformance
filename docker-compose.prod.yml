@@ -539,8 +539,8 @@ services:
       - DB_PASSWORD=${ITINERA_MYSQL_PASSWORD:-itinera_password}
       - DB_NAME=itinera_preprod
       - NEXT_PUBLIC_APP_URL=https://preprod.itinera.ag
-      - DISCOURSE_SSO_URL=${DISCOURSE_SSO_URL}
-      - DISCOURSE_SSO_SECRET=${DISCOURSE_SSO_SECRET}
+      - DISCOURSE_SSO_URL=${ITINERA_PREPROD_DISCOURSE_SSO_URL}
+      - DISCOURSE_SSO_SECRET=${ITINERA_PREPROD_DISCOURSE_SSO_SECRET}
       # AuthJS a besoin de connaître son URL publique explicitement : derrière Traefik, le Host vu
       # par Next.js ne reflète pas x-forwarded-host pour les redirections de connexion/erreur.
       - AUTH_URL=https://preprod.itinera.ag/api/auth
