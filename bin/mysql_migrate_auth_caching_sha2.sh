@@ -210,17 +210,24 @@ root_ok() { mysql_root -e "SELECT 1" >/dev/null 2>&1; }
 
 if [ -f "$CNF_LOCAL" ] && docker cp "$CNF_LOCAL" "$CID:$CNF_REMOTE" >/dev/null 2>&1; then
   ROOT_ARGS=(--defaults-extra-file="$CNF_REMOTE")
-  root_ok && log "root auth: ${CNF_LOCAL#"$REPO_DIR"/}"
+  if root_ok; then
+    log "root auth: ${CNF_LOCAL#"$REPO_DIR"/}"
+    # register the .cnf's own password as root's credential, so the ALTER USER
+    # below re-hashes root with the SAME password we just authenticated with
+    # (not a possibly-stale .env value).
+    cnf_pw="$(sed -nE 's/^[[:space:]]*password[[:space:]]*=[[:space:]]*"?([^"]*)"?[[:space:]]*$/\1/p' "$CNF_LOCAL" | head -n1)"
+    [ -n "$cnf_pw" ] && add_cred "root" "" "$cnf_pw"
+  fi
 fi
 if ! root_ok; then
   for cand in "${ROOT_PW:-}" "${PW_BY_U[root]:-}" "$(efget "$ENV_FILE" MYSQL_ROOT_PASSWORD)"; do
     [ -n "$cand" ] || continue
     ROOT_ARGS=(-p"$cand")
-    root_ok && { log "root auth: password string"; break; }
+    if root_ok; then log "root auth: password string"; add_cred "root" "" "$cand"; break; fi
   done
 fi
 root_ok || die "cannot connect as root.
-Tried backup/.mysql.cnf and MYSQL_ROOT_PASSWORD from ${ENV_FILE}.
+Tried ${CNF_LOCAL} and MYSQL_ROOT_PASSWORD from ${ENV_FILE}.
 Fix: put the real root password in backup/.mysql.cnf ([client] / password=…),
 or run with  ROOT_PW='<real root password>' ./bin/mysql_migrate_auth_caching_sha2.sh …"
 log "Connected to $(docker inspect -f '{{.Name}}' "$CID" | sed 's#^/##') — $(mysql_root -e 'SELECT VERSION()')"
@@ -295,4 +302,7 @@ LEFT="$(mysql_root -e "SELECT CONCAT('   ',user,'@',host) FROM mysql.user WHERE 
 if [ -n "$LEFT" ]; then printf '%s\n' "$LEFT"; else log "   (none)"; fi
 echo
 log "Verify each service still connects (wiki, itinera, insights, matomo, piwigo, dbgate)."
-[ -z "$LEFT" ] && log "List is empty — proceed with: ./bin/mysql_pre_upgrade_shutdown.sh && docker compose ... up -d"
+if [ -z "$LEFT" ]; then
+  log "List is empty — you can now drop the temporary mysql_native_password flag"
+  log "(engine/mysql/prod.cnf + docker-compose.yml command) and restart the db."
+fi
