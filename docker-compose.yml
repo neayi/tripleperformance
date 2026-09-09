@@ -235,7 +235,7 @@ services:
                     - insights.dev.tripleperformance.fr
 
     db:
-        image: mysql:5.7
+        image: mysql:8.0
         command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --max_allowed_packet=64M
         environment:
             - MYSQL_USERNAME=root
