@@ -8,9 +8,11 @@ user = mysql
 skip-name-resolve = 1
 sql_mode = STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION
 
-# All accounts must be on caching_sha2_password before starting 8.4 (the
-# mysql_native_password plugin is disabled by default here and removed in 9.x).
-# Run bin/mysql_migrate_auth_caching_sha2.sh --apply while still on 8.0.
+# TEMPORARY — re-enables the mysql_native_password plugin, which MySQL 8.4
+# disables by default. Needed only until every account has been moved to
+# caching_sha2_password with bin/mysql_migrate_auth_caching_sha2.sh --apply.
+# Remove this line and restart the db once that script reports "(none)" left.
+mysql_native_password = ON
 
 # --------------------------
 # InnoDB SETTINGS
