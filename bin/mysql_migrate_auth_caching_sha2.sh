@@ -40,7 +40,11 @@
 #   ./bin/mysql_migrate_auth_caching_sha2.sh --apply
 #   ./bin/mysql_migrate_auth_caching_sha2.sh --creds extra.txt --apply
 #
-# Env overrides: ENV_FILE, DB_SERVICE, DB_CONTAINER, MATOMO_SERVICE, PIWIGO_SERVICE
+# root auth: uses backup/.mysql.cnf via --defaults-extra-file (same as the backup
+# scripts) if present, else MYSQL_ROOT_PASSWORD from .env, else ROOT_PW=… env.
+#
+# Env overrides: ENV_FILE, DB_SERVICE, DB_CONTAINER, MATOMO_SERVICE,
+#                PIWIGO_SERVICE, ROOT_CNF (path to a my.cnf), ROOT_PW
 # Flags: --apply   actually run the ALTER USERs
 #        --skip-reserved   leave mysql.infoschema/session/sys untouched
 #
@@ -189,12 +193,36 @@ if [ -n "$PCID" ]; then
 fi
 
 # --- connect to the DB ---------------------------------------------------
-ROOT_PW="${PW_BY_U[root]:-$(efget "$ENV_FILE" MYSQL_ROOT_PASSWORD)}"
-[ -n "$ROOT_PW" ] || die "no root password (MYSQL_ROOT_PASSWORD in ${ENV_FILE} or 'root' in --creds)"
 CID="${DB_CONTAINER:-$(find_container "$DB_SERVICE")}"
 [ -n "$CID" ] || die "no running '${DB_SERVICE}' container found. Set DB_CONTAINER=…"
-mysql_root() { docker exec -i "$CID" mysql -uroot -p"$ROOT_PW" -N -B "$@"; }
-mysql_root -e "SELECT 1" >/dev/null 2>&1 || die "cannot connect as root"
+
+# root auth: try, in order, the backup/.mysql.cnf that the backup scripts use
+# (copied in and read via --defaults-extra-file), then any password string we
+# have (ROOT_PW env override, --creds 'root', .env MYSQL_ROOT_PASSWORD).
+ROOT_ARGS=()
+CNF_LOCAL="${ROOT_CNF:-${REPO_DIR}/backup/.mysql.cnf}"
+CNF_REMOTE="/tmp/.migrate_auth_root_$$.cnf"
+cleanup_cnf() { docker exec "$CID" rm -f "$CNF_REMOTE" >/dev/null 2>&1 || true; }
+trap cleanup_cnf EXIT
+
+mysql_root() { docker exec -i "$CID" mysql "${ROOT_ARGS[@]}" -uroot -N -B "$@"; }
+root_ok() { mysql_root -e "SELECT 1" >/dev/null 2>&1; }
+
+if [ -f "$CNF_LOCAL" ] && docker cp "$CNF_LOCAL" "$CID:$CNF_REMOTE" >/dev/null 2>&1; then
+  ROOT_ARGS=(--defaults-extra-file="$CNF_REMOTE")
+  root_ok && log "root auth: ${CNF_LOCAL#"$REPO_DIR"/}"
+fi
+if ! root_ok; then
+  for cand in "${ROOT_PW:-}" "${PW_BY_U[root]:-}" "$(efget "$ENV_FILE" MYSQL_ROOT_PASSWORD)"; do
+    [ -n "$cand" ] || continue
+    ROOT_ARGS=(-p"$cand")
+    root_ok && { log "root auth: password string"; break; }
+  done
+fi
+root_ok || die "cannot connect as root.
+Tried backup/.mysql.cnf and MYSQL_ROOT_PASSWORD from ${ENV_FILE}.
+Fix: put the real root password in backup/.mysql.cnf ([client] / password=…),
+or run with  ROOT_PW='<real root password>' ./bin/mysql_migrate_auth_caching_sha2.sh …"
 log "Connected to $(docker inspect -f '{{.Name}}' "$CID" | sed 's#^/##') — $(mysql_root -e 'SELECT VERSION()')"
 
 # --- build the plan ----------------------------------------------------------
@@ -259,7 +287,7 @@ if [ "$MISSING" -eq 1 ]; then
 fi
 
 log "Applying…"
-{ echo "SET SESSION sql_log_bin=0;"; printf '%s\n' "${STMTS[@]}"; } | docker exec -i "$CID" mysql -uroot -p"$ROOT_PW"
+{ echo "SET SESSION sql_log_bin=0;"; printf '%s\n' "${STMTS[@]}"; } | docker exec -i "$CID" mysql "${ROOT_ARGS[@]}" -uroot
 
 echo
 log "Remaining mysql_native_password accounts:"

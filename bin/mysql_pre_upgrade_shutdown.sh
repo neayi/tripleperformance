@@ -31,6 +31,8 @@
 #   SKIP_IF_VERSION  if the running server already reports this version prefix
 #                    (e.g. "8.4"), exit 0 without doing anything. Handy to make
 #                    the "git pull && this script && up" sequence idempotent.
+#   ROOT_CNF / ROOT_PW  root auth override. By default uses backup/.mysql.cnf
+#                    (like the backup scripts), falling back to MYSQL_ROOT_PASSWORD.
 
 set -euo pipefail
 
@@ -62,8 +64,8 @@ env_get() {
 command -v docker >/dev/null || die "docker not found in PATH"
 
 PROJECT="$(env_get COMPOSE_PROJECT_NAME)"
-ROOT_PW="$(env_get MYSQL_ROOT_PASSWORD)"
-[ -n "$ROOT_PW" ] || die "MYSQL_ROOT_PASSWORD not found in ${ENV_FILE}"
+ROOT_PW="${ROOT_PW:-$(env_get MYSQL_ROOT_PASSWORD)}"
+CNF_LOCAL="${ROOT_CNF:-${REPO_DIR}/backup/.mysql.cnf}"
 
 # --- locate the running db container ----------------------------------------
 CID="${DB_CONTAINER:-}"
@@ -85,10 +87,23 @@ IMAGE="$(docker inspect -f '{{.Config.Image}}' "$CID")"
 log "Target container: ${CNAME} (${CID:0:12}), image ${IMAGE}"
 
 # --- verify we can talk to it ----------------------------------------------------
-mysql_exec() { docker exec -i "$CID" mysql -uroot -p"$ROOT_PW" -N -B "$@"; }
+# root auth: backup/.mysql.cnf (like the backup scripts) if present, else the
+# MYSQL_ROOT_PASSWORD / ROOT_PW string.
+ROOT_ARGS=()
+CNF_REMOTE="/tmp/.pre_upgrade_root_$$.cnf"
+trap 'docker exec "$CID" rm -f "$CNF_REMOTE" >/dev/null 2>&1 || true' EXIT
+mysql_exec() { docker exec -i "$CID" mysql "${ROOT_ARGS[@]}" -uroot -N -B "$@"; }
+root_ok() { mysql_exec -e "SELECT 1" >/dev/null 2>&1; }
+
+if [ -f "$CNF_LOCAL" ] && docker cp "$CNF_LOCAL" "$CID:$CNF_REMOTE" >/dev/null 2>&1; then
+  ROOT_ARGS=(--defaults-extra-file="$CNF_REMOTE")
+fi
+if ! root_ok && [ -n "$ROOT_PW" ]; then ROOT_ARGS=(-p"$ROOT_PW"); fi
+root_ok || die "cannot connect to MySQL in ${CNAME} as root.
+Tried ${CNF_LOCAL} and MYSQL_ROOT_PASSWORD from ${ENV_FILE}.
+Set ROOT_PW='<real root password>' or fix backup/.mysql.cnf."
 
 SERVER_VERSION="$(mysql_exec -e "SELECT VERSION();" 2>/dev/null || true)"
-[ -n "$SERVER_VERSION" ] || die "cannot connect to MySQL in ${CNAME} with the root password from ${ENV_FILE}"
 log "MySQL reports version: ${SERVER_VERSION}"
 
 if [ -n "$SKIP_IF_VERSION" ]; then
