@@ -588,6 +588,34 @@ services:
         volumes:
             - dbgate-data:/root/.dbgate
 
+    arcane:
+        image: ghcr.io/getarcaneapp/arcane:latest
+        restart: unless-stopped
+        profiles:
+            - full
+        cgroup: host
+        environment:
+            - ENCRYPTION_KEY=${ARCANE_ENCRYPTION_KEY:?ARCANE_ENCRYPTION_KEY is required}
+            - TZ=Europe/Paris
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - arcane-data:/app/data
+        healthcheck:
+            test: ["CMD", "./arcane", "health", "--timeout", "2s"]
+            interval: 10s
+            timeout: 3s
+            retries: 5
+            start_period: 15s
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.arcane.rule=Host(`arcane.dev.tripleperformance.fr`)"
+            - "traefik.http.routers.arcane.entrypoints=websecure"
+            - "traefik.http.routers.arcane.tls=true"
+            - "traefik.http.services.arcane.loadbalancer.server.port=3552"
+        networks:
+            - default
+            - traefik
+
 networks:
     default: ~
     traefik:
@@ -607,4 +635,6 @@ volumes:
     pgdata:
         driver: local
     dbgate-data:
+        driver: local
+    arcane-data:
         driver: local
