@@ -489,6 +489,8 @@ services:
       # OpenAI Configuration
       - OPENAI_API_KEY=${ITINERA_OPENAI_API_KEY}
       - CLAUDE_API_KEY=${CLAUDE_API_KEY}
+      # TypeSafe / Jev (rapprochement seed_varieties -> seed_species)
+      - JEV_API_KEY=${JEV_API_KEY}
       - LLM_PROVIDER=${LLM_PROVIDER:-openai}
       - LLM_INDICATOR_MODEL=${LLM_INDICATOR_MODEL:-gpt-4o-mini}
       - LLM_SYSTEM_MODEL=${LLM_SYSTEM_MODEL:-gpt-4o}
@@ -560,6 +562,8 @@ services:
       # OpenAI Configuration
       - OPENAI_API_KEY=${ITINERA_OPENAI_API_KEY}
       - CLAUDE_API_KEY=${CLAUDE_API_KEY}
+      # TypeSafe / Jev (rapprochement seed_varieties -> seed_species)
+      - JEV_API_KEY=${JEV_API_KEY}
       - LLM_PROVIDER=${LLM_PROVIDER:-openai}
       - LLM_INDICATOR_MODEL=${LLM_INDICATOR_MODEL:-gpt-4o-mini}
       - LLM_SYSTEM_MODEL=${LLM_SYSTEM_MODEL:-gpt-4o}
