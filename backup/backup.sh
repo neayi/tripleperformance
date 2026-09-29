@@ -4,8 +4,8 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 docker cp $DIR/.mysql.cnf tripleperformance_prod-db-1:/etc/mysql/conf.d/mysqlpassword.cnf
 
-for DB in $(docker exec tripleperformance_prod-db-1 /usr/bin/mysql --defaults-extra-file=/etc/mysql/conf.d/mysqlpassword.cnf -u root -s -e "SHOW DATABASES" --skip-column-names); do
-    docker exec tripleperformance_prod-db-1 /usr/bin/mysqldump --defaults-extra-file=/etc/mysql/conf.d/mysqlpassword.cnf --single-transaction $DB -u root | gzip > $DIR/DBs/$DB-$(date +%Y%m%d).sql.gz
+for DB in $(docker exec tripleperformance_prod-db-1 /usr/bin/mysql --defaults-extra-file=/etc/mysql/conf.d/mysqlpassword.cnf -u root -s -e "SHOW DATABASES" --skip-column-names | grep -vE '^(information_schema|performance_schema|sys)$'); do
+    docker exec tripleperformance_prod-db-1 /usr/bin/mysqldump --defaults-extra-file=/etc/mysql/conf.d/mysqlpassword.cnf --single-transaction --routines --events $DB -u root | gzip > $DIR/DBs/$DB-$(date +%Y%m%d).sql.gz
 done
 
 docker exec tripleperformance_prod-db-1 rm /etc/mysql/conf.d/mysqlpassword.cnf
@@ -15,9 +15,18 @@ rsync -va $DIR/../.data/images neayi.com:~/backup
 rsync -va $DIR/../.data/insights_prod_storage neayi.com:~/backup
 rsync -va /var/www/discourse/shared/standalone/backups neayi.com:~/discourse_backup/
 rsync -va /var/www/discourse/containers neayi.com:~/discourse_backup/
-rsync -va /var/www/tripleperformance_docker/piwigo/config/www/_data/i/upload neayi.com:~/piwigo_backup/
+# Piwigo: original photos (gallery/upload, gallery/galleries) and config (local/) - _data/i is only the thumbnails cache
+rsync -va /var/www/tripleperformance_docker/piwigo/gallery neayi.com:~/piwigo_backup/
+rsync -va /var/www/tripleperformance_docker/piwigo/config/www/local neayi.com:~/piwigo_backup/
 scp $DIR/../.env $DIR/../.env.preprod neayi.com:~/backup/
 scp $DIR/../insights/.env neayi.com:~/backup/.env.insights
+scp $DIR/../insights/.env.preprod neayi.com:~/backup/.env.insights.preprod
+scp $DIR/../.data/acme.json neayi.com:~/backup/
+
+# Matomo config (not in the DB dump: tables prefix, salt, installed plugins...)
+docker exec tripleperformance_prod-matomo-1 cat /var/www/html/config/config.ini.php | gzip > $DIR/DBs/matomo-config.ini.php-$(date +%Y%m%d).gz
+docker exec tripleperformance_prod-matomo-1 sh -c "test -d /var/www/html/misc/user && tar czf - -C /var/www/html/misc user" > $DIR/DBs/matomo-misc-user-$(date +%Y%m%d).tar.gz
+rsync -va $DIR/DBs/matomo-config.ini.php-$(date +%Y%m%d).gz $DIR/DBs/matomo-misc-user-$(date +%Y%m%d).tar.gz neayi.com:~/backup
 
 docker exec tripleperformance_prod-n8n-1 sh -c "n8n export:entities  --backup --outputDir=/files/entities/"
 rsync -va $DIR/n8n neayi.com:~/backup/n8n
