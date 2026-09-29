@@ -512,6 +512,9 @@ services:
       - SMTP_FROM=${N8N_SMTP_SENDER:-noreply@itinera.ag}
       - SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN}
       - NEXT_PUBLIC_SENTRY_DSN=${NEXT_PUBLIC_SENTRY_DSN}
+      # Matomo (reporting d'usage) - prod uniquement, laisser vide désactive le suivi
+      - MATOMO_URL=${ITINERA_MATOMO_URL}
+      - MATOMO_SITE_ID=${ITINERA_MATOMO_SITE_ID}
     depends_on:
       - db
     restart: always

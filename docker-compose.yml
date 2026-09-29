@@ -189,6 +189,9 @@ services:
             - SMTP_FROM=${N8N_SMTP_SENDER:-noreply@itinera.ag}
             # Sentry
             - SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN}
+            # Matomo (reporting d'usage) - laisser vide désactive le suivi
+            - MATOMO_URL=${ITINERA_MATOMO_URL}
+            - MATOMO_SITE_ID=${ITINERA_MATOMO_SITE_ID}
             # Node inspector, for attaching a debugger (VSCode) to the Next.js dev server
             - NODE_OPTIONS=--inspect=0.0.0.0:9229
         ports:
