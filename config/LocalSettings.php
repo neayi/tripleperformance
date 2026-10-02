@@ -422,10 +422,12 @@ $wgSitemapNamespacesPriorities = [
 wfLoadExtension( 'HeadScript' );
 
 // Add some color to the browser (in mobile mode)
-$wgHeadScriptCode = '<meta name="theme-color" content="#15A072">';
+// Chunks are concatenated into $wgHeadScriptCode at the end of this file
+$wgHeadScriptCodeChunk = [];
+$wgHeadScriptCodeChunk['theme-color'] = '<meta name="theme-color" content="#15A072">';
 
 // Add the Triple Performance icon font
-$wgHeadScriptCode .= '<link rel="stylesheet" href="https://neayi.github.io/tripleperformance-icon-font/style.css" />';
+$wgHeadScriptCodeChunk['neayi-icon-font'] = '<link rel="stylesheet" href="https://neayi.github.io/tripleperformance-icon-font/style.css" />';
 
 if('prod' === $env) {
     $wgEnableCanonicalServerLink = true;
@@ -463,7 +465,7 @@ if('prod' === $env) {
             break;
     }
 
-    $wgHeadScriptCode .= <<<START_END_MARKER
+    $wgHeadScriptCodeChunk['matomo'] = <<<START_END_MARKER
     <!-- Matomo -->
     <script>
     var _paq = window._paq = window._paq || [];
@@ -478,6 +480,9 @@ if('prod' === $env) {
         g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
     })();
     </script>
+START_END_MARKER;
+
+    $wgHeadScriptCodeChunk['facebook'] = <<<START_END_MARKER
     <!-- Facebook Pixel Code -->
     <script>
       !function(f,b,e,v,n,t,s)
@@ -495,6 +500,9 @@ if('prod' === $env) {
       src="https://www.facebook.com/tr?id=705673526999195&ev=PageView&noscript=1"
     /></noscript>
     <!-- End Facebook Pixel Code -->
+START_END_MARKER;
+
+    $wgHeadScriptCodeChunk['linkedin'] = <<<START_END_MARKER
     <script type="text/javascript">
     _linkedin_partner_id = "2661170";
     window._linkedin_data_partner_ids = window._linkedin_data_partner_ids || [];
@@ -530,7 +538,7 @@ if ('dev' === $env) {
             break;
     }
 
-    $wgHeadScriptCode .= <<<START_END_MARKER
+    $wgHeadScriptCodeChunk['matomo'] = <<<START_END_MARKER
     <!-- Matomo -->
     <script>
     var _paq = window._paq = window._paq || [];
@@ -935,6 +943,17 @@ $wgCrawlerProtectedSpecialPages[] = "UnusedProperties";
 $wgCrawlerProtectedSpecialPages[] = "URIResolver";
 $wgCrawlerProtectedSpecialPages[] = "WantedProperties";
 
+// Don't report denied requests to Matomo: HeadScript reads $wgHeadScriptCode
+// in BeforePageDisplay, which runs after this hook.
+$wgHooks['CrawlerProtectionShouldDeny'][] = function ( $user, $request, $entryPoint, $specialPageName, &$shouldDeny ) {
+    global $wgHeadScriptCode, $wgHeadScriptCodeChunk;
+    if ( $shouldDeny ) {
+        // Attention, ce hook est exécuté après la lecture de LocalSettings.php, donc après que $wgHeadScriptCode ait été défini. Il faut donc le redéfinir ici.
+        unset( $wgHeadScriptCodeChunk['matomo'] );
+        $wgHeadScriptCode = implode( "\n", $wgHeadScriptCodeChunk );
+    }
+};
+
 wfLoadExtension( 'ArrayFunctions' );
 
 
@@ -956,3 +975,6 @@ if ($debug) {
     $wgDevelopmentWarnings = true;
 
 }
+
+// Head scripts (theme color, styles, Matomo...) - see $wgHeadScriptCodeChunk above
+$wgHeadScriptCode = implode( "\n", $wgHeadScriptCodeChunk );
