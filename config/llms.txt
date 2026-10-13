@@ -1,0 +1,41 @@
+# Triple Performance
+
+> Triple Performance is a collaborative wiki about agroecology and farming practices
+> (crop systems, farm case studies, technical guides), run by Neayi. It is built on
+> MediaWiki + Semantic MediaWiki and published in several languages.
+
+If you are a crawler, a scraper or an AI agent: please do NOT crawl the HTML pages link
+by link. Use the sitemap and the APIs below - it is faster for you and cheaper for us.
+Page history, diffs, old revisions and most special pages are blocked for anonymous
+clients, and IPs that keep requesting them get banned.
+
+## Language editions
+
+- French: https://wiki.tripleperformance.fr
+- Other languages: https://{lang}.tripleperformance.ag with {lang} in en, de, es, it, pt, nl, pl, el, hu, fi, ar
+
+All the paths below are relative to one of these hosts.
+
+## Listing pages
+
+- [Sitemap (all languages)](https://wiki.tripleperformance.fr/sitemap.xml): every indexable page, with last modification date
+- All pages of a namespace: `/api.php?action=query&list=allpages&apnamespace=0&aplimit=max&format=json` (follow `continue`)
+- Incremental updates: `/api.php?action=query&list=recentchanges&rcprop=title|timestamp&rclimit=max&format=json` - fetch only what changed since your last visit
+
+## Reading content
+
+- Page wikitext (REST): `/rest.php/v1/page/{title}`
+- Page HTML (REST): `/rest.php/v1/page/{title}/html`
+- Batch wikitext (up to 50 titles): `/api.php?action=query&prop=revisions&rvprop=content&rvslots=main&titles=A|B|C&format=json`
+- Plain-text extract: `/api.php?action=query&prop=extracts&explaintext=1&titles={title}&format=json`
+
+## Structured data (Semantic MediaWiki)
+
+- Semantic queries: `/api.php?action=ask&query=[[Category:{category}]]|?{property}|limit=500&format=json`
+  (use `offset` to paginate; please do not crawl Special:Ask / Special:SearchByProperty HTML pages)
+
+## Etiquette
+
+- Send a descriptive User-Agent with a contact URL or e-mail.
+- Stay sequential (no parallel requests), around 1 request per second; add `maxlag=5` to api.php calls.
+- Respect robots.txt and its Crawl-delay.

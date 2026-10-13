@@ -1,3 +1,7 @@
+# Sitemap of all language editions (bots: please use it instead of crawling links)
+Sitemap: https://wiki.tripleperformance.fr/sitemap.xml
+# Bulk / programmatic access: see https://wiki.tripleperformance.fr/llms.txt
+
 User-agent: Amazonbot  # Amazon's user agent
 User-agent: MJ12bot
 User-agent: mauibot

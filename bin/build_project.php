@@ -51,6 +51,7 @@ function create_wiki_env()
 
 	linkWikiSettings('LocalSettings.php');
 	linkWikiSettings('robots.txt');
+	linkWikiSettings('llms.txt');
 
 	$wiki_install_dir = getInstallDir();
 
@@ -113,6 +114,7 @@ function update_wiki_env()
 
 	linkWikiSettings('LocalSettings.php');
 	linkWikiSettings('robots.txt');
+	linkWikiSettings('llms.txt');
 
 	$components = getWikiComponents();
 	foreach ($components as $aComponent)
