@@ -942,6 +942,9 @@ $wgCrawlerProtectedSpecialPages[] = "Types";
 $wgCrawlerProtectedSpecialPages[] = "UnusedProperties";
 $wgCrawlerProtectedSpecialPages[] = "URIResolver";
 $wgCrawlerProtectedSpecialPages[] = "WantedProperties";
+// Headless-browser botnets crawl its filter links (days/from/hide*... permutations, a new
+// `from` timestamp on every render = infinite URL space). Bots should use the API (see llms.txt).
+$wgCrawlerProtectedSpecialPages[] = "Recentchanges";
 
 // Don't report denied requests to Matomo: HeadScript reads $wgHeadScriptCode
 // in BeforePageDisplay, which runs after this hook.
