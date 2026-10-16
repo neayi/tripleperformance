@@ -677,30 +677,29 @@ services:
     volumes:
       - dbgate-data:/root/.dbgate
 
-  arcane:
-    image: ghcr.io/getarcaneapp/arcane:latest
-    hostname: arcane.tripleperformance.fr
+  dozzle:
+    image: amir20/dozzle:latest
+    hostname: dozzle.tripleperformance.fr
     restart: always
-    cgroup: host
     environment:
-      - ENCRYPTION_KEY=${ARCANE_ENCRYPTION_KEY:?ARCANE_ENCRYPTION_KEY is required}
+      - DOZZLE_NO_ANALYTICS=true
       - TZ=Europe/Paris
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - arcane-data:/app/data
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     healthcheck:
-      test: ["CMD", "./arcane", "health", "--timeout", "2s"]
+      test: ["CMD", "/dozzle", "healthcheck"]
       interval: 10s
       timeout: 3s
       retries: 5
       start_period: 15s
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.arcane.rule=Host(`arcane.tripleperformance.fr`)"
-      - "traefik.http.routers.arcane.entrypoints=websecure"
-      - "traefik.http.routers.arcane.tls=true"
-      - "traefik.http.routers.arcane.tls.certresolver=letsencrypt"
-      - "traefik.http.services.arcane.loadbalancer.server.port=3552"
+      - "traefik.http.routers.dozzle.rule=Host(`dozzle.tripleperformance.fr`)"
+      - "traefik.http.routers.dozzle.entrypoints=websecure"
+      - "traefik.http.routers.dozzle.tls=true"
+      - "traefik.http.routers.dozzle.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.dozzle.middlewares=dashboard-auth@docker"
+      - "traefik.http.services.dozzle.loadbalancer.server.port=8080"
     networks:
       - default
       - traefik
@@ -723,6 +722,4 @@ volumes:
   pgdata:
     driver: local
   dbgate-data:
-    driver: local
-  arcane-data:
     driver: local
