@@ -128,4 +128,12 @@ COPY --chown=www-data:www-data bin bin/
 COPY --chown=www-data:www-data config config/
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
+# gerrit.wikimedia.org answers 403 to GitHub Actions runners: clone from the GitHub mirrors instead
+RUN <<EOF
+git config --system url."https://github.com/wikimedia/mediawiki-extensions-".insteadOf "https://gerrit.wikimedia.org/r/mediawiki/extensions/"
+git config --system url."https://github.com/wikimedia/mediawiki-skins-".insteadOf "https://gerrit.wikimedia.org/r/mediawiki/skins/"
+git config --system url."https://github.com/wikimedia/mediawiki-vendor".insteadOf "https://gerrit.wikimedia.org/r/mediawiki/vendor"
+git config --system url."https://github.com/wikimedia/VisualEditor".insteadOf "https://gerrit.wikimedia.org/r/VisualEditor/VisualEditor"
+EOF
+
 RUN php bin/build_project.php --create-env
