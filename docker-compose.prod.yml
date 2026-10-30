@@ -74,6 +74,9 @@ services:
     restart: always
     cpus: 6.0
     env_file: .env
+    depends_on:
+      db:
+        condition: service_healthy
     volumes:
       - ./.data/images:/var/www/html/images
     labels:
@@ -181,6 +184,9 @@ services:
     cpus: 3.0
     restart: no
     env_file: .env
+    depends_on:
+      db:
+        condition: service_healthy
     volumes:
       - ./.data/images:/var/www/html/images
     networks:
@@ -192,6 +198,9 @@ services:
     image: ghcr.io/neayi/insights/insights:$INSIGHTS_VERSION_PROD
     env_file: insights/.env
     restart: always
+    depends_on:
+      db:
+        condition: service_healthy
     networks:
       - default
       - traefik
@@ -209,6 +218,9 @@ services:
     image: ghcr.io/neayi/tripleperformance/wiki:$WIKI_VERSION_PREPROD
     restart: always
     env_file: .env.preprod
+    depends_on:
+      db:
+        condition: service_healthy
     volumes:
       - ./.data/images_preprod:/var/www/html/images
     labels:
@@ -243,6 +255,9 @@ services:
     image: ghcr.io/neayi/insights/insights:$INSIGHTS_VERSION_PREPROD
     restart: always
     env_file: insights/.env.preprod
+    depends_on:
+      db:
+        condition: service_healthy
     volumes:
       - ./.data/insights_preprod_storage:/var/www/html/storage/app/public
     labels:
@@ -347,6 +362,9 @@ services:
     volumes:
       - ./piwigo/config:/config
       - ./piwigo/gallery:/gallery
+    depends_on:
+      db:
+        condition: service_healthy
     restart: always
     labels:
       - "traefik.enable=true"
@@ -378,7 +396,8 @@ services:
       - "traefik.http.routers.matomo.tls.certresolver=letsencrypt"
       - "traefik.http.services.matomo.loadbalancer.server.port=80"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     restart: always
 
   n8n:
