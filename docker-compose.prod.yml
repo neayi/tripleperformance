@@ -264,6 +264,15 @@ services:
     volumes:
       - ./.data/mysql:/var/lib/mysql
       - ./engine/mysql/prod.cnf:/etc/mysql/conf.d/prod.cnf:ro
+    healthcheck:
+      # En TCP (127.0.0.1) et pas sur le socket : le serveur temporaire de l'initialisation de l'image n'écoute pas en TCP.
+      # mysqladmin ping répond 0 dès que le serveur tourne, même sans identifiants valides.
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      # Marge pour la récupération InnoDB après un arrêt brutal.
+      start_period: 300s
 
   portainer:
     image: portainer/portainer-ce
@@ -517,7 +526,8 @@ services:
       - MATOMO_URL=${ITINERA_MATOMO_URL}
       - MATOMO_SITE_ID=${ITINERA_MATOMO_SITE_ID}
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     restart: always
     labels:
       - "traefik.enable=true"
@@ -591,7 +601,8 @@ services:
       - SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN}
       - NEXT_PUBLIC_SENTRY_DSN=${NEXT_PUBLIC_SENTRY_DSN}
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     restart: always
     labels:
       - "traefik.enable=true"
